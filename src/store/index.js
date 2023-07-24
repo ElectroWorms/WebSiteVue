@@ -18,8 +18,8 @@ export const useCounterStore = defineStore('counter', {
 })
 
 /*
-  import {useStore} from './index.js'
-  const store = useStore()
+  import {useCounterStore} from './index.js'
+  const store = useCounterStore()
   store.increment()
 
 */
