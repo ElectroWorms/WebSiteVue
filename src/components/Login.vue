@@ -26,9 +26,6 @@
                 </div>
               </div>
             </template>
-          
-
-
 
         <div class="Container">
             <div class="Encabezado">
@@ -52,10 +49,6 @@
                     Iniciar
 
                 </v-btn>
-
-
-
-
             </div>
         </div>
     </v-dialog>
