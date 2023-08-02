@@ -8,6 +8,10 @@ import VueCompositionAPI from '@vue/composition-api'
 Vue.use(PiniaVuePlugin)
 const pinia = createPinia()
 Vue.use(VueCompositionAPI)
+//import VueCompositionAPI from '@vue/composition-api'
+
+//Vue.use(PiniaVuePlugin)
+//Vue.use(VueCompositionAPI)
 
 Vue.config.productionTip = false
 

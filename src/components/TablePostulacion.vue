@@ -262,11 +262,8 @@
         else return 'orange'
       },
       validate () {
-        
         if(this.$refs.form.validate()){
           this.save()
-          
-          
         }
       },
       resetValidation () {

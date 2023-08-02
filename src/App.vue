@@ -3,7 +3,6 @@
     <v-main class="pa-0 ma-0">
       <router-view class="pa-0 ma-0"/>
     </v-main>
-    
   </v-app>
 </template>
 
@@ -22,7 +21,6 @@ export default {
     changeToggle (){
       this.dialogRegistrarse = false
       
-
     },
   }
 };
