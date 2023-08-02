@@ -1,16 +1,44 @@
+# default
 
-
-# Consideraciones
-Para iniciar sesión, simplemente hay que darle al boton de iniciar y cambiara la interfaz, ya que no se valida ningún usuario.  
-Video de prueba de la aplicación https://youtu.be/1_4hSZY4XoA . Solo práctica front-end y buenas prácticas de experencia de usuarios.
-
-# proyect-interfaces  
 ## Project setup
+
 ```
+# yarn
+yarn
+
+# npm
 npm install
+
+# pnpm
+pnpm install
 ```
 
 ### Compiles and hot-reloads for development
+
 ```
-npm run serve
+# yarn
+yarn dev
+
+# npm
+npm run dev
+
+# pnpm
+pnpm dev
 ```
+
+### Compiles and minifies for production
+
+```
+# yarn
+yarn build
+
+# npm
+npm run build
+
+# pnpm
+pnpm build
+```
+
+### Customize configuration
+
+See [Configuration Reference](https://vitejs.dev/config/).
