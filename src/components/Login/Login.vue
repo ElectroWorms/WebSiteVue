@@ -8,8 +8,6 @@
             <v-card-text class="mt-6">
                 <v-form
                 ref="form"
-                v-model="valid"
-                lazy-validation
                 >
                 <v-row>
                     <v-text-field
@@ -28,6 +26,14 @@
                     ></v-text-field>
                 </v-row>
                 </v-form>
+            </v-card-text>
+            <v-card-text class="px-1">
+              <v-alert
+                  type="error"
+                  v-model = "alertError"
+                  variant="outlined"
+                  text="No coinciden las credenciales. Por favor, intente nuevamente..."
+                ></v-alert>
             </v-card-text>
             <v-container class="px-0">
                 <v-card-actions >
@@ -59,6 +65,7 @@
 import axios from 'axios'
   export default {
     data: () => ({
+      alertError: false,
       user:{
         userName: null,
         password: null,
@@ -68,8 +75,9 @@ import axios from 'axios'
       
     },
     methods: {
-      validate () {
-        if(this.$refs.form.validate()){
+      async validate () {
+        const { valid } = await this.$refs.form.validate()
+        if (valid) {
           this.save()
         }
       },
@@ -78,15 +86,18 @@ import axios from 'axios'
         this.$emit("changeDialogLogin", false);
       },
       save (){
-        var url = 'http://localhost:3000/login'
+        
+        this.$router.push({path: '/Usuarios'})
+        /*var url = 'http://localhost:4000/login'
         axios.post(url, this.user)
         .then (response => {
-            console.log(response)
+            this.$emit("changeDialogLogin", false);
+            this.$router.push({path: '/Inicio'})
         })
         .catch(error => {
             console.log(error)
-            this.errorDialog = true
-        })
+            this.alertError = true
+        })*/
       }
 
     },

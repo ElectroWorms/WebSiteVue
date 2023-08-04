@@ -17,6 +17,22 @@ const routes = [
     //   },
     // ],
   },
+  {
+    path: '/Inicio',
+    component: () => import('@/views/Inicio.vue'),
+  },
+  {
+    path: '/Usuarios',
+    component: () => import('@/views/MisUsuarios.vue'),
+  },
+  {
+    path: '/Vincular',
+    component: () => import('@/views/Vincular.vue'),
+  },
+  {
+    path: '/Dashboard',
+    component: () => import('@/views/Dashboard.vue'),
+  }
 ]
 
 const router = createRouter({
