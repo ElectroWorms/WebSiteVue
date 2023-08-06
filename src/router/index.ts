@@ -17,11 +17,12 @@ const routes = [
     //   },
     // ],
   },
-  {
+  /* {
     path: '/Inicio',
     component: () => import('@/views/Inicio.vue'),
-  },
+  }, */
   {
+    name: "Usuarios",
     path: '/Usuarios',
     component: () => import('@/views/MisUsuarios.vue'),
   },
@@ -32,6 +33,24 @@ const routes = [
   {
     path: '/Dashboard',
     component: () => import('@/views/Dashboard.vue'),
+  },
+  {
+    name: 'DetalleActividad',
+    path: '/Actividad/Detalle/:ActividadId/:UserId',
+    props: true,
+    component: () => import('@/views/DetalleActividad.vue'),
+  },
+  {
+    name: 'Juegos',
+    path: '/Juegos/List/:ActividadId/:UserId',
+    props: true,
+    component: () => import('@/views/Juegos.vue'),
+  },
+  {
+    name: 'MenuActividades',
+    path: '/Actividad/List/:UserId',
+    props: true,
+    component: () => import('@/views/MenuActividades.vue'),
   }
 ]
 
