@@ -17,12 +17,7 @@ const routes = [
     //   },
     // ],
   },
-  /* {
-    path: '/Inicio',
-    component: () => import('@/views/Inicio.vue'),
-  }, */
   {
-    name: "Usuarios",
     path: '/Usuarios',
     component: () => import('@/views/MisUsuarios.vue'),
   },
@@ -33,6 +28,14 @@ const routes = [
   {
     path: '/Dashboard',
     component: () => import('@/views/Dashboard.vue'),
+  },
+  {
+    path: '/Solicitudes',
+    component: () => import('@/views/Solicitudes.vue'),
+  },
+  {
+    path:'/User',
+    component: () => import('@/views/User.vue'),
   },
   {
     name: 'DetalleActividad',
