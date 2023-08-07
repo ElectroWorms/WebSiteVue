@@ -36,6 +36,12 @@ const routes = [
   {
     path:'/User',
     component: () => import('@/views/User.vue'),
+  },
+  {
+    name: 'MenuActividades',
+    path:'/Actividad/List/:UserId',
+    props: true,
+    component: () => import('@/views/MenuActividades.vue'),
   }
 ]
 
