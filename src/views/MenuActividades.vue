@@ -14,6 +14,9 @@
 .subtitulo {
     text-align: center;
 }
+.switch-active {
+    flex-direction: row-reverse;
+}
 </style>
 <template>
     <SidePanelTutor/>
@@ -31,12 +34,19 @@
     
                 <v-card-actions class="btn-actions">
                     <v-btn color="success" variant="flat" @click="loadActivity(act._id,act.user)">Detalle</v-btn>
-                    <v-switch class="mx-auto" v-model="act.active" label="Activo" color="success"  hide-details></v-switch>    
+                    <v-switch class="mx-auto switch-active" style="flex-direction: row-reverse;" v-model="act.active" label="Activo" color="success" @change="updateActivity(act._id,act.active,act.title)" hide-details></v-switch>    
                 </v-card-actions>
             </v-card>
         </v-col>
     </v-row>
-    
+    <v-snackbar v-model="snackbar" :timeout="timeout" :color="snackbarColor">
+        {{ snackbarText }}
+        <template v-slot:action="{ attrs }">
+            <v-btn color="blue" text v-bind="attrs" @click="snackbar = false">
+            Close
+            </v-btn>
+        </template>
+    </v-snackbar>
     
 </template>
 
@@ -46,14 +56,36 @@
 */
 import SidePanelTutor from '@/components/SidePanel/SidePanelTutor.vue';
 import axios from 'axios';
-import { ref, toRefs,onMounted } from 'vue'
-import config from '../../config'
-import router from '@/router'
+import { ref, toRefs,onMounted } from 'vue';
+import config from '../../config.json';
+import router from '@/router';
 /*
     Route Params
 */
 const props = defineProps(["UserId"]);
 const {UserId} = toRefs(props);
+/*
+    Ref
+*/
+const snackbar = ref(false);
+const snackbarText = ref('ok');
+const snackbarColor = ref('success');
+const timeout = ref(1000);
+/*
+    Funciones
+*/
+async function updateActivity(actividadId: string,active: boolean,title: string){
+    try {
+        await axios.post(config.PathAPI+'actividad/update/',{ ActividadId: actividadId, active: active});
+        snackbar.value = true;
+        snackbarText.value = 'La Actividad "'+title+'" ha sido '+(active ? 'Activada.' : 'Desactivada.');
+        snackbarColor.value = 'success';
+    } catch (error) {
+        snackbarText.value = 'Error al '+(active ? 'Activar' : 'Desactivar')+' la Actividad: "'+title+'".';
+        snackbarColor.value = 'red';
+        snackbar.value = true;
+    }    
+}
 /*
     Funciones
 */

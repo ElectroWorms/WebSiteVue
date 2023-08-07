@@ -31,13 +31,20 @@
                 <v-card-subtitle class="pt-4 subtitulo"> {{juego.title}}</v-card-subtitle>
     
                 <v-card-actions>
-                    <v-switch style="flex-direction: row-reverse !important" v-model="juego.active" label="Activo" color="success"  hide-details></v-switch>       
+                    <v-switch v-model="juego.active" @change="updateGame(juego._id,juego.active,juego.title)" label="Activo" color="success"  hide-details></v-switch>       
                 </v-card-actions>
             </v-card>
         </v-col>
     </v-row>
     
-    
+    <v-snackbar v-model="snackbar" :timeout="timeout" :color="snackbarColor">
+        {{ snackbarText }}
+        <template v-slot:action="{ attrs }">
+            <v-btn color="blue" text v-bind="attrs" @click="snackbar = false">
+            Close
+            </v-btn>
+        </template>
+    </v-snackbar>
 </template>
 
 <script setup lang="ts">
@@ -46,7 +53,7 @@
 */
 import SidePanelTutor from '@/components/SidePanel/SidePanelTutor.vue';
 import axios from 'axios';
-import { ref, toRefs,onMounted } from 'vue'
+import { ref, toRefs,onMounted, reactive } from 'vue'
 import config from '../../config'
 import router from '@/router'
 /*
@@ -55,9 +62,29 @@ import router from '@/router'
 const props = defineProps(["ActividadId","UserId"]);
 const {ActividadId, UserId} = toRefs(props);
 /*
+    Ref
+*/
+const snackbar = ref(false);
+const snackbarText = ref('ok');
+const snackbarColor = ref('success');
+const timeout = ref(1000);
+/*
     Funciones
 */
 let Respuesta;
+async function updateGame(juegoId: string,active: boolean,title: string){
+    try {
+        await axios.post(config.PathAPI+'juegos/update/',{ juegoId: juegoId, active: active});
+        snackbar.value = true;
+        snackbarText.value = 'El juego "'+title+'" ha sido '+(active ? 'Activado.' : 'Desactivado.');
+        snackbarColor.value = 'success';
+    } catch (error) {
+        snackbarText.value = 'Error al '+(active ? 'Activar' : 'Desactivar')+' el juego "'+title+'".';
+        snackbarColor.value = 'red';
+        snackbar.value = true;
+    }
+    
+}
 async function getGames(){
     Respuesta = {status: true, message: 'Actividad obtenida con éxito.', items: {}};
     await axios.get(config.PathAPI+'juegos/list/'+ActividadId.value)
