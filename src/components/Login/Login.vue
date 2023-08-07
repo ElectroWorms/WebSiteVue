@@ -17,12 +17,12 @@
                     
                     ></v-text-field>
                 </v-row>
-
                 <v-row>
                     <v-text-field
                     label="Contraseña"
                     v-model="user.password"
                     :rules="[v => !!v || 'Contraseña es requerido']"
+                    type="password"
                     ></v-text-field>
                 </v-row>
                 </v-form>
@@ -63,6 +63,8 @@
 </template>
 <script>
 import axios from 'axios'
+import {useUserStore} from "../../store/app"
+const store = useUserStore()
   export default {
     data: () => ({
       alertError: false,
@@ -86,18 +88,20 @@ import axios from 'axios'
         this.$emit("changeDialogLogin", false);
       },
       save (){
-        
-        this.$router.push({path: '/Usuarios'})
-        /*var url = 'http://localhost:4000/login'
+        //this.$router.push({path: '/Usuarios'})
+        var url = 'http://localhost:4000/login'
         axios.post(url, this.user)
         .then (response => {
-            this.$emit("changeDialogLogin", false);
-            this.$router.push({path: '/Inicio'})
+          store.$patch({
+            user: response.data
+          })
+          this.$emit("changeDialogLogin", false);
+          this.$router.push({path: '/Usuarios'})
         })
         .catch(error => {
             console.log(error)
             this.alertError = true
-        })*/
+        })
       }
 
     },
