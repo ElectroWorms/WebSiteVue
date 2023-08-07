@@ -232,10 +232,11 @@ export default {
             }
         },
         initPerfil(item){
+            
             store.$patch({
                 secondUser: item
             })
-            this.$router.push({path: '/User/MiCuenta'})
+            this.$router.push({path: '/User/Rutinas'})
         },
         deletePerfil(){
 
