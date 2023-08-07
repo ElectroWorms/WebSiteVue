@@ -56,7 +56,6 @@
                     <v-text-field
                     label="Contraseña"
                     v-model="user.password"
-                    type="password"
                     :rules="[v => !!v || 'Contraseña es requerido']"
                     ></v-text-field>
                   </v-col>
@@ -70,7 +69,6 @@
                     <v-text-field
                     label="Correo"
                     v-model="user.email"
-                    type="email"
                     :rules="[v => !!v || 'Correo es requerido']"
                     ></v-text-field>
                   </v-col>
@@ -158,7 +156,6 @@ import axios from 'axios'
         password: null,
         email:null,
         typeAccount: null,
-        users: []
       }
       ,
     }),

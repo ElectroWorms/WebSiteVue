@@ -9,7 +9,7 @@
 <template>
   <SidePanelTutor/>
   <UpperPanel/>
-  <MisUsuarios/>
+  <FormVincular/>
 
 </template>
 <script setup>
