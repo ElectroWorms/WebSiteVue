@@ -25,7 +25,7 @@
     <v-row class="mx-4 mt-2">
         <v-col v-for="(juego,index) in Juegos" :key="index" cols="3" justify="center" aspect-ratio="4/3">
             <v-card class="card-content">
-                <v-img class="align-end text-white mx-auto" width="300" :src="juego.base64" >             
+                <v-img class="align-end text-white mx-auto" width="300" :src="juego.url" >             
                 </v-img>
 
                 <v-card-subtitle class="pt-4 subtitulo"> {{juego.title}}</v-card-subtitle>
@@ -89,7 +89,6 @@ async function getGames(){
     Respuesta = {status: true, message: 'Actividad obtenida con éxito.', items: {}};
     await axios.get(config.PathAPI+'juegos/list/'+ActividadId.value)
     .then(response => {
-        console.log(response)
         Respuesta = response.data;
         if (response.data.state) {
             if (response.data.items.length) {
@@ -108,16 +107,11 @@ async function getGames(){
 const Juegos = ref([]);
 onMounted(async () => {
     let data = await getGames();
-    data = data.items.map(i => {
-        i.base64 = 'data:image/jpeg;base64, '+i.base64;
-        return i;
-    });
-    console.log(data)
-    Juegos.value = data;
+    console.log(data.items)
+    Juegos.value = data.items;
     //console.log(actividad.value.base64)
 }) 
 function loadGames() {
-    console.log('click')
     router.push({ name: 'Juegos', params: { ActividadId: ActividadId.value } });
 }
 function back() {

@@ -5,17 +5,13 @@
     min-height: 300px;
 }
 .btn-actions {
-    display: flex !important;
-    align-items: center !important;    
-    text-align: center !important;
-    justify-content: center !important;
 
 }
 .subtitulo {
     text-align: center;
 }
 .switch-active {
-    flex-direction: row-reverse;
+    flex-direction: row-reverse !important;
 }
 </style>
 <template>
@@ -27,14 +23,14 @@
     <v-row class="mx-4 mt-2">
         <v-col v-for="(act,index) in Actividades" :key="index" cols="3" justify="center" aspect-ratio="4/3">
             <v-card class="card-content">
-                <v-img class="align-end text-white mx-auto" width="300" :src="act.base64" >             
+                <v-img class="align-end text-white mx-auto" width="300" :src="act.url" >             
                 </v-img>
 
                 <v-card-subtitle class="pt-4 subtitulo"> {{act.title}}</v-card-subtitle>
     
-                <v-card-actions class="btn-actions">
+                <v-card-actions>                    
+                    <v-switch style="flex-direction: row-reverse !important"  v-model="act.active" label="Activo" color="success" @change="updateActivity(act._id,act.active,act.title)" hide-details></v-switch>    
                     <v-btn color="success" variant="flat" @click="loadActivity(act._id,act.user)">Detalle</v-btn>
-                    <v-switch class="mx-auto switch-active" style="flex-direction: row-reverse;" v-model="act.active" label="Activo" color="success" @change="updateActivity(act._id,act.active,act.title)" hide-details></v-switch>    
                 </v-card-actions>
             </v-card>
         </v-col>
@@ -94,7 +90,6 @@ async function getActividades(){
     Respuesta = {status: true, message: 'Actividad obtenida con éxito.', items: {}};
     await axios.get(config.PathAPI+'actividad/list/'+UserId.value)
     .then(response => {
-        console.log(response)
         Respuesta = response.data;
         if (response.data.state) {
             if (response.data.items.length) {
@@ -113,14 +108,10 @@ async function getActividades(){
 const Actividades = ref([]);
 onMounted(async () => {
     let data = await getActividades();
-    data = data.items.map(i => {
-        i.base64 = 'data:image/jpeg;base64, '+i.base64;
-        return i;
-    });
-    console.log(data)
-    Actividades.value = data;
+    let items = data.items;
+    Actividades.value = items;
     //console.log(actividad.value.base64)
-}) 
+})
 function loadActivity(ActivityId,UserId) {
     console.log('click')
     router.push({ name: 'DetalleActividad', params: { ActividadId: ActivityId, UserId: UserId } });
@@ -128,11 +119,4 @@ function loadActivity(ActivityId,UserId) {
 function back() {
     router.push({ name: 'Usuarios' });
 }
-
-/*if (activityResponse.status) {
-    let data = activityResponse.item;
-    //data.base64 = 'data:image/jpeg;base64, '+data.base64;
-    console.log(data)
-    //var actividad = ref(actividad);
-} */
 </script>
