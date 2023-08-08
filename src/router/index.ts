@@ -34,8 +34,8 @@ const routes = [
     component: () => import('@/views/Solicitudes.vue'),
   },
   {
-    path:'/User',
-    component: () => import('@/views/User.vue'),
+    path:'/User/MiCuenta',
+    component: () => import('@/views/MiCuenta.vue'),
   },
   {
     name: 'MenuActividades',

@@ -31,6 +31,7 @@ export const useUserStore = defineStore("app", () => {
   })
 
   if (localStorage.getItem("user")){
+    //localStorage.removeItem('user');
     user.value = JSON.parse(localStorage.getItem("user"))
   }
 
@@ -51,6 +52,19 @@ export const useUserStore = defineStore("app", () => {
       })
   }
 
+  const getTerapeuta = () => {
+    var url = `http://localhost:4000/solicitudes/listSolicitud/${user.value._id}`
+    axios.get(url)
+    .then(response => {
+        var _solicitud = response.data ? response.data[0] : null
+        solicitud.value = _solicitud 
+        console.log("valor solicitud", solicitud)
+    })
+    .catch(error => {
+        console.log(error)
+    })
+  } 
+
   watch(
     user,
     (userVal) =>{
@@ -66,8 +80,6 @@ export const useUserStore = defineStore("app", () => {
     },
     {deep: true}
   )
-
-  
 
   return{
     user,

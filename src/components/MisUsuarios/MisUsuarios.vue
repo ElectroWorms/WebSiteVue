@@ -236,7 +236,7 @@ export default {
             store.$patch({
                 secondUser: item
             })
-            this.$router.push({path: '/User/Rutinas'})
+            this.$router.push({path: '/User/MiCuenta'})
         },
         deletePerfil(){
 
