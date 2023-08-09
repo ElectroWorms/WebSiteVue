@@ -25,7 +25,7 @@
     <v-row class="mt-8">
         <v-col cols="6" justify="end" >
             <v-card class="pt-2 card-rutina">
-                <v-img class="" :height="300" :src="actividad.base64">
+                <v-img class="" :height="300" :src="actividad.url">
                     <!-- <v-card-title>Top 10 Australian beaches</v-card-title> -->
                 </v-img>
 
@@ -101,7 +101,6 @@ const actividad = ref("");
 onMounted(async () => {
     let data = await getActivity();
     data = data.item;
-    data.base64 = 'data:image/jpeg;base64, '+data.base64;
     actividad.value = data;
     //console.log(actividad.value.base64)
 }) 
