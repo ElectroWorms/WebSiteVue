@@ -54,6 +54,12 @@ const routes = [
     path: '/Actividad/List/:UserId',
     props: true,
     component: () => import('@/views/MenuActividades.vue'),
+  },
+  {
+    name: 'DetalleRutina',
+    path: '/Rutina/Detalle/:RoutineId/:ActividadId/:UserId',
+    props: true,
+    component: () => import('@/views/DetalleRutina.vue'),
   }
 ]
 

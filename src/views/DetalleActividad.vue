@@ -29,13 +29,19 @@
                     <!-- <v-card-title>Top 10 Australian beaches</v-card-title> -->
                 </v-img>
 
+                <div v-if="routineList.length">
+                    <ul>
+                        <li v-for="routine in routineList" :key="routine._id">{{ routine.title }}</li>
+                    </ul>
+                </div>
+
                 <v-card-subtitle class="pt-4"> Rutina </v-card-subtitle>
                 <v-card-text>
                     <div>Potencia el crecimiento de tu hijo con rutinas diarias, brindándole confianza en cada paso de su camino.</div>
                 </v-card-text>
 
                 <v-card-actions class="btn-actions">
-                    <v-btn color="orange"> Ver Rutina </v-btn>
+                    <v-btn @click="loadRoutine" color="green"> Ver Rutina </v-btn>
                 </v-card-actions>
             </v-card>
         </v-col>
@@ -60,55 +66,48 @@
     
 </template>
 <script setup lang="ts">
-/*
-    Imports
-*/
+
+// Imports
+
 import SidePanelTutor from '@/components/SidePanel/SidePanelTutor.vue';
-import UpperPanel from '@/components/UpperPanel/UpperPanel.vue';
-import axios from 'axios';
 import { ref, toRefs,onMounted } from 'vue'
-import config from '../../config'
 import router from '@/router'
-/*
-    Route Params
-*/
+import {getActivity, fetchRoutines} from '../functions/activityDetailFunctions'
+
+
+// Route Params
+
 const props = defineProps(["ActividadId","UserId"]);
-const {ActividadId, UserId} = toRefs(props);
-/*
-    Funciones
-*/
-let Respuesta;
-async function getActivity(){
-    Respuesta = {status: true, message: 'Actividad obtenida con éxito.', item: {}};
-    await axios.get(config.PathAPI+'actividad/get/'+ActividadId.value)
-    .then(response => {
-        Respuesta = response.data;
-        if (response.data.state) {
-            if (response.data.items.length) {
-                Respuesta = {status: true, message: 'Actividad obtenida con éxito.', item: response.data.items[0]};
-            }
-            else {
-                Respuesta = {status: true, message: response.data.message, item: {}};
-            }
-        }
-    })
-    .catch(error => {
-        Respuesta = {status: true, message: 'Error al obtener los datos:'+error, item: {}};
-    });
-    return Respuesta;
-}
-const actividad = ref("");
+const {ActividadId, UserId}: any = toRefs(props);
+
+const routineId = 1;
+let routineList: any[] = [];
+let activityData: any;
+
+
+// Functions
+
+const actividad: any = ref("");
+
 onMounted(async () => {
-    let data = await getActivity();
-    data = data.item;
-    data.base64 = 'data:image/jpeg;base64, '+data.base64;
-    actividad.value = data;
-    //console.log(actividad.value.base64)
-}) 
+    activityData = await getActivity(ActividadId);
+    routineList = await fetchRoutines();
+    activityData = activityData.item;
+    actividad.value = activityData;
+})
+
+// Routes
+
+function loadRoutine() {
+    router.push({name: 'DetalleRutina', params: {RoutineId: routineId, ActividadId: ActividadId.value, UserId: UserId.value}});
+}
+
 function loadGames() {
     router.push({ name: 'Juegos', params: { ActividadId: ActividadId.value } });
 }
+
 function back() {
     router.push({ name: 'MenuActividades', params: { ActividadId: ActividadId.value, UserId: UserId.value } });
 }
+
 </script>
