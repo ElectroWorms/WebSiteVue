@@ -2,8 +2,10 @@
     <div>
         <v-card-title class="text-subtitle-1 ">Mis Usuarios</v-card-title>
         <v-container class="border d-flex justify-start mx-1 mb-5 elevation-0" fluid >
+
             <v-card class="w-100 px-1 py-1">
-                <v-toolbar density="compact">
+                <v-row>
+                <v-toolbar density="">
                     <v-spacer></v-spacer>
                     <v-btn
                         color="blue darken-1"
@@ -14,46 +16,50 @@
                         Agregar Usuario
                     </v-btn>
                 </v-toolbar>
-                <v-card
-                    color="primary"
-                    theme="dark"
-                    class="pa-2 ma-2"
-                    style="width: 350px;"
-                    v-for="item in users"
-                    :key="item._id"
-                    >
-                    <div class="d-flex flex-no-wrap">
-                    <div class="">
-                        <v-card-title class="text-h5 ">
-                            {{item.userName}}
-                        </v-card-title>
-                        <v-card-subtitle>{{ item.firstName }} {{ item.secondName }}</v-card-subtitle>
-                        <v-card-actions>
-                        <v-btn
-                            class="ms-2"
-                            icon="mdi-play"
-                            variant="text"
-                            @click="initPerfil(item)"
-                        ></v-btn>
-                        <v-btn
-                            class="ms-2"
-                            icon="mdi-delete"
-                            variant="text"
-                            @click="deletePerfil"
-                        ></v-btn>
-                        </v-card-actions>
-                    </div>
-                    <v-avatar
-                        class="ma-3 "
-                        size="125"
-                        rounded="0"
-                    >
-                        <v-img src="https://avataaars.io/?avatarStyle=Transparent&topType=ShortHairShortCurly&accessoriesType=Blank&hairColor=Black&facialHairType=Blank&clotheType=Hoodie&clotheColor=White&eyeType=Default&eyebrowType=DefaultNatural&mouthType=Default&skinColor=Light"></v-img>
-                    </v-avatar>
-                    </div>
-                </v-card>  
-                
+                </v-row>
+                <v-row>
+                    <v-col cols="3 " v-for="item in users" :key="item._id">
+                        <v-card
+                            color="primary"
+                            theme="dark"
+                            class="rounded-lg"
+                            >
+                            <div class="d-flex flex-no-wrap">
+                            <div>
+                                <v-card-title class="text-h5 ">
+                                    {{item.userName}}
+                                </v-card-title>
+                                <v-card-subtitle>{{item.firstName}} {{item.secondName}}</v-card-subtitle>
+                                <v-card-actions>
+                                <v-btn
+                                    class="ms-2"
+                                    icon="mdi-play"
+                                    variant="text"
+                                    @click="initPerfil(item)"
+                                ></v-btn>
+                                <v-btn
+                                    class="ms-2"
+                                    icon="mdi-delete"
+                                    variant="text"
+                                    @click="deletePerfil"
+                                ></v-btn>
+                                </v-card-actions>
+                            </div>
+                            <v-avatar
+                                class=""
+                                size="125"
+                                rounded="0"
+                            >
+                                <v-img src="https://avataaars.io/?avatarStyle=Transparent&topType=ShortHairShortCurly&accessoriesType=Blank&hairColor=Black&facialHairType=Blank&clotheType=Hoodie&clotheColor=White&eyeType=Default&eyebrowType=DefaultNatural&mouthType=Default&skinColor=Light"></v-img>
+                            </v-avatar>
+                            </div>
+                        </v-card>  
+                        
+                    
+                    </v-col>
+                </v-row>
             </v-card>
+                
             
         </v-container>
     </div>
@@ -221,6 +227,7 @@ export default {
     methods:{
         closeDialogSuccess (){
             this.dialogSuccess = false
+            this.dialogCreateUser = false
         },
         create(){
             this.dialogCreateUser = true
@@ -250,14 +257,21 @@ export default {
             let formData = {
                 idTutor: store.solicitud.tutor._id,
                 idTerapeuta: store.solicitud.terapeuta._id,
-                user: store.user
+                user: this.user
             }
             console.log("formMetada", formData)
             axios.post(url, this.user)
-            .then (response => {
+            .then (response1 => {
                 axios.post(url2, formData)
-                .then(response => {
+                .then(response2 => {
                     this.dialogSuccess = true
+                    let newUser = store.user
+                    console.log(response1.data.user)
+                    newUser.users.push(response1.data.user)
+                    console.log(newUser)
+                    store.$patch({
+                        user: newUser
+                    })
                 })
                 .catch(error => {
                     console.log(error)
