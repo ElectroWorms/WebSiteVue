@@ -25,15 +25,23 @@
     <v-row class="mt-8">
         <v-col cols="6" justify="end" >
             <v-card class="pt-2 card-rutina">
-                <v-img class="" :height="300" :src="actividad.base64">
+
+                <v-img class="" :height="300" :src="actividad.url">
                     <!-- <v-card-title>Top 10 Australian beaches</v-card-title> -->
                 </v-img>
 
-                <div v-if="routineList.length">
-                    <ul>
-                        <li v-for="routine in routineList" :key="routine._id">{{ routine.title }}</li>
-                    </ul>
-                </div>
+                <!-- create select with the elements of routineList -->
+                <v-row class="ml-4 mr-4 mt-4">
+                    <v-select class="mr-2"
+                        label="Seleccione la rutina activa"
+                        :items="routineList"
+                        variant="outlined"
+                        v-model="selectedRoutine"
+                        :return-object="true"
+                        v-on:update:model-value="onChangeSelectedRoutine"
+                    ></v-select>
+                    <v-btn @click="activateRoutine" :disabled="!selectedRoutine" color="green"> Activar </v-btn>
+                </v-row>
 
                 <v-card-subtitle class="pt-4"> Rutina </v-card-subtitle>
                 <v-card-text>
@@ -73,6 +81,8 @@ import SidePanelTutor from '@/components/SidePanel/SidePanelTutor.vue';
 import { ref, toRefs,onMounted } from 'vue'
 import router from '@/router'
 import {getActivity, fetchRoutines} from '../functions/activityDetailFunctions'
+import { Routine } from '@/interfaces/Routine';
+import { changeRoutineStatus } from '@/functions/routineFunctions';
 
 
 // Route Params
@@ -80,26 +90,49 @@ import {getActivity, fetchRoutines} from '../functions/activityDetailFunctions'
 const props = defineProps(["ActividadId","UserId"]);
 const {ActividadId, UserId}: any = toRefs(props);
 
-const routineId = 1;
-let routineList: any[] = [];
+let routineId: string | undefined;
+let routineList: Routine[] = [];
 let activityData: any;
 
+const actividad: any = ref([]);
+
+// make a ref for an object with the selected routine
+let selectedRoutine = ref<Routine>();
 
 // Functions
 
-const actividad: any = ref("");
+function onChangeSelectedRoutine() {
+    console.log("Selected routine:", selectedRoutine.value?._id);
+}
 
+async function activateRoutine() {
+    // get the id of the selected routine and save it in
+    routineId = selectedRoutine.value?._id;
+
+    // send the id to the backend for changing the routine status
+    await changeRoutineStatus(routineId!, true);
+}
+
+// when the component loads
 onMounted(async () => {
+
+    // get the activity data and save it in ref 'actividad'
     activityData = await getActivity(ActividadId);
-    routineList = await fetchRoutines();
-    activityData = activityData.item;
+    activityData = activityData.items;
     actividad.value = activityData;
+
+    // get the list of routines for the activity
+    routineList = await fetchRoutines(UserId.value, ActividadId.value);
+
+    // select the routine that is active
+    selectedRoutine.value = routineList.filter((routine) => routine.active)[0];
+    routineId = selectedRoutine.value._id;
 })
 
 // Routes
 
 function loadRoutine() {
-    router.push({name: 'DetalleRutina', params: {RoutineId: routineId, ActividadId: ActividadId.value, UserId: UserId.value}});
+    router.push({name: 'DetalleRutina', params: {routineId: routineId, activityId: ActividadId.value, userId: UserId.value}});
 }
 
 function loadGames() {

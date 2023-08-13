@@ -57,7 +57,7 @@ const routes = [
   },
   {
     name: 'DetalleRutina',
-    path: '/Rutina/Detalle/:RoutineId/:ActividadId/:UserId',
+    path: '/Rutina/Detalle/:routineId/:activityId/:userId',
     props: true,
     component: () => import('@/views/DetalleRutina.vue'),
   }

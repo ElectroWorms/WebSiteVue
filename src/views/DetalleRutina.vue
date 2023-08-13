@@ -48,57 +48,37 @@
     
 </template>
 <script setup lang="ts">
-/*
-    Imports
-*/
+
+// Imports
+
 import SidePanelTutor from '@/components/SidePanel/SidePanelTutor.vue';
-import UpperPanel from '@/components/UpperPanel/UpperPanel.vue';
-import axios from 'axios';
-import { ref, toRefs,onMounted } from 'vue'
-import config from '../../config.json'
+import { ref, toRefs, onMounted } from 'vue'
 import router from '@/router'
+import { Routine, RoutineStep } from '../interfaces/Routine';
+import { getRoutine } from '../functions/routineFunctions';
 
 
-/*
-    Route Params
-*/
+// Route Params
 
 const props = defineProps(["routineId", "activityId", "userId"]);
 const {routineId, activityId, userId}: any = toRefs(props);
+console.log("props", routineId, activityId, userId);
+
+// Variables 
+let routine = ref<Routine>();
+let routineSteps = ref<RoutineStep[]>();
 
 
-/*
-    Funciones
-*/
-let Respuesta;
-// async function getActivity(){
-//     Respuesta = {status: true, message: 'Actividad obtenida con éxito.', item: {}};
-//     await axios.get(config.PathAPI+'rutina/get/'+ routineId.value)
-//     .then(response => {
-//         Respuesta = response.data;
-//         if (response.data.state) {
-//             if (response.data.items.length) {
-//                 Respuesta = {status: true, message: 'Actividad obtenida con éxito.', item: response.data.items[0]};
-//             }
-//             else {
-//                 Respuesta = {status: true, message: response.data.message, item: {}};
-//             }
-//         }
-//     })
-//     .catch(error => {
-//         Respuesta = {status: true, message: 'Error al obtener los datos:'+error, item: {}};
-//     });
-//     return Respuesta;
-// }
+// Functions
 
-const actividad: any = ref("");
+onMounted(async () => {
+    console.log("routineIdObj", routineId);
+    // obtenemos la rutina y los pasos de la rutina
+    routine.value = await getRoutine(routineId.value);
+});
 
-// onMounted(async () => {
-//     let data: any = await getActivity();
-//     data = data.item;
-//     data.base64 = 'data:image/jpeg;base64, '+data.base64;
-//     actividad.value = data;
-// })
+
+// Routes
 
 function back() {
     router.push({ name: 'DetalleActividad', params: { ActividadId: activityId.value, UserId: userId.value } });
