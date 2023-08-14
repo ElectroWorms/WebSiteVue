@@ -18,29 +18,49 @@
     min-height: 500px;
 }
 
+.add-step-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+}	
+
 </style>
 <template>
     
     <SidePanelTutor/>
     <v-app-bar :elevation="2" class="pl-4">
         <v-btn @click="back" icon="mdi-arrow-left"></v-btn>
-        Detalle de la Rutina {{ routineId }}
+        <!-- make a vue subtitle with "Detalle de la Rutina:" and put routine?.title beside -->
+        <span><span class="font-weight-bold">Detalle de la Rutina:</span> {{ routine?.title }}</span>
     </v-app-bar>
-    <v-row class="mt-8">
-        <v-col cols="4" justify="end" >
-            <v-card class="pt-2 card-step">
-                <v-img class="" :height="300" src="@/assets/juego.jpg">
-                    <!-- <v-card-title>Top 10 Australian beaches</v-card-title> -->
-                </v-img>
+    
+    <v-btn class="add-step-btn pl-4 pr-4" prepend-icon="$plus" variant="tonal" 
+        @click="showDialogNew = !showDialogNew" color="green"> 
+        Agregar Paso 
+    </v-btn>
+    <CreateRoutineStepDialog v-model="showDialogNew" @close="handleClose" :routine="routine" />
 
-                <v-card-subtitle class="pt-4"> Rutina </v-card-subtitle>
+    <v-row class="mt-8 ml-4 mr-4">
+
+        <v-col v-for="(routineStep, index) in routine?.steps" :key="index" cols="3" justify="end">
+            <v-card class="pt-2 card-step">
+                <v-img class="" :height="200" :src="routineStep.recursoItem.url"></v-img>
+
+                <v-card-subtitle class="pt-6"> Paso de Rutina {{ index + 1 }} </v-card-subtitle>
                 <v-card-text>
-                    <div>Potencia el crecimiento de tu hijo con rutinas diarias, brindándole confianza en cada paso de su camino.</div>
+                    {{ routineStep.recursoItem.title }}
                 </v-card-text>
 
-                <!-- <v-card-actions class="btn-actions">
-                    <v-btn @click="loadRoutine" color="green"> Ver Rutina </v-btn>
-                </v-card-actions> -->
+                <v-card-actions class="btn-actions pl-3 pr-3">
+                    <v-btn prepend-icon="$edit" variant="tonal" class="pl-4 pr-4"
+                        @click="editRoutineStepBtn(routineStep)" color="orange"> 
+                        Editar 
+                    </v-btn>
+                    <v-btn prepend-icon="$delete" variant="tonal" class="pl-4 pr-4"
+                        @click="deleteRoutineStepBtn(routineStep)" color="red"> 
+                        Eliminar 
+                    </v-btn>
+                </v-card-actions>
             </v-card>
         </v-col>
     </v-row>
@@ -52,30 +72,66 @@
 // Imports
 
 import SidePanelTutor from '@/components/SidePanel/SidePanelTutor.vue';
+import CreateRoutineStepDialog from '@/components/RoutineCRUD/CreateRoutineStepDialog.vue';
 import { ref, toRefs, onMounted } from 'vue'
 import router from '@/router'
-import { Routine, RoutineStep } from '../interfaces/Routine';
-import { getRoutine } from '../functions/routineFunctions';
+import { Routine, Step } from '../interfaces/Routine';
+import { getRoutineByActivityId } from '../functions/routineFunctions';
+import { deleteRoutineStep } from '@/functions/routineStepFunctions';
 
 
 // Route Params
 
 const props = defineProps(["routineId", "activityId", "userId"]);
 const {routineId, activityId, userId}: any = toRefs(props);
-console.log("props", routineId, activityId, userId);
 
 // Variables 
 let routine = ref<Routine>();
-let routineSteps = ref<RoutineStep[]>();
+let showDialogNew = ref<boolean>(false);
 
 
 // Functions
 
 onMounted(async () => {
-    console.log("routineIdObj", routineId);
-    // obtenemos la rutina y los pasos de la rutina
-    routine.value = await getRoutine(routineId.value);
+    // get the routine from the database with the steps and resources
+    let routineResp = await getRoutineByActivityId(activityId.value);
+    routineResp = routineResp.item[0];
+
+    // parse the routine and the routine steps
+    routine.value = routineResp;
 });
+
+
+// function that called to delete a routine step
+async function deleteRoutineStepBtn(routineStep: Step) {
+    console.log("Delete", routineStep._id);
+    // delete the routine step from the database
+    await deleteRoutineStep(routineStep._id);
+    // delete the routine step from the routineSteps array
+    if (routine.value?.steps) {
+        routine.value.steps = routine.value?.steps.filter((step) => step._id != routineStep._id);
+    }
+    console.log(routine.value);
+}
+
+// function that called to edit a routine step
+async function editRoutineStepBtn(routineStep: Step) {
+    console.log("Edit", routineStep._id);
+    // edit the routine step from the database
+    // edit the routine step from the routineSteps array
+}
+
+// function that called to add a new routine step
+async function addRoutineStepBtn() {
+    console.log("New");
+    showDialogNew.value = true;
+    // add the routine step to the database
+    // add the routine step to the routineSteps array
+}
+
+function handleClose() {
+    showDialogNew.value = false;
+}
 
 
 // Routes

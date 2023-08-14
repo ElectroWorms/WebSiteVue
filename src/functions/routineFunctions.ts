@@ -3,10 +3,10 @@ import axios from 'axios';
 import config from '../../config.json';
 
 // get routine by id
-export async function getRoutine(routineId: string) {
+export async function getRoutineByActivityId(activityId: string) {
 
     try {
-        const response = await axios.get(config.PathAPI + 'rutina/get/' + routineId);
+        const response = await axios.get(config.PathAPI + 'rutina/get/' + activityId);
         const routine = response.data;
         return routine;
 

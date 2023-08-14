@@ -122,7 +122,7 @@ onMounted(async () => {
     actividad.value = activityData;
 
     // get the list of routines for the activity
-    routineList = await fetchRoutines(UserId.value, ActividadId.value);
+    routineList = (await fetchRoutines(UserId.value, ActividadId.value)).item;
 
     // select the routine that is active
     selectedRoutine.value = routineList.filter((routine) => routine.active)[0];
