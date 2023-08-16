@@ -112,16 +112,23 @@
                     </v-card-text>
                 </v-card>
             </v-container>
-
-
     </div>
-    
+
+    <v-snackbar v-model="snackbar.active" :timeout="timeout" :color="snackbar.color">
+        {{ snackbar.text }}
+        <template v-slot:action="{ attrs }">
+            <v-btn color="blue" text v-bind="attrs" @click="snackbar.active = false">
+            Close
+            </v-btn>
+        </template>
+    </v-snackbar>
 
 </template>
 
 <script>
 import axios from 'axios'
 import {useUserStore} from "../../store/app"
+import config from '../../../config.json'
 const store = useUserStore()
 export default {
     data: () =>({
@@ -142,6 +149,12 @@ export default {
             userName: null,
             email: null,
         },
+        snackbar: {
+            color: null,
+            active: false,
+            text: null,
+            timeout: 3000,
+        },
         
     }),
 
@@ -151,7 +164,7 @@ export default {
             this.stateSelect = true
         },
         getTerapeutas(){
-            var url = 'http://localhost:4000/solicitudes/listTerapeutas'
+            var url = `${config.PathAPI}solicitudes/listTerapeutas`
             axios.get(url)
             .then(response => {
                 var userNameTerapeutas = response.data.map(terapeuta  => terapeuta.userName)
@@ -162,28 +175,80 @@ export default {
                 console.log(error)
             })
         },
-        vincular () {
-            var url = 'http://localhost:4000/solicitudes/enlazar'
+        async vincular () {
+            var url = `${config.PathAPI}solicitudes/enlazar`
             var terapeuta = this.terapeutas.filter (terapeuta => terapeuta.userName == this.userNameTerapeuta)[0]
             var tutor = store.user
             var formMetada = {tutorUser: tutor, terapeutaUser: terapeuta, estado: 'En espera'}
-            axios.post(url, formMetada)
-            .then(response => {
-                console.log(response)
-                console.log(store.user)
-                this.showCard = true
-                this.activeButton = false
-                this.typeAlert = "info"
-                this.stateSelect = false,
-                this.typeText = "La solicitud se encuentra en estado: En espera"
 
-            })
-            .catch(error => {
-                console.log(error)
-            })
+            // eliminar los usuarios del to, mostrar flag, el usuario a decidido desvincular la cuenta
+            if (this.showChangeTo == true){
+                console.log(store.vinculacion)
+                var url2 = `${config.PathAPI}getUser/${store.vinculacion.terapeuta._id}`
+                var url3 = `${config.PathAPI}solicitudes/updateUsers`
+                var users = store.user.users.map(user => user.userName)
+                axios.get(url2)
+                    .then( response => {
+                        console.log(response)
+                        var terapeuta = response.data.user
+                        var newUsersTerapeuta = []
+                        terapeuta.users.forEach(user => {
+                            if (!users.includes(user.userName)){
+                                newUsersTerapeuta.push(user)
+                            }
+                        });
+                        var formData ={
+                            idTerapeuta: terapeuta._id,
+                            users: newUsersTerapeuta
+                        }
+                        console.log(formData)
+                        axios.post(url3, formData)
+                        .then(response => {
+                            axios.post(url, formMetada)
+                            .then(response => {
+                                this.$router.go()
+                            })
+                            .catch(error => {
+                                this.snackbar.text = 'No se ha logrado procesar la solicitud. Intente nuevamente'
+                                this.snackbar.color = 'error'
+                                this.snackbar.active = true
+                            })
+                        })
+                        .catch(error => {
+                            this.snackbar.text = 'No se ha logrado vincular la cuenta. Intente nuevamente'
+                            this.snackbar.color = 'error'
+                            this.snackbar.active = true
+                        })
+
+                    })
+                    .catch(error => {
+                        this.snackbar.text = 'No se ha logrado vincular la cuenta. Intente nuevamente'
+                        this.snackbar.color = 'error'
+                        this.snackbar.active = true
+                    })
+                
+            }
+
+            else{
+                axios.post(url, formMetada)
+                .then(response => {
+                    this.showCard = true
+                    this.activeButton = false
+                    this.typeAlert = "info"
+                    this.stateSelect = false,
+                    this.typeText = "La solicitud se encuentra en estado: En espera"
+
+                })
+                .catch(error => {
+                    this.snackbar.text = 'No se ha logrado procesar la solicitud. Intente nuevamente'
+                    this.snackbar.color = 'error'
+                    this.snackbar.active = true
+                })
+            }
+        
         },
         getSolicitud(){
-            var url = `http://localhost:4000/solicitudes/listSolicitud/${store.user._id}`
+            var url = `${config.PathAPI}solicitudes/listSolicitud/${store.user._id}`
             axios.get(url)
             .then(response => {
                 var solicitud = response.data ? response.data[0] : null
@@ -228,14 +293,16 @@ export default {
                 
             })
             .catch(error => {
-                console.log(error)
+                this.snackbar.text = 'No se ha logrado obtener la solicitud. Intente nuevamente'
+                this.snackbar.color = 'error'
+                this.snackbar.active = true
             })
         },
         
     },
-    
     created () {
         this.getSolicitud()
+        store.getVinculacion()
     }
 }
 </script>

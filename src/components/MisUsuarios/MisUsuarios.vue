@@ -11,9 +11,10 @@
                         color="blue darken-1"
                         text
                         variant="outlined"
-                        @click="create"
+                        v-if="isTutor"
+                        @click="dialogCreateUser = true"
                         >
-                        Agregar Usuario
+                        Agregar Niño
                     </v-btn>
                 </v-toolbar>
                 </v-row>
@@ -176,7 +177,7 @@
                         color="red darken-1"
                         text
                         variant="outlined"
-                        @click="cancelar"
+                        @click="dialogCreateUser = false"
                         >
                         Cancelar
                     </v-btn>
@@ -185,31 +186,34 @@
                 </v-container>
             </v-card>
     </v-dialog>
-
-    <v-dialog v-model="dialogSuccess" max-width="580px">
-    <v-card >
-      <v-card-title class="text-h5 text-center">La cuenta se ha creado la cuenta correctamente!</v-card-title>
-      <v-card-text class="text-center">
-        <v-icon size="75" class="align-text" max-widht="300px" color="green">
-            mdi-checkbox-marked-circle-outline
-        </v-icon>
-    </v-card-text>
-      <v-card-actions>
-        <v-spacer></v-spacer>
-        <v-btn color="blue darken-1" text variant="outlined" @click="closeDialogSuccess">Aceptar</v-btn>
-        <v-spacer></v-spacer>
-      </v-card-actions>
-    </v-card>
-  </v-dialog>
     
+    <v-snackbar v-model="snackbar.active" :timeout="timeout" :color="snackbar.color">
+        {{ snackbar.text }}
+        <template v-slot:action="{ attrs }">
+            <v-btn color="blue" text v-bind="attrs" @click="snackbar.active = false">
+            Close
+            </v-btn>
+        </template>
+    </v-snackbar>
+
 </template>
 
 <script>
 import axios from 'axios'
 import {useUserStore} from "../../store/app"
 const store = useUserStore()
+const vinculacion = store.vinculacion
+var cuentaVinculada = false
+var formData = {}
+import config from '../../../config.json'
 export default {
     data: () =>({
+        snackbar: {
+            color: null,
+            active: false,
+            text: null,
+            timeout: 3000,
+        },
         user:{
             userName: null,
             firstName: null,
@@ -218,20 +222,12 @@ export default {
             email:store.user.email,
             typeAccount: "Niño",
         },
-        users: store.user.users,
         dialogCreateUser: false,
-        dialogSuccess: false
-        
+        isTutor: false,
+        users: store.user.users ? store.user.users : null,
     }),
 
     methods:{
-        closeDialogSuccess (){
-            this.dialogSuccess = false
-            this.dialogCreateUser = false
-        },
-        create(){
-            this.dialogCreateUser = true
-        },
         async validate () {
             const { valid } = await this.$refs.form.validate()
             if (valid) {
@@ -239,53 +235,73 @@ export default {
             }
         },
         initPerfil(item){
-            
             store.$patch({
                 secondUser: item
             })
+
             this.$router.push({path: '/User/MiCuenta'})
         },
-        deletePerfil(){
 
-        }, 
-        cancelar () {
-            this.dialogCreateUser = false
-        },
         save (){
-            var url = 'http://localhost:4000/createUser'
-            var url2 = 'http://localhost:4000/addUser'
-            let formData = {
-                idTutor: store.solicitud.tutor._id,
-                idTerapeuta: store.solicitud.terapeuta._id,
-                user: this.user
-            }
-            console.log("formMetada", formData)
+
+            let url = `${config.PathAPI}createUser`
+            let url2 = `${config.PathAPI}addUser`
+
             axios.post(url, this.user)
-            .then (response1 => {
-                axios.post(url2, formData)
-                .then(response2 => {
-                    this.dialogSuccess = true
+            .then (responseUser => {
+                axios.post(url2, {})
+                .then(response => {
+                    console.log(formData)
+                    this.snackbar.text = 'La cuenta ha sido agregada correctamente'
+                    this.snackbar.color = 'success'
+                    this.snackbar.active = true
+                    this.dialogCreateUser = false
+
+                    // Modificar el usuario incluyendo el nuevo usuario niño a la lista de usuarios
                     let newUser = store.user
-                    console.log(response1.data.user)
-                    newUser.users.push(response1.data.user)
-                    console.log(newUser)
+                    newUser.users.push(responseUser.data.user)
                     store.$patch({
                         user: newUser
                     })
+
                 })
                 .catch(error => {
-                    console.log(error)
+                    this.snackbar.text = 'No se ha podido crear la cuenta. Intente nuevamente'
+                    this.snackbar.color = 'error'
+                    this.snackbar.active = true
+                    this.dialogCreateUser = false
                 })
             })
             .catch(error => {
-            console.log(error)
-            this.alertError = true
+                this.snackbar.text = 'No se ha podido crear la cuenta. Intente nuevamente'
+                this.snackbar.color = 'error'
+                this.snackbar.active = true
+                this.dialogCreateUser = false
             })
         }
     },
     
     created () {
-        store.getSolicitud()
+        if (vinculacion.estado !== "Aprobado") {
+            cuentaVinculada = false
+            formData = {
+                idTutor: store.user._id,
+                idTerapeuta: null,
+                user: this.user,
+                cuentaVinculada
+            }
+        }
+        else{
+            cuentaVinculada = true
+            store.getVinculacion()
+            formData = {
+                idTutor: store.vinculacion.tutor._id,
+                idTerapeuta: store.vinculacion.terapeuta._id,
+                user: this.user,
+                cuentaVinculada
+            }
+        }
+        this.isTutor= store.user.typeAccount == "Tutor" ? true : false
     }
 }
 </script>

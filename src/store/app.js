@@ -23,7 +23,7 @@ export const useUserStore = defineStore("app", () => {
     typeAccount: null,
   }) 
 
-  const solicitud = ref({
+  const vinculacion = ref({
     estado: null,
     terapeuta: null,
     tutor: null,
@@ -38,13 +38,13 @@ export const useUserStore = defineStore("app", () => {
     secondUser.value = JSON.parse(localStorage.getItem("secondUser"))
   }
 
-  const getSolicitud = () => {
+  const getVinculacion = () => {
       var url = `http://localhost:4000/solicitudes/listSolicitud/${user.value._id}`
       axios.get(url)
       .then(response => {
           var _solicitud = response.data ? response.data[0] : null
-          solicitud.value = _solicitud 
-          console.log("valor solicitud", solicitud)
+          vinculacion.value = _solicitud 
+          console.log("valor solicitud", vinculacion)
       })
       .catch(error => {
           console.log(error)
@@ -56,8 +56,8 @@ export const useUserStore = defineStore("app", () => {
     axios.get(url)
     .then(response => {
         var _solicitud = response.data ? response.data[0] : null
-        solicitud.value = _solicitud 
-        console.log("valor solicitud", solicitud)
+        vinculacion.value = _solicitud 
+        console.log("valor solicitud", vinculacion)
     })
     .catch(error => {
         console.log(error)
@@ -83,8 +83,8 @@ export const useUserStore = defineStore("app", () => {
   return{
     user,
     secondUser,
-    solicitud,
-    getSolicitud
+    vinculacion,
+    getVinculacion
   }
 })
 

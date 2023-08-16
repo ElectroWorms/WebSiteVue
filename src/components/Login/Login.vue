@@ -28,12 +28,6 @@
                 </v-form>
             </v-card-text>
             <v-card-text class="px-1">
-              <v-alert
-                  type="error"
-                  v-model = "alertError"
-                  variant="outlined"
-                  text="No coinciden las credenciales. Por favor, intente nuevamente..."
-                ></v-alert>
             </v-card-text>
             <v-container class="px-0">
                 <v-card-actions >
@@ -59,15 +53,30 @@
         </v-card>
         </v-responsive>
     </v-container>
+
+    <v-snackbar v-model="snackbar.active" :timeout="timeout" :color="snackbar.color">
+        {{ snackbar.text }}
+        <template v-slot:action="{ attrs }">
+            <v-btn color="blue" text v-bind="attrs" @click="snackbar.active = false">
+            Close
+            </v-btn>
+        </template>
+    </v-snackbar>
     
 </template>
 <script>
 import axios from 'axios'
 import {useUserStore} from "../../store/app"
+import config from '../../../config.json'
 const store = useUserStore()
   export default {
     data: () => ({
-      alertError: false,
+      snackbar: {
+        color: null,
+        active: false,
+        text: null,
+        timeout: 3000,
+      },
       user:{
         userName: null,
         password: null,
@@ -83,13 +92,11 @@ const store = useUserStore()
           this.save()
         }
       },
-      
       cancelar () {
         this.$emit("changeDialogLogin", false);
       },
       save (){
-        //this.$router.push({path: '/Usuarios'})
-        var url = 'http://localhost:4000/login'
+        var url = `${config.PathAPI}login`
         axios.post(url, this.user)
         .then (response => {
           store.$patch({
@@ -99,8 +106,9 @@ const store = useUserStore()
           this.$router.push({path: '/Usuarios'})
         })
         .catch(error => {
-            console.log(error)
-            this.alertError = true
+            this.snackbar.text = 'Credenciales incorrectas'
+            this.snackbar.color = 'error'
+            this.snackbar.active = true
         })
       }
 

@@ -164,28 +164,23 @@
             </v-container>
     </div>
 
-    <v-dialog v-model="dialogSuccess" max-width="580px">
-    <v-card >
-      <v-card-title class="text-h5 text-center">Los datos han sido modificados correctamente!</v-card-title>
-      <v-card-text class="text-center">
-        <v-icon size="75" class="align-text" max-widht="300px" color="green">
-            mdi-checkbox-marked-circle-outline
-        </v-icon>
-    </v-card-text>
-      <v-card-actions>
-        <v-spacer></v-spacer>
-        <v-btn color="blue darken-1" text variant="outlined" @click="closeDialogSuccess">Aceptar</v-btn>
-        <v-spacer></v-spacer>
-      </v-card-actions>
-    </v-card>
-  </v-dialog>
+    <v-snackbar v-model="snackbar.active" :timeout="timeout" :color="snackbar.color">
+        {{ snackbar.text }}
+        <template v-slot:action="{ attrs }">
+            <v-btn color="blue" text v-bind="attrs" @click="snackbar.active = false">
+            Close
+            </v-btn>
+        </template>
+    </v-snackbar>
     
 </template>
 
 <script>
 import axios from 'axios'
 import {useUserStore} from "../../store/app"
+import config from '../../../config.json'
 const store = useUserStore()
+const vinculacion = store.vinculacion
 export default {
     data: () =>({
         items: ['Masculino', 'Femenino'],
@@ -202,6 +197,12 @@ export default {
             sexo: store.secondUser.infoNino ? store.secondUser.infoNino.sexo : null
 
         },
+        snackbar: {
+            color: null,
+            active: false,
+            text: null,
+            timeout: 3000,
+        },
         activeInputs: false,
         activeButtonEnviar: false,
         activeInputsNino: store.secondUser.infoNino ? false : true,
@@ -215,9 +216,6 @@ export default {
             this.activeInputs = true
             this.activeButtonEnviar = true
         },
-        closeDialogSuccess () {
-            this.dialogSuccess = false  
-        },
         actualizarNino () {
             this.activeInputsNino = true
             this.activeButtonEnviarNino = true
@@ -230,17 +228,35 @@ export default {
         },
         saveCuenta () {
             var secondUser = store.secondUser
-            var url = "http://localhost:4000/updateUser"
+            var url =  `${config.PathAPI}updateUser`
             secondUser.userName = this.user.userName
             secondUser.firstName = this.user.firstName
             secondUser.secondName = this.user.secondName
             secondUser.email =  this.user.email
 
-            axios.post(url, {idTutor: store.solicitud.tutor._id, idTerapeuta: store.solicitud.terapeuta._id, secondUser})
+            let FormData ={
+                idTutor: null,
+                idTerapeuta: null,
+                secondUser: secondUser
+            }
+            
+            //La cuenta aun no se ha vinculado y esta ingresando datos el tutor
+            if (vinculacion.estado != "Aprobado"){
+                FormData.idTutor = store.user._id
+            }
+            //La cuenta fue vinculada
+            else{
+                FormData.idTutor = store.vinculacion.tutor._id
+                FormData.idTerapeuta = store.vinculacion.terapeuta._id
+            }
+            
+            axios.post(url, FormData)
             .then(response => {
                 this.activeInputs = false
                 this.activeButtonEnviar = false
-                this.dialogSuccess = true
+                this.snackbar.text = 'Se ha modificado la cuenta del niño correctamente'
+                this.snackbar.color = 'success'
+                this.snackbar.active = true
                 store.$patch({
                     secondUser: secondUser,
                     user: store.user.typeAccount == "Terapeuta Ocupacional" ? response.data.terapeuta : response.data.tutor
@@ -248,8 +264,12 @@ export default {
                 console.log(store.user)
             })
             .catch( error => {
-                console.log(error)
+                this.snackbar.text = 'No se pudo modificar la cuenta del niño'
+                this.snackbar.color = 'error'
+                this.snackbar.active = true
             })
+            
+            
         },
         async validateNino () {
             const { valid } = await this.$refs.form.validate()
@@ -258,14 +278,15 @@ export default {
             }
         },
         saveNino () {
-            var url = "http://localhost:4000/addNino"
-            var userInfoNino = {
-                    _id: store.secondUser._id,
-                    edad:this.userNino.edad,
-                    sexo: this.userNino.sexo,
-                    nivelTea: this.userNino.nivelTea,
-                }
+            var url =  `${config.PathAPI}addDatosNino`
             var secondUser = store.secondUser
+            
+            var userInfoNino = {
+                _id: store.secondUser._id,
+                edad:this.userNino.edad,
+                sexo: this.userNino.sexo,
+                nivelTea: this.userNino.nivelTea,
+            }
             
             secondUser.infoNino = {
                 _id: store.secondUser._id,
@@ -273,27 +294,46 @@ export default {
                 sexo: this.userNino.sexo,
                 nivelTea: this.userNino.nivelTea,
             }
-            axios.post(url, {idTutor: store.solicitud.tutor._id, idTerapeuta: store.solicitud.terapeuta._id, userInfoNino})
+
+            let FormData ={
+                idTutor: null,
+                idTerapeuta: null,
+                userInfoNino: userInfoNino
+            }
+            
+            //La cuenta aun no se ha vinculado y esta ingresando datos el tutor
+            if (vinculacion.estado != "Aprobado"){
+                FormData.idTutor = store.user._id
+            }
+            //La cuenta fue vinculada
+            else{
+                FormData.idTutor = store.vinculacion.tutor._id
+                FormData.idTerapeuta = store.vinculacion.terapeuta._id
+            }
+
+            axios.post(url, FormData)
             .then (response => {
                 this.activeButtonEnviarNino = false
                 this.activeButtonActualizarNino = true
                 this.activeInputsNino = false
-                this.dialogSuccess = true
+                this.snackbar.text = 'Se ha actualizado correctamente los datos del niño'
+                this.snackbar.color = 'success'
+                this.snackbar.active = true
                 store.$patch({
                     user: store.user.typeAccount == "Terapeuta Ocupacional" ? response.data.terapeuta : response.data.tutor,
                     secondUser: secondUser
                 })
             })
             .catch (error => {
-                console.log (error)
+                this.snackbar.text = 'No se pudo modificar los datos del niño'
+                this.snackbar.color = 'error'
+                this.snackbar.active = true
             }) 
         },
     },
     
     created () {
-        store.getSolicitud()
-        console.log(store.user)
-        console.log(store.secondUser)
+        store.getVinculacion()
     }
 }
 </script>
