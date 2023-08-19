@@ -19,7 +19,7 @@
     <v-app-bar :elevation="2" class="pl-4">        
 		Mis Usuarios
         <v-spacer></v-spacer>
-        <v-text-field v-model="search" class="fondoBlanco" placeholder="Buscar..." variant="underlined" prepend-icon="mdi-magnify" @change="updateUserCards"></v-text-field>
+        <v-text-field v-model="search" class="fondoBlanco" placeholder="Buscar..." variant="underlined" prepend-icon="mdi-magnify"></v-text-field>
         <v-spacer></v-spacer>
         <v-btn color="primary" class="mt-2" @click="dialogCreateUser = true">Crear Cuenta</v-btn>
 	</v-app-bar>
@@ -32,7 +32,7 @@
             <v-row>                    
                 <v-col cols="3" v-for="item in users" :key="item._id">      
                     <v-card class="mx-auto" max-width="100%" style="height: 340px;">
-                        <v-img :src="getCardImg(item)" class="mt-5 mb-5" height="150px" aspect-ratio="1/1"></v-img>
+                        <v-img :src="getCardImg(item.url,item.sexo)" class="mt-5 mb-5" height="150px" aspect-ratio="1/1"></v-img>
 
                         <v-card-title style="text-align: center;">
                          {{item.fullname }}
@@ -54,13 +54,13 @@
             </v-row>
         </div> 
         <v-row v-else class="w-100 h-100 mx-2 mt-4">
-            <v-card class="mx-auto mt-4" max-width="344">
+            <v-card class="mx-auto mt-4 pt-4 pb-4" max-width="344">
                 <v-img src="https://rapnistorage.blob.core.windows.net/rapnistorage/Lombriz.png" max-width="344" max-height="120px" cover></v-img>
                 <br>
                 <v-card-subtitle>
-                    Aún no has creado ninguna cuenta.
+                    {{ MensajeBusqueda }}
                 </v-card-subtitle>
-                <v-card-actions class="actions-center">
+                <v-card-actions class="actions-center" v-if="MensajeBusqueda == 'Aún no has creado ninguna cuenta.'">
                     <v-btn color="orange-lighten-2" variant="text" @click="dialogCreateUser = true">
                         Agregar Cuenta
                     </v-btn>
@@ -85,11 +85,6 @@
                             </v-col>
                             <v-col cols="4" md="4">
                                 <v-text-field v-model="user.apellidoMaterno" :rules="[v => !!v || 'Apellido Materno es requerido']" :counter="10" label="Apellido Materno" required variant="underlined"></v-text-field>
-                            </v-col>
-                            <v-col cols="4" md="4">
-                                <v-container>
-                                    <v-date-picker v-model="user.fechaNacimiento" color="primary"></v-date-picker>
-                                </v-container>
                             </v-col>
                             <v-col cols="4" md="4" >
                                 <v-text-field label="Nombre de usuario" v-model="user.userName" :rules="[v => !!v || 'Nombre de usuario es requerido']" variant="underlined"></v-text-field>
@@ -159,6 +154,7 @@ export default {
             text: null,
             timeout: 3000,
         },
+        MensajeBusqueda: (store.user.users ? store.user.users : []).length == 0 ? "Aún no has creado ninguna cuenta." : "Ninguna cuenta coincide con la búsqueda",
         user: {
             userName: null,
             nombre: null,
@@ -177,7 +173,7 @@ export default {
         dialogCreateUser: false,
         isTutor: false,
         users: store.user.users ? store.user.users : null,
-        respaldoUsers: store.user.users ? store.user.users : null,
+        respaldoUsers: store.user.users ? store.user.users : [],
         search: null,
     }),
     methods:{
@@ -193,16 +189,22 @@ export default {
             else if (nivelTea == 'Nivel de Apoyo 3') return "warning";
             else return "purple";
         },
-        getCardImg(item){
-            if (item.url != '' && item.url != undefined) return item.url; 
-            else return (item.sexo == 'Masculino') ? '/src/assets/icons/nino_1.png' : '/src/assets/icons/nina_1.png';
+        getCardImg(url,sexo){
+            console.log(sexo)
+            if (url != "" && url != undefined) return url; 
+            else return (sexo == 'Masculino') ? '/src/assets/icons/nino_1.png' : '/src/assets/icons/nina_1.png';
         },
-        updateUserCards(event){
+        updateUserCards() {
             console.log(this.search);
             this.users = this.respaldoUsers.filter(m => 
             (m.fullname || '').toLowerCase().includes(this.search) ||
             (m.nivelTea || '').toLowerCase().includes(this.search));
-            console.log(this.users)
+            if (this.users.length == 0) {
+                this.MensajeBusqueda = "Ninguna cuenta coincide con la búsqueda.";
+            }
+            else {
+                this.MensajeBusqueda = "Aún no has creado ninguna cuenta.";
+            }
         },
         loadPerfil(item) {
             store.$patch({
@@ -275,7 +277,14 @@ export default {
         deleteAccount(cuenta){
             console.log('Cuenta eliminada:',cuenta)
         }
-    },    
+    },   
+    watch: {
+        search(newVal, oldVal) {
+            this.search = newVal;
+            console.log(newVal,oldVal)
+            this.updateUserCards();
+        }
+    },
     created () {
         if (vinculacion) {
             if (vinculacion.estado !== "Aprobado") {

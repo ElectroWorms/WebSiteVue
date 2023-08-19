@@ -7,8 +7,8 @@
           <v-list-item
             class="px-10 mt-7"
             lines="two"
-            :prepend-avatar="avatar"
-            :title="fullname"
+            :prepend-avatar="profile.avatar"
+            :title="profile.fullname"
             subtitle="Terapeuta Ocupacional"
           ></v-list-item>
         </template>
@@ -29,12 +29,18 @@
 <script>
 import {useUserStore} from "../../store/app"
 const store = useUserStore()
+function getCardImg(url,sexo){
+    if (url != "" && url != undefined) return url; 
+    else return (sexo == 'Masculino') ? '/src/assets/icons/perfil_man.png' : '/src/assets/icons/perfil_woman.png';
+}
 export default {
-  data: () =>({
-    profile: {
-      avatar: store.user.url || "https://avataaars.io/?avatarStyle=Transparent&topType=ShortHairShortCurly&accessoriesType=Blank&hairColor=Black&facialHairType=Blank&clotheType=Hoodie&clotheColor=White&eyeType=Default&eyebrowType=DefaultNatural&mouthType=Default&skinColor=Light",
-      fullname: store.user.fullname || "Usuario",
-    }
-  })
+    data: () =>({
+      userId: store.user._id,
+      profile: {
+        avatar: getCardImg(store.user.url,store.user.sexo),
+        fullname: store.user.fullname || "Usuario",
+        rol: store.user.typeAccount
+      }
+    }),
 }
 </script>

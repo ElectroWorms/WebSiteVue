@@ -19,7 +19,7 @@
                                 <v-row>
                                     <v-col align-self="center">
                                         <v-sheet class="pa-2 ma-2">
-                                            <v-file-input :rules="rules" accept="image/png, image/jpeg, image/jpg" label="Seleccionar foto de perfil" prepend-icon="mdi-camera" :readonly="!editing" :variant="variant"></v-file-input>
+                                            <v-file-input v-model="file" :rules="rules" accept="image/png, image/jpeg, image/jpg" label="Cambiar foto de perfil" prepend-icon="mdi-camera" :readonly="!editing" :variant="variant"></v-file-input>
                                         </v-sheet>
                                     </v-col>
                                 </v-row>
@@ -27,7 +27,7 @@
                             <v-col cols="8" md="8">
                                 <v-row>
                                     <v-col cols="4" md="4">
-                                        <v-text-field v-model="user.name" label="Nombre" :readonly="!editing" :variant="variant"></v-text-field>
+                                        <v-text-field v-model="user.nombre" label="Nombre" :readonly="!editing" :variant="variant"></v-text-field>
                                     </v-col>
                                     <v-col cols="4" md="4">
                                         <v-text-field v-model="user.apellidoPaterno" label="Apellido Paterno" :readonly="!editing" :variant="variant"></v-text-field>
@@ -42,10 +42,10 @@
                                         <v-text-field label="Correo" v-model="user.email" :readonly="!editing" :variant="variant"></v-text-field>
                                     </v-col>
                                     <v-col cols="4" md="4">
-                                        <v-text-field label="Contraseña" v-model="user.confirmPassword" :readonly="!editing" :variant="variant" type="password"></v-text-field>
+                                        <v-text-field label="Contraseña" v-model="user.password" :readonly="!editing" :variant="variant" type="password" :rules="[v => !!v || 'Contraseña es requerido', v => (user.password == user.passwordConfirm) ? true: 'Las Contraseñas no coinciden.']"></v-text-field>
                                     </v-col>
                                     <v-col cols="4" md="4">
-                                        <v-text-field label="Confirmar Contraseña" v-model="user.password" :readonly="!editing" :variant="variant" type="password" v-if="editing"></v-text-field>
+                                        <v-text-field label="Confirmar Contraseña" v-model="user.passwordConfirm" :readonly="!editing" :variant="variant" type="password" v-if="editing" :rules="[v => !!v || 'Contraseña es requerido', v => (user.password == user.passwordConfirm) ? true: 'Las Contraseñas no coinciden.']"></v-text-field>
                                     </v-col>
                                     <v-col cols="4" md="4">
                                          <v-text-field label="Edad" v-model="userNino.edad" :readonly="!editing" :variant="variant"></v-text-field>
@@ -55,8 +55,7 @@
                                     </v-col>
                                     <v-col cols="4" md="4">
                                         <v-select label="Sexo" :items="items" v-model="userNino.sexo" :readonly="!editing" :variant="variant"></v-select>
-                                    </v-col>
-                                    <v-date-picker show-adjacent-months width="40px"></v-date-picker>
+                                    </v-col>                                    
                                 </v-row>
                             </v-col>
                         </v-row>          
@@ -99,6 +98,22 @@ import {useUserStore} from "../../store/app";
 import config from '../../../config.json';
 const store = useUserStore();
 const vinculacion = store.vinculacion;
+function fileToBlob(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    
+    reader.onload = () => {
+      const blob = new Blob([reader.result], { type: file.type });
+      resolve(blob);
+    };
+    
+    reader.onerror = (error) => {
+      reject(error);
+    };
+    
+    reader.readAsArrayBuffer(file);
+  });
+}
 export default {
     data: () =>({
         rules: [
@@ -106,19 +121,20 @@ export default {
                 return !value || !value.length || value[0].size < 2000000 || 'Avatar size should be less than 2 MB!'
             },
         ],
+        file: null,
         editing: false,
         variant: "plain",
         items: ['Masculino', 'Femenino'],
-        nivelTea: ['1', '2', '3'],
+        nivelTea: ['Nivel de Apoyo 1', 'Nivel de Apoyo 2', 'Nivel de Apoyo 3'],
         user : {
             userName: store.secondUser.userName,
-            name: store.secondUser.firstName,
+            nombre: store.secondUser.nombre,
             apellidoPaterno: store.secondUser.apellidoPaterno,
             apellidoMaterno: store.secondUser.apellidoMaterno,
             email: store.secondUser.email,
             url: store.secondUser.url,
-            password: "",
-            confirmPassword: ""            
+            password: store.secondUser.password,
+            passwordConfirm: store.secondUser.password            
         },
         userNino : {
             edad: store.secondUser.infoNino ? store.secondUser.infoNino.edad : null,
@@ -162,112 +178,44 @@ export default {
                 this.saveCuenta()
             }
         },
-        saveCuenta () {
-            var secondUser = store.secondUser
-            var url =  `${config.PathAPI}updateUser`
-            secondUser.userName = this.user.userName
-            secondUser.firstName = this.user.firstName
-            secondUser.secondName = this.user.secondName
-            secondUser.email =  this.user.email
-
-            let FormData ={
-                idTutor: null,
-                idTerapeuta: null,
-                secondUser: secondUser
+        saveCuenta () {            
+            if (this.file != null) {
+                console.log(this.file)
+                let formData = new FormData();
+                formData.filename = 'perfil_'+this.user._id+'.png';
+                formData.file = await fileToBlob(this.file);
+                axios.post(`${config.PathAPI}utility/uploadDocument`,formData).then(response => {
+                    let respuesta = response.data;                    
+                    console.log(respuesta);
+                    if (respuesta.state) {
+                        this.user.url = respuesta.item.url;
+                    }
+                });
             }
-            
-            //La cuenta aun no se ha vinculado y esta ingresando datos el tutor
-            if (vinculacion.estado != "Aprobado"){
-                FormData.idTutor = store.user._id
-            }
-            //La cuenta fue vinculada
-            else{
-                FormData.idTutor = store.vinculacion.tutor._id
-                FormData.idTerapeuta = store.vinculacion.terapeuta._id
-            }
-            
-            axios.post(url, FormData)
-            .then(response => {
-                this.activeInputs = false
-                this.activeButtonEnviar = false
-                this.snackbar.text = 'Se ha modificado la cuenta del niño correctamente'
-                this.snackbar.color = 'success'
+            return;
+            axios.post(`${config.PathAPI}updateAccount`, this.user).then(response => {
+                let respuesta = response.data;
+                if (respuesta.state) {
+                    this.editing = false;
+                    this.snackbar.text = 'Se ha modificado la cuenta del niño correctamente';
+                    this.snackbar.color = 'success';
+                    this.snackbar.active = true;
+                    store.$patch({
+                        secondUser: this.user,
+                        user: store.user.typeAccount == "Terapeuta Ocupacional" ? response.data.terapeuta : response.data.tutor
+                    })
+                }
+                this.snackbar.text = 'No se pudo modificar la cuenta del niño';
+                this.snackbar.color = 'error';
                 this.snackbar.active = true
-                store.$patch({
-                    secondUser: secondUser,
-                    user: store.user.typeAccount == "Terapeuta Ocupacional" ? response.data.terapeuta : response.data.tutor
-                })
-                console.log(store.user)
             })
             .catch( error => {
-                this.snackbar.text = 'No se pudo modificar la cuenta del niño'
+                this.snackbar.text = 'Ha ocurrido un error'
                 this.snackbar.color = 'error'
                 this.snackbar.active = true
-            })
-            
-            
-        },
-        async validateNino () {
-            const { valid } = await this.$refs.form.validate()
-            if (valid) {
-                this.saveNino()
-            }
-        },
-        saveNino () {
-            var url =  `${config.PathAPI}addDatosNino`
-            var secondUser = store.secondUser
-            
-            var userInfoNino = {
-                _id: store.secondUser._id,
-                edad:this.userNino.edad,
-                sexo: this.userNino.sexo,
-                nivelTea: this.userNino.nivelTea,
-            }
-            
-            secondUser.infoNino = {
-                _id: store.secondUser._id,
-                edad:this.userNino.edad,
-                sexo: this.userNino.sexo,
-                nivelTea: this.userNino.nivelTea,
-            }
-
-            let FormData ={
-                idTutor: null,
-                idTerapeuta: null,
-                userInfoNino: userInfoNino
-            }
-            
-            //La cuenta aun no se ha vinculado y esta ingresando datos el tutor
-            if (vinculacion.estado != "Aprobado"){
-                FormData.idTutor = store.user._id
-            }
-            //La cuenta fue vinculada
-            else{
-                FormData.idTutor = store.vinculacion.tutor._id
-                FormData.idTerapeuta = store.vinculacion.terapeuta._id
-            }
-
-            axios.post(url, FormData)
-            .then (response => {
-                this.activeButtonEnviarNino = false
-                this.activeButtonActualizarNino = true
-                this.activeInputsNino = false
-                this.snackbar.text = 'Se ha actualizado correctamente los datos del niño'
-                this.snackbar.color = 'success'
-                this.snackbar.active = true
-                store.$patch({
-                    user: store.user.typeAccount == "Terapeuta Ocupacional" ? response.data.terapeuta : response.data.tutor,
-                    secondUser: secondUser
-                })
-            })
-            .catch (error => {
-                this.snackbar.text = 'No se pudo modificar los datos del niño'
-                this.snackbar.color = 'error'
-                this.snackbar.active = true
-            }) 
-        },
-    },
-    
+            })           
+        }
+    },    
     created () {
         store.getVinculacion()
     }

@@ -21,9 +21,9 @@
         Menú de Actividades
     </v-app-bar>
     <v-row class="mx-4 mt-2">
-        <v-col v-for="(act,index) in Actividades" :key="index" cols="3" justify="center" aspect-ratio="4/3">
-            <v-card class="card-content">
-                <v-img class="align-end text-white mx-auto" width="300" :src="act.url" >             
+        <v-col v-for="(act,index) in Actividades" :key="index" cols="3" justify="center" >
+            <v-card class="card-content pt-5 pb-5 px-5" height="350">
+                <v-img class="align-end text-white mx-auto" height="250" :src="act.url" aspect-ratio="1">             
                 </v-img>
 
                 <v-card-subtitle class="pt-4 subtitulo"> {{act.title}}</v-card-subtitle>
