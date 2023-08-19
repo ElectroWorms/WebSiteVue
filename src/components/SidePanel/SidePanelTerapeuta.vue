@@ -7,9 +7,9 @@
           <v-list-item
             class="px-10 mt-7"
             lines="two"
-            prepend-avatar="https://avataaars.io/?avatarStyle=Transparent&topType=ShortHairShortCurly&accessoriesType=Blank&hairColor=Black&facialHairType=Blank&clotheType=Hoodie&clotheColor=White&eyeType=Default&eyebrowType=DefaultNatural&mouthType=Default&skinColor=Light"
-            title="Jane Smith"
-            subtitle="Logged in"
+            :prepend-avatar="avatar"
+            :title="fullname"
+            subtitle="Terapeuta Ocupacional"
           ></v-list-item>
         </template>
         <v-container class="px-0" style="margin-top: 10px">
@@ -27,4 +27,14 @@
       </v-navigation-drawer>
 </template>
 <script>
+import {useUserStore} from "../../store/app"
+const store = useUserStore()
+export default {
+  data: () =>({
+    profile: {
+      avatar: store.user.url || "https://avataaars.io/?avatarStyle=Transparent&topType=ShortHairShortCurly&accessoriesType=Blank&hairColor=Black&facialHairType=Blank&clotheType=Hoodie&clotheColor=White&eyeType=Default&eyebrowType=DefaultNatural&mouthType=Default&skinColor=Light",
+      fullname: store.user.fullname || "Usuario",
+    }
+  })
+}
 </script>

@@ -70,7 +70,7 @@ const timeout = ref(1000);
 /*
     Funciones
 */
-async function updateActivity(actividadId: string,active: boolean,title: string){
+async function updateActivity(actividadId: string, active: boolean ,title: string){
     try {
         await axios.post(config.PathAPI+'actividad/update/',{ ActividadId: actividadId, active: active});
         snackbar.value = true;
@@ -87,32 +87,28 @@ async function updateActivity(actividadId: string,active: boolean,title: string)
 */
 let Respuesta;
 async function getActividades(){
-    Respuesta = {status: true, message: 'Actividad obtenida con éxito.', items: {}};
-    await axios.get(config.PathAPI+'actividad/list/'+UserId.value)
+    Respuesta = {status: true, message: 'Actividad obtenida con éxito.', item: {}};
+    await axios.get(config.PathAPI+'actividad/list/'+UserId?.value)
     .then(response => {
         Respuesta = response.data;
         if (response.data.state) {
-            if (response.data.items.length) {
-                Respuesta = {status: true, message: 'Listado de Actividades obtenido con éxito.', items: response.data.items};
-            }
-            else {
-                Respuesta = {status: true, message: response.data.message, items: []};
-            }
+            Respuesta = response.data;
         }
     })
     .catch(error => {
-        Respuesta = {status: true, message: 'Error al obtener los datos:'+error, items: []};
+        Respuesta = {state: true, code: 500, message: 'Error al obtener los datos:'+error, item: []};
     });
     return Respuesta;
 }
-const Actividades = ref([]);
+const Actividades:any = ref([]);
 onMounted(async () => {
     let data = await getActividades();
-    let items = data.items;
+    console.log(data.item)
+    let items = data.item;
     Actividades.value = items;
     //console.log(actividad.value.base64)
 })
-function loadActivity(ActivityId,UserId) {
+function loadActivity(ActivityId: string,UserId: string) {
     console.log('click')
     router.push({ name: 'DetalleActividad', params: { ActividadId: ActivityId, UserId: UserId } });
 }

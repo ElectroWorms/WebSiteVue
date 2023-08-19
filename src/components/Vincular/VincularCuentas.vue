@@ -1,40 +1,28 @@
+<style>
+.center {
+    display: flex;
+    justify-content: center;
+}
+</style>
 <template>
     <div>
-        <v-card-title class="text-subtitle-1 ">Vincular Cuenta</v-card-title>
-        <v-container class="border d-flex justify-start w-75 mx-2 mb-5 elevation-0" >
-            <v-card class="w-50 px-1 py-1">           
+        <v-container class="justify-center w-100 mx-2 mb-5 elevation-0 center" >
+            <v-card class="w-50 px-5 pb-5">           
+                <v-card-title class="text-subtitle-1">Vincular Cuenta</v-card-title>
                 <v-form ref="form">
-                    <v-select
-                        v-model="userNameTerapeuta"
-                        :items="userNameTerapeutas"
-                        :disabled="!stateSelect"
-                        :rules="[v => !!v || 'El terapeuta ocupacional es requerido']"
-                        label="Seleccione al terapeuta"
-                        required
-                    ></v-select>
+                    <v-select v-model="userNameTerapeuta" :items="userNameTerapeutas" :disabled="!stateSelect" :rules="[v => !!v || 'El terapeuta ocupacional es requerido']" label="Seleccione al terapeuta" required></v-select>
                 </v-form>
                 <v-row>
                     <v-col cols="12" sm="12">
                         <div class="d-flex flex-column">
-                            <v-btn
-                            color="success"
-                            class="mt-4"
-                            block
-                            :disabled="!activeButton"
-                            @click="vincular"
-                            >
+                            <v-btn color="success" class="mt-4" block :disabled="!activeButton" @click="vincular" >
                             Vincular
                             </v-btn>
                         </div>
                     </v-col>
                     <v-col cols="12" sm="12" v-if="showChangeTo">
                         <div class="d-flex flex-column">
-                            <v-btn
-                            color="info"
-                            class="mt-4"
-                            block
-                            @click="changeTo"
-                            >
+                            <v-btn color="info" class="mt-4" block @click="changeTo" >
                             Cambiar Terapeuta Ocupacional
                             </v-btn>
                         </div>

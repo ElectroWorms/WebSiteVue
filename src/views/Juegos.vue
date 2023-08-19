@@ -10,7 +10,6 @@
     text-align: center !important;
     justify-content: center !important;
     flex-direction: row-reverse !important;
-
 }
 .subtitulo {
     text-align: center;
@@ -54,7 +53,7 @@
 import SidePanelTutor from '@/components/SidePanel/SidePanelTutor.vue';
 import axios from 'axios';
 import { ref, toRefs,onMounted, reactive } from 'vue'
-import config from '../../config'
+import config from '../../config.json'
 import router from '@/router'
 /*
     Route Params
@@ -86,36 +85,36 @@ async function updateGame(juegoId: string,active: boolean,title: string){
     
 }
 async function getGames(){
-    Respuesta = {status: true, message: 'Actividad obtenida con éxito.', items: {}};
-    await axios.get(config.PathAPI+'juegos/list/'+ActividadId.value)
+    Respuesta = {state: true, code: 200, message: 'Actividad obtenida con éxito.', item: {}};
+    await axios.get(config.PathAPI+'juegos/list/'+ActividadId?.value)
     .then(response => {
         Respuesta = response.data;
         if (response.data.state) {
-            if (response.data.items.length) {
-                Respuesta = {status: true, message: 'Listado de Juegos obtenido con éxito.', items: response.data.items};
+            if (response.data.item.length) {
+                Respuesta = response.data;
             }
             else {
-                Respuesta = {status: true, message: response.data.message, items: []};
+                Respuesta = {state: false, message: response.data.message, item: []};
             }
         }
     })
     .catch(error => {
-        Respuesta = {status: true, message: 'Error al obtener los datos:'+error, items: []};
+        Respuesta = {state: false, code: 500, message: 'Error al obtener los datos:'+error, item: []};
     });
     return Respuesta;
 }
-const Juegos = ref([]);
+const Juegos:any = ref([]);
 onMounted(async () => {
     let data = await getGames();
-    console.log(data.items)
-    Juegos.value = data.items;
+    console.log(data.item)
+    Juegos.value = data.item;
     //console.log(actividad.value.base64)
 }) 
 function loadGames() {
-    router.push({ name: 'Juegos', params: { ActividadId: ActividadId.value } });
+    router.push({ name: 'Juegos', params: { ActividadId: ActividadId?.value } });
 }
 function back() {
-    router.push({ name: 'DetalleActividad', params: { ActividadId: ActividadId.value, UserId: UserId.value } });
+    router.push({ name: 'DetalleActividad', params: { ActividadId: ActividadId?.value, UserId: UserId?.value } });
 }
 
 /*if (activityResponse.status) {

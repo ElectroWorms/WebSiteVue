@@ -97,7 +97,7 @@ async function getActivity(){
     });
     return Respuesta;
 }
-const actividad = ref("");
+const actividad:any = ref({});
 onMounted(async () => {
     let data = await getActivity();
     data = data.item;
@@ -105,9 +105,9 @@ onMounted(async () => {
     //console.log(actividad.value.base64)
 }) 
 function loadGames() {
-    router.push({ name: 'Juegos', params: { ActividadId: ActividadId.value } });
+    router.push({ name: 'Juegos', params: { ActividadId: ActividadId?.value } });
 }
 function back() {
-    router.push({ name: 'MenuActividades', params: { ActividadId: ActividadId.value, UserId: UserId.value } });
+    router.push({ name: 'MenuActividades', params: { ActividadId: ActividadId?.value, UserId: UserId?.value } });
 }
 </script>

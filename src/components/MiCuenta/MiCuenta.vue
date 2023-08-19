@@ -1,167 +1,85 @@
+<style>
+.center {
+    display: flex;
+    justify-content: center;
+}
+</style>
 <template>
-    <div>
-        <v-card-title class="text-subtitle-1 ">Información Cuenta Niño</v-card-title>
-            <v-container class="border d-flex justify-start w-75 mx-2 mb-5 elevation-0" >
-                <v-card class="w-75">
-                    <v-card-text class="mt-6">
-                        <v-form
-                        ref="form"
-                        >
-                        <v-row >
-                        <v-col class="px-1"
-                        cols="12"
-                        md="6"
-                        >
-                            <v-text-field
-                            v-model="user.userName"
-                            label="Nombre"
-                            :disabled="!activeInputs"
-                            ></v-text-field>
-                        </v-col>
-
-                        <v-col
-                            cols="12"
-                            md="6"
-                        >
-                            <v-text-field
-                            v-model="user.firstName"
-                            label="Apellido"
-                            :disabled="!activeInputs"
-                            ></v-text-field>
-                        </v-col>
-                        </v-row>
-
-                        <v-row >
-                        <v-col class="px-1"
-                        cols="12"
-                        md="6"
-                        >
-                            <v-text-field
-                            label="Nombre de usuario"
-                            v-model="user.secondName"
-                            :disabled="!activeInputs"
-                            ></v-text-field>
-                        </v-col>
-
-                        <v-col class=""
-                        cols="12"
-                        md="6"
-                        >
-                            <v-text-field
-                            label="Correo"
-                            v-model="user.email"
-                            :disabled="!activeInputs"
-                            ></v-text-field>
-                        </v-col>
-                        </v-row>
-                        </v-form>
-                    </v-card-text>
-                    <v-container class="px-0">
-                <v-card-actions class="px-5">
-                    <v-spacer></v-spacer>
-                    <v-btn
-                        color="blue darken-1"
-                        text
-                        variant="outlined"
-                        :disabled="!activeButtonEnviar"
-                        @click="validateCuenta"
-                        >
-                        Enviar
-                    </v-btn>
-                    
-                    <v-btn
-                        color="green darken-1"
-                        text
-                        variant="outlined"
-                        @click="actualizar"
-                        >
-                        Actualizar
-                    </v-btn>
-                </v-card-actions>
-                
-                </v-container>
-                </v-card>
-
-            </v-container>
-    </div>
-
-    <div>
-        <v-card-title class="text-subtitle-1 ">Datos Niño</v-card-title>
-            <v-container class="border d-flex justify-start w-75 mx-2 mb-5 elevation-0" >
-                <v-card class="w-75">
-                    <v-card-text class="mt-6">
-                        <v-form
-                        ref="form"
-                        >
-
-                        <v-row >
-                            <v-col class="px-1"
-                            cols="12"
-                            md="6"
-                            >
-                                <v-text-field
-                                label="Edad"
-                                v-model="userNino.edad"
-                                :disabled="!activeInputsNino"
-                                ></v-text-field>
+    <div class="w-100">
+        <v-container class="d-flex justify-start w-100 mx-2 mb-5 elevation-0" >
+            <v-card class="w-100">                
+                <v-card-title class="text-subtitle-1">Información de la Cuenta</v-card-title>
+                <v-card-text class="mt-6">
+                    <v-form ref="form">
+                        <v-row>                                      
+                            <v-col cols="4" md="4">
+                                <v-row rows="2" class="center">
+                                    <v-img class="border bg-white" max-width="200px" :aspect-ratio="1" :src="getCardImg(user)" cover></v-img>
+                                </v-row>
+                                <v-row>
+                                    <v-col align-self="center">
+                                        <v-sheet class="pa-2 ma-2">
+                                            <v-file-input :rules="rules" accept="image/png, image/jpeg, image/jpg" label="Seleccionar foto de perfil" prepend-icon="mdi-camera" :readonly="!editing" :variant="variant"></v-file-input>
+                                        </v-sheet>
+                                    </v-col>
+                                </v-row>
+                            </v-col>                  
+                            <v-col cols="8" md="8">
+                                <v-row>
+                                    <v-col cols="4" md="4">
+                                        <v-text-field v-model="user.name" label="Nombre" :readonly="!editing" :variant="variant"></v-text-field>
+                                    </v-col>
+                                    <v-col cols="4" md="4">
+                                        <v-text-field v-model="user.apellidoPaterno" label="Apellido Paterno" :readonly="!editing" :variant="variant"></v-text-field>
+                                    </v-col>                                    
+                                    <v-col cols="4" md="4">
+                                        <v-text-field v-model="user.apellidoMaterno" label="Apellido Materno" :readonly="!editing" :variant="variant"></v-text-field>
+                                    </v-col>
+                                    <v-col cols="4" md="4">
+                                        <v-text-field label="Nombre de usuario" v-model="user.userName" :readonly="!editing" :variant="variant"></v-text-field>
+                                    </v-col>
+                                    <v-col cols="4" md="4">
+                                        <v-text-field label="Correo" v-model="user.email" :readonly="!editing" :variant="variant"></v-text-field>
+                                    </v-col>
+                                    <v-col cols="4" md="4">
+                                        <v-text-field label="Contraseña" v-model="user.confirmPassword" :readonly="!editing" :variant="variant" type="password"></v-text-field>
+                                    </v-col>
+                                    <v-col cols="4" md="4">
+                                        <v-text-field label="Confirmar Contraseña" v-model="user.password" :readonly="!editing" :variant="variant" type="password" v-if="editing"></v-text-field>
+                                    </v-col>
+                                    <v-col cols="4" md="4">
+                                         <v-text-field label="Edad" v-model="userNino.edad" :readonly="!editing" :variant="variant"></v-text-field>
+                                    </v-col>
+                                    <v-col cols="4" md="4">
+                                        <v-select label="Nivel de Apoyo" :items= "nivelTea" v-model="userNino.nivelTea" :readonly="!editing" :variant="variant"></v-select>
+                                    </v-col>
+                                    <v-col cols="4" md="4">
+                                        <v-select label="Sexo" :items="items" v-model="userNino.sexo" :readonly="!editing" :variant="variant"></v-select>
+                                    </v-col>
+                                    <v-date-picker show-adjacent-months width="40px"></v-date-picker>
+                                </v-row>
                             </v-col>
+                        </v-row>          
+                    </v-form>
+                </v-card-text>
+                <v-container class="px-0">
+                    <v-card-actions class="px-5">
+                        <v-spacer></v-spacer>
+                        <v-btn color="blue" prepend-icon="mdi-content-save" text variant="tonal" v-if="editing" @click="validateCuenta()">
+                            Enviar
+                        </v-btn>
+                        
+                        <v-btn color="warning" prepend-icon="$edit" variant="tonal" text v-if="!editing" @click="actualizar()">
+                            Editar
+                        </v-btn>
 
-                            <v-col class=""
-                            cols="12"
-                            md="6"
-                            >
-                                <v-select
-                                label="Nivel TEA"
-                                :items= "nivelTea"
-                                v-model="userNino.nivelTea"
-                                :disabled="!activeInputsNino"
-                                ></v-select>
-                            </v-col>
-                        </v-row>
-
-                        <v-row >
-                            <v-col class="px-1"
-                            cols="12"
-                            md="6"
-                            >
-                                <v-select
-                                label="Sexo"
-                                :items="items"
-                                v-model="userNino.sexo"
-                                :disabled="!activeInputsNino"
-                                ></v-select>
-                            </v-col>
-                        </v-row>
-                        </v-form>
-                    </v-card-text>
-                    <v-container class="px-0">
-                <v-card-actions class="px-5">
-                    <v-spacer></v-spacer>
-                    <v-btn
-                        color="blue darken-1"
-                        text
-                        variant="outlined"
-                        :disabled="!activeButtonEnviarNino"
-                        @click="validateNino"
-                        >
-                        Enviar
-                    </v-btn>
-                    
-                    <v-btn
-                        color="green darken-1"
-                        text
-                        variant="outlined"
-                        :disabled="!activeButtonActualizarNino"
-                        @click="actualizarNino"
-                        >
-                        Actualizar
-                    </v-btn>
-                </v-card-actions>
-                
-                </v-container>
-                </v-card>
-
-            </v-container>
+                        <v-btn color="red" prepend-icon="$delete" variant="tonal" text v-if="editing" @click="actualizar()">
+                            Cancelar
+                        </v-btn>
+                    </v-card-actions>                    
+                </v-container>  
+            </v-card>
+        </v-container>
     </div>
 
     <v-snackbar v-model="snackbar.active" :timeout="timeout" :color="snackbar.color">
@@ -176,20 +94,31 @@
 </template>
 
 <script>
-import axios from 'axios'
-import {useUserStore} from "../../store/app"
-import config from '../../../config.json'
-const store = useUserStore()
-const vinculacion = store.vinculacion
+import axios from 'axios';
+import {useUserStore} from "../../store/app";
+import config from '../../../config.json';
+const store = useUserStore();
+const vinculacion = store.vinculacion;
 export default {
     data: () =>({
+        rules: [
+            value => {
+                return !value || !value.length || value[0].size < 2000000 || 'Avatar size should be less than 2 MB!'
+            },
+        ],
+        editing: false,
+        variant: "plain",
         items: ['Masculino', 'Femenino'],
         nivelTea: ['1', '2', '3'],
         user : {
             userName: store.secondUser.userName,
-            firstName: store.secondUser.firstName,
-            secondName: store.secondUser.secondName,
+            name: store.secondUser.firstName,
+            apellidoPaterno: store.secondUser.apellidoPaterno,
+            apellidoMaterno: store.secondUser.apellidoMaterno,
             email: store.secondUser.email,
+            url: store.secondUser.url,
+            password: "",
+            confirmPassword: ""            
         },
         userNino : {
             edad: store.secondUser.infoNino ? store.secondUser.infoNino.edad : null,
@@ -212,13 +141,20 @@ export default {
     }),
 
     methods:{
-        actualizar () {
-            this.activeInputs = true
-            this.activeButtonEnviar = true
+        getCardColor(nivelTea) {
+            if (nivelTea == 'Nivel de Apoyo 1') return "primary";
+            else if (nivelTea == 'Nivel de Apoyo 2') return "success";
+            else if (nivelTea == 'Nivel de Apoyo 3') return "warning";
+            else return "purple";
         },
-        actualizarNino () {
-            this.activeInputsNino = true
-            this.activeButtonEnviarNino = true
+        getCardImg(item){
+            console.log("item",item)
+            if (item.url != '' && item.url != undefined) return item.url; 
+            else return (item.sexo == 'Masculino') ? '/src/assets/icons/nino_1.png' : '/src/assets/icons/nina_1.png';
+        },
+        actualizar() {            
+            this.variant = (this.variant == "plain") ? "outlined" : "plain";
+            this.editing = !this.editing;
         },
         async validateCuenta () {
             const { valid } = await this.$refs.form.validate()

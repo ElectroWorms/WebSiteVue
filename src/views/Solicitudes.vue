@@ -5,8 +5,13 @@
     <div v-if="typeAccount === 'Tutor'">
       <SidePanelTutor/>
     </div>
-    <UpperPanel/>
-    <TableSolicitudes/>
+    <v-app-bar :elevation="2" class="pl-4">
+        Mis Solicitudes
+    </v-app-bar>
+    <br>
+    <div class="mx-4">
+      <TableSolicitudes/>
+    </div>
   </template>
   <script setup>
     import SidePanelTutor from '@/components/SidePanel/SidePanelTutor.vue'

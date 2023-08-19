@@ -5,7 +5,11 @@
   <div v-if="typeAccount === 'Tutor'">
     <SidePanelTutor/>
   </div>
-  <UpperPanel/>
+  
+  <v-app-bar :elevation="2" class="pl-4">
+      Vincular Cuentas
+  </v-app-bar>
+  
   <FormVincular/>
 
 </template>
