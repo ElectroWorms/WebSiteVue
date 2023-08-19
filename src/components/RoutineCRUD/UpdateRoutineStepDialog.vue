@@ -6,7 +6,7 @@
 
         <!-- Form Title -->
         <v-card-title class="mt-2">
-          <span class="text-h5">Agregar paso a: {{ routine.title }}</span>
+          <span class="text-h5">Actualizar el paso en la posición {{ routineStep.posicion }}</span>
         </v-card-title>
 
         <!-- Form Inputs -->
@@ -34,11 +34,12 @@
                   hide-details>
                 </v-switch>
                 
-                <!-- Select resource -->
+                <!-- Autocomplete resource -->
                 <v-autocomplete class="mt-4"
                   outlined
                   v-if="!newResource"
                   v-model="selectedResource"
+                  auto-select-first
                   :items="resources"
                   :rules="resourceRules"
                   return-object
@@ -105,16 +106,16 @@
 // Imports
 
 import { createResource, getAllResources, uploadImage } from "@/functions/resourceFunctions";
-import { createRoutineStep, updateRoutineStep } from "@/functions/routineStepFunctions";
+import { updateRoutineStep } from "@/functions/routineStepFunctions";
 import { Resource } from "@/interfaces/Resource";
-import { onMounted, ref, toRefs } from "vue";
+import { onMounted, ref, toRefs, watch } from "vue";
 
 // define props
-const props = defineProps(["routine", "user"]);
-const { routine, user } = toRefs(props);
+const props = defineProps(["routine", "user", "routineStep"]);
+const { routine, user, routineStep } = toRefs(props);
 
 // emmit the close event to the parent component
-const emit = defineEmits(["close", "newStep"]);
+const emit = defineEmits(["close", "updateStep"]);
 
 // Form
 const form = ref();
@@ -124,7 +125,6 @@ let resources: Resource[] = [];
 let position = ref(0);
 const positionRules = [
   (value: number) => {
-    console.log("value:", value);
     if (value && value > 0) return true;
     return "La posición dentro de la rutina es requerida, y debe ser mayor a 0";
   }
@@ -161,11 +161,24 @@ onMounted(async () => {
   resources = (await getAllResources(user!.value)).item;
 });
 
+// watch changes in the routineStep prop
+watch(() => routineStep!.value, () => {
+  // fill the form with the data of the routine step
+  fillForm();
+});
+
+function fillForm() {
+
+  // if the routine step is not new
+  position.value = routineStep!.value.posicion;
+  let resource = resources.filter((resource) => resource._id === routineStep!.value.recurso)[0];
+  selectedResource.value = resource;
+}
+
 async function submitValidations(): Promise<boolean> {
 
   // validation of the form
   const {valid} = await form.value.validate();
-  console.log("valid:", valid);
   if (!valid) return false;
 
   // check if the form is valid with the validation given by the rules of each input
@@ -182,10 +195,10 @@ async function submitValidations(): Promise<boolean> {
   if (position.value < 1) position.value = 1;
 
   return true;
-
+  
 }
 
-async function createWithNewResource() {
+async function updateWithNewResource() {
 
   // upload the image to the server passing the data in blob format
   let imageUrl = (await uploadImage(newImage.value[0])).item.url;
@@ -203,35 +216,59 @@ async function createWithNewResource() {
 
   // create the resource and the step
   let resource: Resource = (await createResource(resourceData)).item[0];
-  await createRoutineStep(routine!.value, position.value, resource._id);
+  await updateRoutineStep(routineStep!.value._id, routine!.value._id, position.value, resource._id);
 }
 
-async function createWithExistingResource() {
+async function updateWithExistingResource() {
 
-  // create the step
-  await createRoutineStep(routine!.value, position.value, selectedResource!.value!._id!);
+  // update the step
+  await updateRoutineStep(routineStep!.value._id, routine!.value._id, position.value, selectedResource!.value!._id);
 }
 
-async function createStep() {
+async function updateStep() {
 
   // if new resource
   if (newResource.value) {
-    await createWithNewResource();
+    await updateWithNewResource();
   }
   // if existing resource
   else {
-    await createWithExistingResource();
+    await updateWithExistingResource();
   }
 }
 
 async function updatePositions() {
 
-  // update the position of the next steps in the database
-  for (let i = position.value-1; i < routine!.value.steps.length; i++) {
+  // set the new position of the step
+  await updateRoutineStep(routineStep!.value._id, routine!.value._id, position.value, routineStep!.value.resource);
+  let oldPosition = routineStep!.value.posicion;
+  let newPosition = position.value;
 
-    let updatedStep = routine!.value.steps[i];
-    if (updatedStep)
-      await updateRoutineStep(updatedStep._id, routine!.value._id, i + 2, updatedStep.resource);
+  // if the new position is greater than the old one
+  if (newPosition > oldPosition) {
+    // update the position of the next steps in the database
+    for (let i = oldPosition; i < newPosition; i++) {
+
+      let updatedStep = routine!.value.steps[i];
+      if (updatedStep)
+        await updateRoutineStep(updatedStep._id, routine!.value._id, i, updatedStep.resource);
+    }
+  }
+
+  // if the new position is less than the old one
+  else if (position.value < routineStep!.value.posicion) {
+    // update the position of the next steps in the database
+    for (let i = newPosition-1; i < oldPosition-1; i++) {
+
+      let updatedStep = routine!.value.steps[i];
+      if (updatedStep)
+        await updateRoutineStep(updatedStep._id, routine!.value._id, i+2, updatedStep.resource);
+    }
+  }
+
+  // if the position is the same, return
+  else {
+    return;
   }
 }
 
@@ -243,18 +280,18 @@ async function submitForm() {
   // update the position of the next steps in the database
   await updatePositions();
 
-  // create the step
-  await createStep();
-
-  // send the new step to the parent component to update the list
-  emitNewStep();
+  // update the step
+  await updateStep();
 
   // close the dialog
   closeDialog();
+
+  // send the new step to the parent component to update the list
+  emitUpdateStep();
 }
 
-function emitNewStep() {
-  emit("newStep");
+function emitUpdateStep() {
+  emit("updateStep");
 }
 
 function closeDialog() {

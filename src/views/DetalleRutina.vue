@@ -22,7 +22,8 @@
     position: fixed;
     bottom: 20px;
     right: 20px;
-}	
+    z-index: 100;
+}
 
 </style>
 <template>
@@ -34,11 +35,24 @@
         <span><span class="font-weight-bold">Detalle de la Rutina:</span> {{ routine?.title }}</span>
     </v-app-bar>
     
+    <div class="btn-container">
+        <v-btn class="delete-routine-btn pl-4 pr-4" prepend-icon="$delete" variant="tonal" 
+            @click="deleteRoutine" color="red"> 
+            Eliminar Rutina 
+        </v-btn>
+    </div>
+    
     <v-btn class="add-step-btn pl-4 pr-4" prepend-icon="$plus" variant="tonal" 
-        @click="showDialogNew = !showDialogNew" color="green"> 
+        @click="addRoutineStepBtn" color="green">
         Agregar Paso 
     </v-btn>
-    <CreateRoutineStepDialog v-model="showDialogNew" @close="handleClose" :routine="routine" />
+
+    <!-- Dialogs -->
+    <CreateRoutineStepDialog v-model="showDialogNew" @close="handleClose" 
+        @new-step="handleNewStep" :routine="routine!" :user="userId"/>
+
+    <UpdateRoutineStepDialog v-model="showDialogUpdate" @close="handleClose" 
+        @update-step="handleUpdateStep" :routine="routine!" :user="userId" :routineStep="selectedRoutineStep"/>
 
     <v-row class="mt-8 ml-4 mr-4">
 
@@ -73,11 +87,12 @@
 
 import SidePanelTutor from '@/components/SidePanel/SidePanelTutor.vue';
 import CreateRoutineStepDialog from '@/components/RoutineCRUD/CreateRoutineStepDialog.vue';
+import UpdateRoutineStepDialog from '@/components/RoutineCRUD/UpdateRoutineStepDialog.vue';
 import { ref, toRefs, onMounted } from 'vue'
 import router from '@/router'
 import { Routine, Step } from '../interfaces/Routine';
 import { getRoutineByActivityId } from '../functions/routineFunctions';
-import { deleteRoutineStep } from '@/functions/routineStepFunctions';
+import { deleteRoutineStep, updateRoutineStep } from '@/functions/routineStepFunctions';
 
 
 // Route Params
@@ -88,49 +103,84 @@ const {routineId, activityId, userId}: any = toRefs(props);
 // Variables 
 let routine = ref<Routine>();
 let showDialogNew = ref<boolean>(false);
+let showDialogUpdate = ref<boolean>(false);
+let selectedRoutineStep = ref<Step>();
 
 
 // Functions
 
-onMounted(async () => {
-    // get the routine from the database with the steps and resources
+async function getUpdatedRoutine() {
     let routineResp = await getRoutineByActivityId(activityId.value);
     routineResp = routineResp.item[0];
-
-    // parse the routine and the routine steps
     routine.value = routineResp;
+}
+
+onMounted(async () => {
+
+    await getUpdatedRoutine();
 });
 
 
 // function that called to delete a routine step
 async function deleteRoutineStepBtn(routineStep: Step) {
-    console.log("Delete", routineStep._id);
+    
     // delete the routine step from the database
     await deleteRoutineStep(routineStep._id);
+
     // delete the routine step from the routineSteps array
-    if (routine.value?.steps) {
-        routine.value.steps = routine.value?.steps.filter((step) => step._id != routineStep._id);
+    if (routine.value?.steps.length === 1) {
+        routine.value.steps = [];
+        return;
     }
-    console.log(routine.value);
+
+    // delete the routine step from the routineSteps array
+    routine.value!.steps = routine.value!.steps.filter((step) => step._id !== routineStep._id);
+
+    // update the position of the next steps in the database
+    for (let i = routineStep.posicion-1; i < routine.value!.steps.length; i++) {
+        let updatedStep = routine.value!.steps[i];
+        await updateRoutineStep(updatedStep._id, routine.value!._id, i+1, updatedStep.recursoItem._id);
+    }
+
+    // get from the db the updated routine
+    await getUpdatedRoutine();
 }
 
 // function that called to edit a routine step
 async function editRoutineStepBtn(routineStep: Step) {
+
     console.log("Edit", routineStep._id);
-    // edit the routine step from the database
-    // edit the routine step from the routineSteps array
+    selectedRoutineStep.value = routineStep;
+    showDialogUpdate.value = !showDialogUpdate.value;
 }
 
 // function that called to add a new routine step
 async function addRoutineStepBtn() {
+
     console.log("New");
-    showDialogNew.value = true;
-    // add the routine step to the database
-    // add the routine step to the routineSteps array
+    showDialogNew.value = !showDialogNew.value;
+}
+
+async function deleteRoutine() {
+    
+    console.log("Delete Routine", routineId.value);
+    // delete the routine from the database
+    // delete the routine from the routines array
 }
 
 function handleClose() {
     showDialogNew.value = false;
+    showDialogUpdate.value = false;
+}
+
+// call again the getRoutineByActivityId function to get the new routine with the new step
+async function handleNewStep() {
+    await getUpdatedRoutine();
+}
+
+// call again the getRoutineByActivityId function to get the new routine with the updated step
+async function handleUpdateStep() {
+    await getUpdatedRoutine();
 }
 
 
