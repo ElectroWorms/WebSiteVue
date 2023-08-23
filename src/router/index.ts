@@ -18,6 +18,7 @@ const routes = [
     // ],
   },
   {
+    name: 'Usuarios',
     path: '/Usuarios',
     component: () => import('@/views/MisUsuarios.vue'),
   },
@@ -54,6 +55,12 @@ const routes = [
     path: '/Actividad/List/:UserId',
     props: true,
     component: () => import('@/views/MenuActividades.vue'),
+  },
+  {
+    name: 'DetalleRutina',
+    path: '/Rutina/Detalle/:routineId/:activityId/:userId',
+    props: true,
+    component: () => import('@/views/DetalleRutina.vue'),
   }
 ]
 

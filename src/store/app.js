@@ -4,14 +4,20 @@ import { ref, computed, watch } from 'vue'
 import axios from 'axios'
 export const useUserStore = defineStore("app", () => {
   const user = ref({
-    _id : null,
     userName: null,
-    firstName: null,
-    secondName: null,
-    email: null,
+    nombre: null,
+    apellidoPaterno: null,
+    apellidoMaterno: null,
+    fechaNacimiento: null,
+    url: null,
     password: null,
+    confirmPassword: null,
+    email: null,
+    nivelTea: null,
+    edad: null,
+    sexo: null,
     typeAccount: null,
-  }) 
+}) 
 
   const secondUser = ref({
     _id : null,

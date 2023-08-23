@@ -1,20 +1,16 @@
 <template>
-    <v-data-table
-      :headers="computedHeaders"
-      :items="solicitudes"
-      :sort-by="[{ key: 'Usuario tutor', order: 'asc' }]"
-      class="elevation-1"
-    >
+    <v-row class="mx-1 mt-2 mb-4">
+        <v-toolbar color="white">
+            <v-text-field hide-details="auto" placeholder="Buscar...">
+            </v-text-field>
+            <v-btn icon>
+                <v-icon>mdi-magnify</v-icon>
+            </v-btn>
+        </v-toolbar>
+    </v-row>
+    <v-data-table :headers="computedHeaders" :items="solicitudes" :sort-by="[{ key: 'Usuario tutor', order: 'asc' }]" class="elevation-1 w-100">
       <template v-slot:top>
-        <v-toolbar
-          flat
-          density="compact"
-        >
-          <v-toolbar-title  >Mis Solicitudes</v-toolbar-title>
-          <v-dialog
-            v-model="dialog"
-            max-width="500px"
-          > 
+          <v-dialog v-model="dialog" max-width="500px"> 
             <v-card>
               <v-card-title>
                 <span class="text-h5">Revisar estado</span>
@@ -56,8 +52,7 @@
             </v-card>
           </v-dialog>
           <v-dialog v-model="dialogDelete" max-width="500px">
-            <v-card>
-                
+            <v-card>                
               <v-card-title class="text-h5">¿Estas seguro de eliminar este elemento?</v-card-title>
               <v-card-text class="">Eliminaras la solicitud del usuario: {{ editedItem.tutorName}}</v-card-text>
               <v-card-actions>
@@ -68,32 +63,22 @@
               </v-card-actions>
             </v-card>
           </v-dialog>
-        </v-toolbar>
+      </template>
+    
+      <template v-slot:item.estado="{ item }">
+        <v-chip :color="getColor(item.columns.estado)">
+            {{ item.columns.estado }}
+        </v-chip>
       </template>
 
-
-        <template v-slot:item.estado="{ item }">
-            <v-chip :color="getColor(item.columns.estado)">
-                {{ item.columns.estado }}
-            </v-chip>
-        </template>
       <template v-slot:item.actions="{ item }">
-        <v-btn 
-            @click="editItem(item.raw)" 
-            icon=" mdi-pencil"  
-            color="info"
-            class="mr-2"
-            size="small"
-            fab elevation="2"
-        > 
+        <v-btn @click="editItem(item.raw)" icon=" mdi-pencil" color="info" class="mr-2" size="small" fab elevation="2"> 
         </v-btn>
       </template>
+
       <template v-slot:no-data>
-        <v-btn
-          color="primary"
-          @click="initialize"
-        >
-          Reset
+        <v-btn color="primary" @click="initialize">
+          Actualizar
         </v-btn>
       </template>
     </v-data-table>
@@ -105,10 +90,8 @@
             Close
             </v-btn>
         </template>
-    </v-snackbar>
-    
-  </template>
-
+    </v-snackbar>    
+</template>
 <script>
 import axios from 'axios'
 import {useUserStore} from "../../store/app"
@@ -216,7 +199,6 @@ const store = useUserStore()
       },
 
       save () {
-
         var url = `${config.PathAPI}solicitudes/finalizar`
         var url2 = `${config.PathAPI}solicitudes/updateUsers`
         Object.assign(this.solicitudes[this.editedIndex], this.editedItem)
@@ -244,7 +226,6 @@ const store = useUserStore()
                     idTerapeuta: solicitud.terapeuta._id,
                     users: updateUsersTerapeuta
                   }
-                  console.log(formData)
                   // Actualizar usuarios al terapeuta
                   axios.post(url2, formData)
                   .then(response => {

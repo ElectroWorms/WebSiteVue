@@ -1,15 +1,12 @@
 <template>
-    <v-navigation-drawer
-          permanent
-          location="left"
-        >
+    <v-navigation-drawer permanent location="left">
           <template v-slot:prepend >
             <v-list-item
               class="px-10 mt-7"
               lines="two"
-              prepend-avatar="https://avataaars.io/?avatarStyle=Transparent&topType=ShortHairShortCurly&accessoriesType=Blank&hairColor=Black&facialHairType=Blank&clotheType=Hoodie&clotheColor=White&eyeType=Default&eyebrowType=DefaultNatural&mouthType=Default&skinColor=Light"
-              title="Jane Smith"
-              subtitle="Logged in"
+              :prepend-avatar="profile.avatar"
+              :title="profile.fullname"
+              subtitle="Tutor"
             ></v-list-item>
           </template>
           <v-container class="px-0" style="margin-top: 10px">
@@ -26,4 +23,20 @@
         </v-navigation-drawer>
 </template>
 <script>
+import {useUserStore} from "../../store/app"
+const store = useUserStore()
+function getCardImg(url,sexo){
+    if (url != "" && url != undefined) return url; 
+    else return (sexo == 'Masculino') ? '/src/assets/icons/perfil_man.png' : '/src/assets/icons/perfil_woman.png';
+}
+export default {
+    data: () =>({
+      userId: store.user._id,
+      profile: {
+        avatar: getCardImg(store.user.url,store.user.sexo),
+        fullname: store.user.fullname || "Usuario",
+        rol: store.user.typeAccount
+      }
+    }),
+}
 </script>
