@@ -10,12 +10,13 @@
             <v-card class="w-50 px-5 pb-5">           
                 <v-card-title class="text-subtitle-1">Vincular Cuenta</v-card-title>
                 <v-form ref="form">
-                    <v-select v-model="userNameTerapeuta" :items="userNameTerapeutas" :disabled="!stateSelect" :rules="[v => !!v || 'El terapeuta ocupacional es requerido']" label="Seleccione al terapeuta" required></v-select>
+                    <!-- <v-autocomplete v-model="userNameTerapeuta" :items="userNameTerapeutas" label="Ingrese el nombre de usuario de un terapeuta..." :disabled="!stateSelect" :rules="[v => !!v || 'El terapeuta ocupacional es requerido']"  required></v-autocomplete>-->
+                    <v-text-field label="Código de terapeuta" v-model="codigo" :rules="[v => !!v || 'Código es requerido']"  :readonly="!stateSelect"></v-text-field>
                 </v-form>
                 <v-row>
                     <v-col cols="12" sm="12">
                         <div class="d-flex flex-column">
-                            <v-btn color="success" class="mt-4" block :disabled="!activeButton" @click="vincular" >
+                            <v-btn color="success" class="mt-4" block  :disabled="!activeButton" @click="vincular" >
                             Vincular
                             </v-btn>
                         </div>
@@ -23,18 +24,18 @@
                     <v-col cols="12" sm="12" v-if="showChangeTo">
                         <div class="d-flex flex-column">
                             <v-btn color="info" class="mt-4" block @click="changeTo" >
-                            Cambiar Terapeuta Ocupacional
+                                Cambiar Terapeuta Ocupacional
                             </v-btn>
                         </div>
                     </v-col>
                 </v-row>
 
-                <v-card class=" mt-10 fill-height my-1 mx-1" v-if="showCard">           
-                <v-alert
-                    :type="typeAlert"
-                    :text="typeText"
-                    variant="outlined"
-                ></v-alert>
+                <v-card class=" mt-5" v-if="showCard">           
+                    <v-alert
+                        :type="typeAlert"
+                        :text="typeText"
+                        variant="outlined"
+                    ></v-alert>
                 </v-card>
                 
             </v-card>
@@ -42,9 +43,10 @@
     </div>
 
     <div v-if="showDataTerapeuta">
-        <v-card-title class="text-subtitle-1 ">Información Terapeuta Ocupacional</v-card-title>
-            <v-container class="border d-flex justify-start w-75 mx-2 mb-5 elevation-0" >
+        
+            <v-container class=" d-flex justify-start fluid justify-center mb-5" >
                 <v-card class="w-75 border">
+                    <v-card-title class="text-subtitle-1 ">Información Terapeuta Ocupacional</v-card-title>
                     <v-card-text class="mt-6">
                         <v-form
                         ref="form"
@@ -57,7 +59,7 @@
                             <v-text-field
                             v-model="terapeutaSolicitud.firstName"
                             label="Nombre"
-                            disabled="true"
+                            :readonly="true"
                             ></v-text-field>
                         </v-col>
 
@@ -68,7 +70,7 @@
                             <v-text-field
                             v-model="terapeutaSolicitud.secondName"
                             label="Apellido"
-                            disabled="true"
+                            :readonly="true"
                             ></v-text-field>
                         </v-col>
                         </v-row>
@@ -81,7 +83,7 @@
                             <v-text-field
                             label="Nombre de usuario"
                             v-model="terapeutaSolicitud.userName"
-                            disabled="true"
+                            :readonly="true"
                             ></v-text-field>
                         </v-col>
 
@@ -92,7 +94,7 @@
                             <v-text-field
                             label="Correo"
                             v-model="terapeutaSolicitud.email"
-                            disabled="true"
+                            :readonly="true"
                             ></v-text-field>
                         </v-col>
                         </v-row>
@@ -102,7 +104,7 @@
             </v-container>
     </div>
 
-    <v-snackbar v-model="snackbar.active" :timeout="timeout" :color="snackbar.color">
+    <v-snackbar v-model="snackbar.active" :timeout="snackbar.timeout" :color="snackbar.color">
         {{ snackbar.text }}
         <template v-slot:action="{ attrs }">
             <v-btn color="blue" text v-bind="attrs" @click="snackbar.active = false">
@@ -143,6 +145,7 @@ export default {
             text: null,
             timeout: 3000,
         },
+        codigo: null,
         
     }),
 
@@ -164,18 +167,20 @@ export default {
             })
         },
         async vincular () {
-            var url = `${config.PathAPI}solicitudes/enlazar`
-            var terapeuta = this.terapeutas.filter (terapeuta => terapeuta.userName == this.userNameTerapeuta)[0]
+            var urlEnlazar = `${config.PathAPI}solicitudes/enlazar`
+            //var terapeuta = this.terapeutas.filter (terapeuta => terapeuta.userName == this.userNameTerapeuta)[0]
             var tutor = store.user
-            var formMetada = {tutorUser: tutor, terapeutaUser: terapeuta, estado: 'En espera'}
+            var formMetada = {tutorUser: tutor, terapeutaCodigo: this.codigo, estado: 'En espera'}
 
-            // eliminar los usuarios del to, mostrar flag, el usuario a decidido desvincular la cuenta
+            // eliminar los usuarios del to, el usuario ha decidido desvincular la cuenta
             if (this.showChangeTo == true){
-                console.log(store.vinculacion)
-                var url2 = `${config.PathAPI}getUser/${store.vinculacion.terapeuta._id}`
-                var url3 = `${config.PathAPI}solicitudes/updateUsers`
+
+                var urlObtenerTo = `${config.PathAPI}user/getUser/${store.vinculacion.terapeuta._id}`
+                var urlUpdateUsersTo = `${config.PathAPI}solicitudes/updateUsers`
                 var users = store.user.users.map(user => user.userName)
-                axios.get(url2)
+
+                // obtener los datos del terapeuta y modificar su lista de users (eliminar niños)
+                axios.get(urlObtenerTo)
                     .then( response => {
                         console.log(response)
                         var terapeuta = response.data.user
@@ -189,15 +194,16 @@ export default {
                             idTerapeuta: terapeuta._id,
                             users: newUsersTerapeuta
                         }
-                        console.log(formData)
-                        axios.post(url3, formData)
+                        // enviar al terapeuta su lista de users modificado (niños eliminados)
+                        axios.post(urlUpdateUsersTo, formData)
                         .then(response => {
-                            axios.post(url, formMetada)
+                            // Agregar al tutor la nueva vinculacion
+                            axios.post(urlEnlazar, formMetada)
                             .then(response => {
                                 this.$router.go()
                             })
                             .catch(error => {
-                                this.snackbar.text = 'No se ha logrado procesar la solicitud. Intente nuevamente'
+                                this.snackbar.text = 'No se encuentra un terapeuta con ese código. Intente nuevamente...'
                                 this.snackbar.color = 'error'
                                 this.snackbar.active = true
                             })
@@ -228,7 +234,7 @@ export default {
 
                 })
                 .catch(error => {
-                    this.snackbar.text = 'No se ha logrado procesar la solicitud. Intente nuevamente'
+                    this.snackbar.text = 'No se encuentra un terapeuta con ese código. Intente nuevamente...'
                     this.snackbar.color = 'error'
                     this.snackbar.active = true
                 })
@@ -240,8 +246,10 @@ export default {
             axios.get(url)
             .then(response => {
                 var solicitud = response.data ? response.data[0] : null
+  
                 this.getTerapeutas()
                 if (solicitud){
+                    
                     // set user
                     this.terapeutaSolicitud.userName = solicitud.terapeuta.userName
                     this.terapeutaSolicitud.firstName = solicitud.terapeuta.firstName
@@ -249,7 +257,7 @@ export default {
                     this.terapeutaSolicitud.email = solicitud.terapeuta.email
 
                     // estados
-                    this.userNameTerapeuta = solicitud.terapeuta.userName
+                    this.codigo = solicitud.terapeuta.uuid
                     this.showCard = true
                     if (solicitud.estado == "En espera"){
                         this.typeAlert = "info"

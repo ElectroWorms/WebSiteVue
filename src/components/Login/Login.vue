@@ -41,7 +41,7 @@
         </v-responsive>
     </v-container>
 
-    <v-snackbar v-model="snackbar.active" :timeout="timeout" :color="snackbar.color">
+    <v-snackbar v-model="snackbar.active" :timeout="snackbar.timeout" :color="snackbar.color">
         {{ snackbar.text }}
         <template v-slot:action="{ attrs }">
             <v-btn color="blue" text v-bind="attrs" @click="snackbar.active = false">
@@ -86,6 +86,7 @@ export default {
       var url = `${config.PathAPI}user/login`
       axios.post(url, this.user)
       .then (response => {
+        console.log(response)
         if (response.data.state && response.data.item.length == 1) {
           let Usuario = response.data.item[0];
           store.$patch({

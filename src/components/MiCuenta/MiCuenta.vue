@@ -178,7 +178,7 @@ export default {
                 this.saveCuenta()
             }
         },
-        saveCuenta () {            
+        async saveCuenta () {            
             if (this.file != null) {
                 console.log(this.file)
                 let formData = new FormData();
