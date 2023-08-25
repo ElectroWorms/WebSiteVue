@@ -20,13 +20,20 @@ export const useUserStore = defineStore("app", () => {
 }) 
 
   const secondUser = ref({
-    _id : null,
+    _id: null,
     userName: null,
-    firstName: null,
-    secondName: null,
-    email: null,
+    nombre: null,
+    apellidoPaterno: null,
+    apellidoMaterno: null,
+    fechaNacimiento: null,
+    url: null,
     password: null,
-    typeAccount: null,
+    confirmPassword: null,
+    email: null,
+    nivelTea: null,
+    edad: null,
+    sexo: null,
+    typeAccount: "Niño",
   }) 
 
   const vinculacion = ref({

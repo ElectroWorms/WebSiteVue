@@ -21,7 +21,7 @@
         <v-spacer></v-spacer>
         <v-text-field v-model="search" class="fondoBlanco" placeholder="Buscar..." variant="underlined" prepend-icon="mdi-magnify"></v-text-field>
         <v-spacer></v-spacer>
-        <v-btn color="primary" class="mt-2" @click="dialogCreateUser = true">Crear Cuenta</v-btn>
+        <v-btn color="primary" class="mt-2" @click="dialogCreateUser = true" v-if="isTutor">Crear Cuenta</v-btn>
 	</v-app-bar>
     <div class="mx-6">  
         <div v-if="users.length" class="w-100 h-100 mx-2 mt-4">
@@ -87,7 +87,7 @@
                                 <v-text-field v-model="user.apellidoMaterno" :rules="[v => !!v || 'Apellido Materno es requerido']" :counter="10" label="Apellido Materno" required variant="underlined"></v-text-field>
                             </v-col>
                             <v-col cols="4" md="4" >
-                                <v-text-field label="Nombre de usuario" v-model="user.userName" :rules="[v => !!v || 'Nombre de usuario es requerido']" variant="underlined"></v-text-field>
+                                <v-text-field label="Nombre de usuario" v-model="user.userName" :rules="[v => !!v || 'Nombre de usuario es requerido']" variant="underlined" required></v-text-field>
                             </v-col> 
                             <v-col cols="4" md="4" >
                                 <v-text-field label="Correo" v-model="user.email" type="email" :rules="[v => !!v || 'Correo es requerido']" variant="underlined"></v-text-field>
@@ -99,13 +99,13 @@
                                 <v-text-field label="Confirmar Contraseña" v-model="user.passwordConfirm" type="password" :rules="[v => !!v || 'Contraseña es requerido', v => (user.password == user.passwordConfirm) ? true: 'Las Contraseñas no coinciden.']" variant="underlined"></v-text-field>
                             </v-col>
                             <v-col cols="4" md="4">
-                                <v-text-field label="Edad" v-model="user.edad" :variant="underlined" :rules="[v => !!v || 'Campo requerido']"></v-text-field>
+                                <v-text-field label="Edad" v-model="user.edad" variant="underlined" :rules="[v => !!v || 'Campo requerido']"></v-text-field>
                             </v-col>
                             <v-col cols="4" md="4">
-                                <v-select label="Nivel de Apoyo" :items= "['Nivel de Apoyo 1','Nivel de Apoyo 2','Nivel de Apoyo 3']" v-model="user.nivelTea" :variant="underlined" :rules="[v => !!v || 'Campo requerido']"></v-select>
+                                <v-select label="Nivel de Apoyo" :items= "['Nivel de Apoyo 1','Nivel de Apoyo 2','Nivel de Apoyo 3']" v-model="user.nivelTea" variant="underlined" :rules="[v => !!v || 'Campo requerido']" required></v-select>
                             </v-col>
                             <v-col cols="4" md="4">
-                                <v-select label="Sexo" :items="['Masculino','Femenino']" v-model="user.sexo" :variant="underlined" :rules="[v => !!v || 'Campo requerido']"></v-select>
+                                <v-select label="Sexo" :items="['Masculino','Femenino']" v-model="user.sexo" variant="underlined" :rules="[v => !!v || 'Campo requerido']"></v-select>
                             </v-col>
                             <v-col cols="4" md="4" >
                                 <v-text-field label="Rol" :readonly="true" v-model="user.typeAccount" variant="underlined" :rules="[v => !!v || 'Campo requerido']"></v-text-field>
@@ -148,13 +148,15 @@ var formData = {}
 import config from '../../../config.json'
 export default {
     data: () =>({
+        isTutor: (store.user.typeAccount == "Tutor") ? true : false,
+        isTO: (store.user.typeAccount == "Terapeuta Ocupacional")  ? true : false,
         snackbar: {
             color: null,
             active: false,
             text: null,
             timeout: 3000,
         },
-        MensajeBusqueda: (store.user.users ? store.user.users : []).length == 0 ? "Aún no has creado ninguna cuenta." : "Ninguna cuenta coincide con la búsqueda",
+        MensajeBusqueda: (store.user.typeAccount == "Tutor") ? ((store.user.users ? store.user.users : []).length == 0 ? "Aún no has creado ninguna cuenta." : "Ninguna cuenta coincide con la búsqueda") : "Aún no se ha vinculado ninguna cuenta.",
         user: {
             userName: null,
             nombre: null,
@@ -171,7 +173,6 @@ export default {
             typeAccount: "Niño",
         },
         dialogCreateUser: false,
-        isTutor: false,
         users: store.user.users ? store.user.users : null,
         respaldoUsers: store.user.users ? store.user.users : [],
         search: null,

@@ -1,13 +1,10 @@
 <template>
-    <v-row class="mx-1 mt-2 mb-4">
-        <v-toolbar color="white">
-            <v-text-field hide-details="auto" placeholder="Buscar...">
-            </v-text-field>
-            <v-btn icon>
-                <v-icon>mdi-magnify</v-icon>
-            </v-btn>
-        </v-toolbar>
-    </v-row>
+    <v-app-bar :elevation="2" class="pl-4">        
+      Mis Solicitudes
+      <v-spacer></v-spacer>
+      <v-text-field v-model="search" class="fondoBlanco" placeholder="Buscar..." variant="underlined" prepend-icon="mdi-magnify"></v-text-field>
+      <v-spacer></v-spacer>
+    </v-app-bar>
     <v-data-table :headers="computedHeaders" :items="solicitudes" :sort-by="[{ key: 'Usuario tutor', order: 'asc' }]" class="elevation-1 w-100">
       <template v-slot:top>
           <v-dialog v-model="dialog" max-width="500px"> 

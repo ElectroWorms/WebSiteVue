@@ -22,7 +22,7 @@
     </v-app-bar>
     <v-row class="mx-4 mt-2">
         <v-col v-for="(act,index) in Actividades" :key="index" cols="3" justify="center" >
-            <v-card class="card-content pt-5 pb-5 px-5" height="350">
+            <v-card class="card-content pt-5 pb-5 px-5" height="400">
                 <v-img class="align-end text-white mx-auto" height="250" :src="act.url" aspect-ratio="1">             
                 </v-img>
 
