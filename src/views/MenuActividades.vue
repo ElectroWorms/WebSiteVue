@@ -87,10 +87,11 @@ async function updateActivity(actividadId: string, active: boolean ,title: strin
 */
 let Respuesta;
 async function getActividades(){
-    Respuesta = {status: true, message: 'Actividad obtenida con éxito.', item: {}};
+    Respuesta = {state: true, message: 'Actividad obtenida con éxito.', item: []};
     await axios.get(config.PathAPI+'actividad/list/'+UserId?.value)
     .then(response => {
         Respuesta = response.data;
+        console.log(Respuesta)
         if (response.data.state) {
             Respuesta = response.data;
         }
@@ -103,6 +104,7 @@ async function getActividades(){
 const Actividades:any = ref([]);
 onMounted(async () => {
     let data = await getActividades();
+    console.log(data)
     console.log(data.item)
     let items = data.item;
     Actividades.value = items;

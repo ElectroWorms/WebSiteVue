@@ -201,7 +201,7 @@ export default {
                     }
                 });
             }
-            axios.post(`${config.PathAPI}updateAccount`, this.user).then(response => {
+            axios.post(`${config.PathAPI}user/updateAccount`, this.user).then(response => {
                 let respuesta = response.data;
                 if (respuesta.state) {
                     this.editing = false;

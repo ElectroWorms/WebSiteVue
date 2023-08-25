@@ -14,8 +14,9 @@
                 <v-divider inset></v-divider>
                 <v-list-item  prepend-icon="mdi-image" title="Mis imágenes" :to="{ path: '/User/Imagenes' }"></v-list-item>
                 <v-divider inset></v-divider>
-                <v-list-item c prepend-icon="mdi-chart-line" title="Dashboards"  :to="{ path: '/User/Dashboards' }">
-                </v-list-item> 
+                <v-list-item c prepend-icon="mdi-chart-line" title="Dashboards" :to="{ path: '/User/Dashboards' }"></v-list-item> 
+                <v-divider inset></v-divider>
+                <v-list-item c prepend-icon="mdi-logout" title="Cerrar Sesión" value="/" :to="{ path: '/' }"></v-list-item> 
               </v-list>
             </v-container>
           </v-container> 
@@ -30,7 +31,7 @@ function getCardImg(url,sexo){
 }
 export default {
     data: () =>({
-      userId: store.user._id,
+      userId: store.secondUser._id,
       profile: {
         avatar: getCardImg(store.user.url,store.user.sexo),
         fullname: store.user.fullname || "Usuario",
