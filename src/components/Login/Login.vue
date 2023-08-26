@@ -96,7 +96,9 @@ export default {
           this.$router.push({path: '/Usuarios'})
         }
         else {
-          throw('error');
+          this.snackbar.text = response.data.message
+          this.snackbar.color = 'error'
+          this.snackbar.active = true
         }
       })
       .catch(error => {

@@ -216,66 +216,88 @@ export default {
             let urlCreateUser = `${config.PathAPI}user/createUser`
             let urlAddUser = `${config.PathAPI}user/addUser`
             let newUser = this.user;
-            newUser.fullname = `${newUser.nombre} ${newUser.apellidoPaterno} ${newUser.apellidoMaterno}`;
-            axios.post(urlCreateUser, this.user).then (responseUser => {
-                console.log(responseUser)
-                if (responseUser.data.state && responseUser.data.item.length == 1) {
-                    let nuevoUsuario = responseUser.data.item[0];
-                    formData.user = nuevoUsuario;                    
-                    axios.post(urlAddUser, formData).then(response => { 
-                        if (response.data.state) {
-                            this.snackbar.text = 'La cuenta ha sido agregada correctamente';
-                            this.snackbar.color = 'success';
-                            this.snackbar.active = true;
-                            this.dialogCreateUser = false;
-                            // Modificar el usuario incluyendo el nuevo usuario niño a la lista de usuarios
-                            let newUser = store.user;
-                            newUser.users.push(responseUser.data.item[0]);
-                            store.$patch({
-                                user: newUser
-                            });
-                            // Reset user form
-                            this.user = {
-                                userName: null,
-                                nombre: null,
-                                apellidoPaterno: null,
-                                apellidoMaterno: null,
-                                fechaNacimiento: new Date(),
-                                url: "",
-                                password: null,
-                                confirmPassword: null,
-                                email:store.user.email,
-                                nivelTea: null,
-                                edad: null,
-                                sexo: null,
-                                typeAccount: "Niño",
-                            };
-                        }
-                        else {
-                            throw('error');
-                        }
-                    }).catch(error => {
-                        this.snackbar.text = 'No se ha podido vincular la cuenta. Intente nuevamente...';
-                        this.snackbar.color = 'error';
-                        this.snackbar.active = true;
-                        this.dialogCreateUser = false;
-                    });
-                }
-                else {
-                    this.snackbar.text = 'No se ha podido crear la cuenta. Intente nuevamente...';
-                    this.snackbar.color = 'error';
-                    this.snackbar.active = true;
-                    this.dialogCreateUser = false;
-                }                
-            }).catch(error => {
-                this.snackbar.text = 'Ha ocurrido un error al crear la cuenta. Intente nuevamente...';
+            let currentUsers = store.user.users
+            let typePlan = store.user.typePlan ? store.user.typePlan : null
+            // verificar el plan de la cuenta
+            if (typePlan == "Basic" && currentUsers == 2 ){
+                this.snackbar.text = 'No puede crear un nuevo usuario. La cuenta básica permite un máximo de 5 usuarios.';
                 this.snackbar.color = 'error';
                 this.snackbar.active = true;
                 this.dialogCreateUser = false;
-            });
+            }
+            else if (typePlan == "Premium" && currentUsers == 5){
+                this.snackbar.text = 'No puede crear un nuevo usuario. La cuenta premium permite un máximo de 10 usuarios.';
+                this.snackbar.color = 'error';
+                this.snackbar.active = true;
+                this.dialogCreateUser = false;
+            }
+            else{
+                newUser.fullname = `${newUser.nombre} ${newUser.apellidoPaterno} ${newUser.apellidoMaterno}`;
+                axios.post(urlCreateUser, this.user).then (responseUser => {
+                    console.log(responseUser)
+                    if (responseUser.data.state && responseUser.data.item.length == 1) {
+                        let nuevoUsuario = responseUser.data.item[0];
+                        formData.user = nuevoUsuario;                    
+                        axios.post(urlAddUser, formData).then(response => { 
+                            if (response.data.state) {
+                                this.snackbar.text = 'La cuenta ha sido agregada correctamente';
+                                this.snackbar.color = 'success';
+                                this.snackbar.active = true;
+                                this.dialogCreateUser = false;
+                                // Modificar el usuario incluyendo el nuevo usuario niño a la lista de usuarios
+                                let newUser = store.user;
+                                newUser.users.push(responseUser.data.item[0]);
+                                store.$patch({
+                                    user: newUser
+                                });
+                                // Reset user form
+                                this.user = {
+                                    userName: null,
+                                    nombre: null,
+                                    apellidoPaterno: null,
+                                    apellidoMaterno: null,
+                                    fechaNacimiento: new Date(),
+                                    url: "",
+                                    password: null,
+                                    confirmPassword: null,
+                                    email:store.user.email,
+                                    nivelTea: null,
+                                    edad: null,
+                                    sexo: null,
+                                    typeAccount: "Niño",
+                                };
+                            }
+                            else {
+                                throw('error');
+                            }
+                        }).catch(error => {
+                            this.snackbar.text = 'No se ha podido vincular la cuenta. Intente nuevamente...';
+                            this.snackbar.color = 'error';
+                            this.snackbar.active = true;
+                            this.dialogCreateUser = false;
+                        });
+                    }
+                    else {
+                        this.snackbar.text = 'No se ha podido crear la cuenta. Intente nuevamente...';
+                        this.snackbar.color = 'error';
+                        this.snackbar.active = true;
+                        this.dialogCreateUser = false;
+                    }                
+                }).catch(error => {
+                    this.snackbar.text = 'Ha ocurrido un error al crear la cuenta. Intente nuevamente...';
+                    this.snackbar.color = 'error';
+                    this.snackbar.active = true;
+                    this.dialogCreateUser = false;
+                });
+            }
+
+        
         },
         deleteAccount(cuenta){
+            let urlCreateUser = `${config.PathAPI}user/deleteUser`
+            // se debe enviar el ID del niño, verificar si hay vinculación, si es asi eliminar
             console.log('Cuenta eliminada:',cuenta)
+
         }
     },   
     watch: {
@@ -286,6 +308,7 @@ export default {
         }
     },
     created () {
+        // verifica si hay cuenta vinculada, en ese caso al TO se le agregan los usuarios creados
         if (vinculacion) {
             if (vinculacion.estado !== "Aprobado") {
                 cuentaVinculada = false;
