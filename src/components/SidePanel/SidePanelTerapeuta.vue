@@ -15,7 +15,7 @@
         <v-container class="px-0" style="margin-top: 10px">
           <v-container fluid class="px-0"> 
             <v-list density="compact" class=" border mx-0" nav >
-              <v-list-item  prepend-icon="mdi-home" title="Home"  :to="{ name: 'Home' }"></v-list-item>
+              <v-list-item  prepend-icon="mdi-home" title="Home"></v-list-item>
               <v-divider inset></v-divider>
               <v-list-item  prepend-icon="mdi-account" title="Mis usuarios"  :to="{ path: '/Usuarios' }"></v-list-item>
               <v-divider inset></v-divider>

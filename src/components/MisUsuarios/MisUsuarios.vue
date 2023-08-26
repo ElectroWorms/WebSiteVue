@@ -30,7 +30,7 @@
                 
             </v-row>
             <v-row>                    
-                <v-col cols="3" v-for="item in users" :key="item._id">      
+                <v-col xs="12" sm="6" md="4" lg="3" v-for="item in users" :key="item._id">      
                     <v-card class="mx-auto" max-width="100%" style="height: 340px;">
                         <v-img :src="getCardImg(item.url,item.sexo)" class="mt-5 mb-5" height="150px" aspect-ratio="1/1"></v-img>
 

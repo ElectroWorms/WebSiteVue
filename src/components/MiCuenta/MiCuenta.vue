@@ -140,6 +140,7 @@ export default {
             apellidoMaterno: store.secondUser.apellidoMaterno,
             email: store.secondUser.email,
             url: store.secondUser.url,
+            sexo: store.secondUser.sexo,
             password: store.secondUser.password,
             passwordConfirm: store.secondUser.password,
             tutor: (store.user.typeAccount == "Tutor") ? store.user.fullname : store.secondUser.tutor,

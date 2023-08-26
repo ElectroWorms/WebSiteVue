@@ -14,6 +14,36 @@
     max-width: 400px;
     min-height: 500px;
 }
+.rutina {
+    display:flex;
+    justify-content: flex-end;
+}
+.juegos {
+    display:flex;
+    justify-content: flex-start;
+}
+/* sm */
+@media (min-width: 1px) and (max-width: 767px) {
+    .rutina {
+        display:flex;
+        justify-content: center;
+    }
+    .juegos {
+        display:flex;
+        justify-content: center;
+    }
+}
+/* md */
+@media (min-width: 768px)  and (max-width: 991px) {
+    .rutina {
+        display:flex;
+        justify-content: center;
+    }
+    .juegos {
+        display:flex;
+        justify-content: center;
+    }
+}
 </style>
 <template>
     
@@ -23,8 +53,8 @@
         Detalle de la Actividad
     </v-app-bar>
     <v-row class="mt-8">
-        <v-col cols="6" justify="end" >
-            <v-card class="pt-2 card-rutina" height="550">
+        <v-col xs="12" sm="12" md="6" lg="6" class="rutina">
+            <v-card class="pt-2 card-rutina" min-height="550">
 
                 <v-img class="" :height="300" :src="actividad.url">
                     <!-- <v-card-title>Top 10 Australian beaches</v-card-title> -->
@@ -52,8 +82,8 @@
                 </v-card-actions>
             </v-card>
         </v-col>
-        <v-col cols="6">
-            <v-card class="card-juegos pt-2" height="550">
+        <v-col xs="12" sm="12" md="6" lg="6" class="juegos">
+            <v-card class="card-juegos pt-2" min-height="550">
                 <v-img class="" :height="300" src="@/assets/juego.jpg">
                     <!-- <v-card-title>Top 10 Australian beaches</v-card-title> -->
                 </v-img>
@@ -63,8 +93,8 @@
                 <v-card-text>
                     <div>Mediante juegos interactivos, estimula la creatividad y autonomía en las actividades diarias.</div>
                 </v-card-text>
-
-                <v-card-actions class="btn-actions">
+                
+                <v-card-actions class="btn-actions" style="margin-top: 80px">
                     <v-btn @click="loadGames" color="orange"> Ver Juegos </v-btn>
                 </v-card-actions>
             </v-card>
