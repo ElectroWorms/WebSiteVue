@@ -21,6 +21,16 @@
             <v-divider inset></v-divider>
             <v-list-item c prepend-icon="mdi-logout" title="Cerrar Sesión" value="/" @click="logout"></v-list-item>  
           </v-list>
+              <v-list-item  prepend-icon="mdi-home" title="Home"  :to="{ name: 'Home' }"></v-list-item>
+              <v-divider inset></v-divider>
+              <v-list-item  prepend-icon="mdi-account" title="Mis usuarios"  :to="{ path: '/Usuarios' }"></v-list-item>
+              <v-divider inset></v-divider>
+              <v-list-item c prepend-icon="mdi-note-alert-outline " title="Solicitudes Vinculación"  :to="{ path: '/Solicitudes' }"></v-list-item> 
+              <v-divider inset></v-divider>
+              <v-list-item c prepend-icon="mdi-chart-line" title="Dashboards"  :to="{ path: '/User/Dashboards' }"></v-list-item> 
+              <v-divider inset></v-divider>
+              <v-list-item c prepend-icon="mdi-logout" title="Cerrar Sesión" value="/" :to="{ path: '/' }"></v-list-item>  
+            </v-list>
           </v-container>
         </v-container> 
       </v-navigation-drawer>

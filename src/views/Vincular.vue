@@ -1,10 +1,10 @@
 <template>
-  <div v-if="typeAccount === 'Terapeuta Ocupacional'">
+ <!--  <div v-if="typeAccount === 'Terapeuta Ocupacional'">
       <SidePanelTerapeuta/>
   </div>
   <div v-if="typeAccount === 'Tutor'">
     <SidePanelTutor/>
-  </div>
+  </div> -->
   
   <v-app-bar :elevation="2" class="pl-4">
       Vincular Cuentas

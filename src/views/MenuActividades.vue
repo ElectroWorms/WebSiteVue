@@ -22,7 +22,7 @@
     </v-app-bar>
     <v-row class="mx-4 mt-2">
         <v-col v-for="(act,index) in Actividades" :key="index" cols="3" justify="center" >
-            <v-card class="card-content pt-5 pb-5 px-5" height="350">
+            <v-card class="card-content pt-5 pb-5 px-5" height="400">
                 <v-img class="align-end text-white mx-auto" height="250" :src="act.url" aspect-ratio="1">             
                 </v-img>
 
@@ -87,10 +87,11 @@ async function updateActivity(actividadId: string, active: boolean ,title: strin
 */
 let Respuesta;
 async function getActividades(){
-    Respuesta = {status: true, message: 'Actividad obtenida con éxito.', item: {}};
+    Respuesta = {state: true, message: 'Actividad obtenida con éxito.', item: []};
     await axios.get(config.PathAPI+'actividad/list/'+UserId?.value)
     .then(response => {
         Respuesta = response.data;
+        console.log(Respuesta)
         if (response.data.state) {
             Respuesta = response.data;
         }
@@ -103,6 +104,7 @@ async function getActividades(){
 const Actividades:any = ref([]);
 onMounted(async () => {
     let data = await getActividades();
+    console.log(data)
     console.log(data.item)
     let items = data.item;
     Actividades.value = items;

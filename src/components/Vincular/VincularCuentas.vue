@@ -101,8 +101,9 @@
                         </v-form>
                     </v-card-text>
                 </v-card>
-            </v-container>
-    </div>
+            </div>
+        </v-col>
+    </v-row>
 
     <v-snackbar v-model="snackbar.active" :timeout="snackbar.timeout" :color="snackbar.color">
         {{ snackbar.text }}
@@ -112,9 +113,7 @@
             </v-btn>
         </template>
     </v-snackbar>
-
 </template>
-
 <script>
 import axios from 'axios'
 import {useUserStore} from "../../store/app"

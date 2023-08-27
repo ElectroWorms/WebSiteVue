@@ -23,8 +23,8 @@
     </v-app-bar>
     <v-row class="mx-4 mt-2">
         <v-col v-for="(juego,index) in Juegos" :key="index" cols="3" justify="center" aspect-ratio="4/3">
-            <v-card class="card-content">
-                <v-img class="align-end text-white mx-auto" width="300" :src="juego.url" >             
+            <v-card class="card-content" height="400">
+                <v-img class="align-center mt-5 text-white mx-auto" height="250" :src="juego.url" aspect-ratio="1" >             
                 </v-img>
 
                 <v-card-subtitle class="pt-4 subtitulo"> {{juego.title}}</v-card-subtitle>
