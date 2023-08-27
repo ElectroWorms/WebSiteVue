@@ -31,16 +31,16 @@
     <SidePanelTutor/>
     <v-app-bar :elevation="2" class="pl-4">
         <v-btn @click="back" icon="mdi-arrow-left"></v-btn>
-        <!-- make a vue subtitle with "Detalle de la Rutina:" and put routine?.title beside -->
-        <span><span class="font-weight-bold">Detalle de la Rutina:</span> {{ routine?.title }}</span>
+        <span>Detalle de la Rutina</span>
     </v-app-bar>
     
-    <div class="btn-container">
-        <v-btn class="delete-routine-btn pl-4 pr-4" prepend-icon="$delete" variant="tonal" 
+    <v-row class="d-flex justify-space-between mt-8 ml-8 mr-8">
+        <p class="text-h5">{{ routine?.title }}</p>
+        <!-- <v-btn class="delete-routine-btn pl-4 pr-4" prepend-icon="$delete" variant="tonal" 
             @click="deleteRoutine" color="red"> 
             Eliminar Rutina 
-        </v-btn>
-    </div>
+        </v-btn> -->
+    </v-row>
     
     <v-btn class="add-step-btn pl-4 pr-4" prepend-icon="$plus" variant="tonal" 
         @click="addRoutineStepBtn" color="green">
@@ -159,13 +159,6 @@ async function addRoutineStepBtn() {
 
     console.log("New");
     showDialogNew.value = !showDialogNew.value;
-}
-
-async function deleteRoutine() {
-    
-    console.log("Delete Routine", routineId.value);
-    // delete the routine from the database
-    // delete the routine from the routines array
 }
 
 function handleClose() {
