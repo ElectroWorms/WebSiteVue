@@ -51,17 +51,18 @@ export const useUserStore = defineStore("app", () => {
     secondUser.value = JSON.parse(localStorage.getItem("secondUser"))
   }
 
-  const getVinculacion = () => {
-      var url = `http://localhost:4000/solicitudes/listSolicitud/${user.value._id}`
-      axios.get(url)
-      .then(response => {
-          var _solicitud = response.data ? response.data[0] : null
-          vinculacion.value = _solicitud 
-          console.log("valor solicitud", vinculacion)
-      })
-      .catch(error => {
-          console.log(error)
-      })
+  const getVinculacion =  async (id) => {
+    var url = `http://localhost:4000/solicitudes/listSolicitud/${id}`
+    await axios.get(url)
+    .then(response => {
+      console.log(response)
+        var _solicitud = response.data.length ? response.data[0] : null
+        vinculacion.value = _solicitud 
+        console.log("valor solicitud", _solicitud)
+    })
+    .catch(error => {
+        console.log(error)
+    })
   }
 
   const getTerapeuta = () => {

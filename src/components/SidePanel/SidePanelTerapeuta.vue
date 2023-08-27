@@ -19,17 +19,9 @@
             <v-divider inset></v-divider>
             <v-list-item c prepend-icon="mdi-note-alert-outline " title="Solicitudes Vinculación"  :to="{ path: '/Solicitudes' }"></v-list-item> 
             <v-divider inset></v-divider>
+            <v-list-item c prepend-icon="mdi-chart-line" title="Dashboards"  :to="{ path: '/User/Dashboards' }"></v-list-item>
+            <v-divider inset></v-divider>
             <v-list-item c prepend-icon="mdi-logout" title="Cerrar Sesión" value="/" @click="logout"></v-list-item>  
-          </v-list>
-              <v-list-item  prepend-icon="mdi-home" title="Home"  :to="{ name: 'Home' }"></v-list-item>
-              <v-divider inset></v-divider>
-              <v-list-item  prepend-icon="mdi-account" title="Mis usuarios"  :to="{ path: '/Usuarios' }"></v-list-item>
-              <v-divider inset></v-divider>
-              <v-list-item c prepend-icon="mdi-note-alert-outline " title="Solicitudes Vinculación"  :to="{ path: '/Solicitudes' }"></v-list-item> 
-              <v-divider inset></v-divider>
-              <v-list-item c prepend-icon="mdi-chart-line" title="Dashboards"  :to="{ path: '/User/Dashboards' }"></v-list-item> 
-              <v-divider inset></v-divider>
-              <v-list-item c prepend-icon="mdi-logout" title="Cerrar Sesión" value="/" :to="{ path: '/' }"></v-list-item>  
             </v-list>
           </v-container>
         </v-container> 
@@ -39,11 +31,10 @@
 
       <v-dialog v-model="dialogLogout" max-width="500px">
         <v-card>
-          <v-card-title class="text-h5 justify-center bg-red">¿Está seguro de cerrar sesión?</v-card-title>
+          <v-card-title class="text-h5 text-center">¿Está seguro de cerrar sesión?</v-card-title>
           <v-card-text class="text-center">
             <v-icon size="75" class="mr-2" max-widht="300px" elevation="2"
               fab
-              color="error"
               >
               mdi-logout
             </v-icon>

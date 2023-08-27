@@ -6,7 +6,7 @@
 </style>
 <template>
     <div>
-        <v-container class="justify-center w-100 mx-2 mb-5 elevation-0 center" >
+        <v-container class="justify-center w-100 mx-2 elevation-0 center pb-1" >
             <v-card class="w-50 px-5 pb-5">           
                 <v-card-title class="text-subtitle-1">Vincular Cuenta</v-card-title>
                 <v-form ref="form">
@@ -44,66 +44,64 @@
 
     <div v-if="showDataTerapeuta">
         
-            <v-container class=" d-flex justify-start fluid justify-center mb-5" >
-                <v-card class="w-75 border">
-                    <v-card-title class="text-subtitle-1 ">Información Terapeuta Ocupacional</v-card-title>
-                    <v-card-text class="mt-6">
-                        <v-form
-                        ref="form"
-                        >
-                        <v-row >
-                        <v-col class="px-1"
-                        cols="12"
-                        md="6"
-                        >
-                            <v-text-field
-                            v-model="terapeutaSolicitud.firstName"
-                            label="Nombre"
-                            :readonly="true"
-                            ></v-text-field>
-                        </v-col>
-
-                        <v-col
-                            cols="12"
-                            md="6"
-                        >
-                            <v-text-field
-                            v-model="terapeutaSolicitud.secondName"
-                            label="Apellido"
-                            :readonly="true"
-                            ></v-text-field>
-                        </v-col>
+        <v-container class=" d-flex justify-start fluid justify-center mb-5 " >
+            <v-card class="w-75 border">
+                <v-card-title class="text-subtitle-1 my-2 px-7 ">Información Terapeuta Ocupacional</v-card-title>
+                <v-card-text class="mt-6">
+                    <v-form>
+                        <v-row class="py-1">
+                            <v-col cols="4" md="4" class="">
+                                <v-row rows="2" class="center">
+                                    <v-img class="border bg-white" max-width="200px" :aspect-ratio="1" :src="getCardImg()" cover></v-img>
+                                </v-row>
+                                <v-row class="center mt-6">
+                                    <p>Foto de Perfil</p>
+                                </v-row>
+                            </v-col>
+                            <v-col cols="8" md="8" class="px-5">
+                                <v-row>
+                                    <v-col cols="6" md="6">
+                                        <v-text-field
+                                            v-model="terapeutaSolicitud.apellidoPaterno"
+                                            label="Nombre"
+                                            readonly="true"
+                                            variant="plain"
+                                        ></v-text-field>
+                                    </v-col>
+                                    <v-col cols="6" md="6">         
+                                        <v-text-field
+                                            v-model="terapeutaSolicitud.apellidoMaterno"
+                                            label="Apellido"
+                                            readonly="true"
+                                            variant="plain"
+                                        ></v-text-field>
+                                    </v-col>
+                                    <v-col cols="6" md="6">
+                                        <v-text-field
+                                            label="Nombre de usuario"
+                                            v-model="terapeutaSolicitud.userName"
+                                            readonly="true"
+                                            variant="plain"
+                                        ></v-text-field>
+                                    </v-col>
+                                    <v-col cols="6" md="6">
+                                        <v-text-field
+                                            label="Correo"
+                                            v-model="terapeutaSolicitud.email"
+                                            readonly="true"
+                                            variant="plain"
+                                        ></v-text-field>
+                                    </v-col>
+                                </v-row>
+                            </v-col>   
                         </v-row>
-
-                        <v-row >
-                        <v-col class="px-1"
-                        cols="12"
-                        md="6"
-                        >
-                            <v-text-field
-                            label="Nombre de usuario"
-                            v-model="terapeutaSolicitud.userName"
-                            :readonly="true"
-                            ></v-text-field>
-                        </v-col>
-
-                        <v-col class=""
-                        cols="12"
-                        md="6"
-                        >
-                            <v-text-field
-                            label="Correo"
-                            v-model="terapeutaSolicitud.email"
-                            :readonly="true"
-                            ></v-text-field>
-                        </v-col>
-                        </v-row>
-                        </v-form>
-                    </v-card-text>
-                </v-card>
-            </div>
-        </v-col>
-    </v-row>
+                        
+                    </v-form>
+                </v-card-text>
+            </v-card>
+        </v-container> 
+    </div>
+        
 
     <v-snackbar v-model="snackbar.active" :timeout="snackbar.timeout" :color="snackbar.color">
         {{ snackbar.text }}
@@ -153,6 +151,9 @@ export default {
             this.activeButton = true
             this.stateSelect = true
         },
+        getCardImg(){
+            return '/src/assets/icons/perfil_man.png';
+        },
         getTerapeutas(){
             var url = `${config.PathAPI}solicitudes/listTerapeutas`
             axios.get(url)
@@ -169,11 +170,11 @@ export default {
             var urlEnlazar = `${config.PathAPI}solicitudes/enlazar`
             //var terapeuta = this.terapeutas.filter (terapeuta => terapeuta.userName == this.userNameTerapeuta)[0]
             var tutor = store.user
-            var formMetada = {tutorUser: tutor, terapeutaCodigo: this.codigo, estado: 'En espera'}
+            var childUser = store.secondUser
+            var formMetada = {tutorUser: tutor, terapeutaCodigo: this.codigo, childUser, estado: 'En espera'}
 
             // eliminar los usuarios del to, el usuario ha decidido desvincular la cuenta
             if (this.showChangeTo == true){
-
                 var urlObtenerTo = `${config.PathAPI}user/getUser/${store.vinculacion.terapeuta._id}`
                 var urlUpdateUsersTo = `${config.PathAPI}solicitudes/updateUsers`
                 var users = store.user.users.map(user => user.userName)
@@ -223,7 +224,7 @@ export default {
             }
 
             else{
-                axios.post(url, formMetada)
+                axios.post(urlEnlazar, formMetada)
                 .then(response => {
                     this.showCard = true
                     this.activeButton = false
@@ -241,11 +242,10 @@ export default {
         
         },
         getSolicitud(){
-            var url = `${config.PathAPI}solicitudes/listSolicitud/${store.user._id}`
+            var url = `${config.PathAPI}solicitudes/listSolicitud/${store.secondUser._id}`
             axios.get(url)
             .then(response => {
                 var solicitud = response.data ? response.data[0] : null
-  
                 this.getTerapeutas()
                 if (solicitud){
                     
@@ -281,7 +281,6 @@ export default {
                         this.activeButton = true
                     }
                 }
-
                 else{
                     this.showCard = false
                 }
@@ -297,7 +296,7 @@ export default {
     },
     created () {
         this.getSolicitud()
-        store.getVinculacion()
+        store.getVinculacion(store.secondUser._id)
     }
 }
 </script>

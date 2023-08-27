@@ -50,26 +50,26 @@
                                     <v-text-field label="Correo" v-model="user.email" :readonly="!editing" :variant="variant"></v-text-field>
                                 </v-col>
                                 <v-col cols="4" md="4">
-                                        <v-text-field label="Edad" v-model="userNino.edad" :readonly="!editing" :variant="variant" required></v-text-field>
+                                        <v-text-field label="Edad" v-model="user.edad" :readonly="!editing" :variant="variant" required></v-text-field>
                                 </v-col>
                                 <v-col cols="4" md="4">
-                                    <v-select label="Sexo" :items="items" v-model="userNino.sexo" :readonly="!editing" :variant="variant" required></v-select>
+                                    <v-select label="Sexo" :items="items" v-model="user.sexo" :readonly="!editing" :variant="variant" required></v-select>
                                 </v-col>   
                                 <v-col cols="4" md="4">
-                                    <v-select label="Nivel de Apoyo" :items= "nivelTea" v-model="userNino.nivelTea" :readonly="!editing" :variant="variant" required></v-select>
+                                    <v-select label="Nivel de Apoyo" :items= "nivelTea" v-model="user.nivelTea" :readonly="!editing" :variant="variant" required></v-select>
                                 </v-col>
                                 <v-col cols="4" md="4">
-                                    <v-select label="Tutor" :items="items" v-model="userNino.tutor" readonly :variant="variant" required></v-select>
+                                    <v-text-field label="Tutor" :items="items" v-model="user.tutor" readonly :variant="variant" required></v-text-field>
                                 </v-col>
                                 <v-col cols="4" md="4">
-                                    <v-select label="Terapeuta Ocupacional" v-model="userNino.terapeutaOcupacional" readonly :variant="variant" required></v-select>
+                                    <v-text-field label="Terapeuta Ocupacional" v-model="user.terapeutaOcupacional" readonly :variant="variant" required></v-text-field>
                                 </v-col>                                 
                             </v-row>
                         </v-col>
                     </v-row>          
                 </v-form>
             </v-card-text>
-            <v-card-actions class="mt-5 mb-5">
+            <v-card-actions class="mt-5 mb-5" v-if="!hideButtons">
                 <v-spacer></v-spacer>
                 <v-btn color="blue" prepend-icon="mdi-content-save" text variant="tonal" v-if="editing" @click="validateCuenta()">
                     Enviar
@@ -95,6 +95,26 @@
             </v-btn>
         </template>
     </v-snackbar>
+
+    <v-dialog v-model="dialogDelete" max-width="500px">
+      <v-card>
+        <v-card-title class="text-h5 text-center">¿Está seguro de eliminar la cuenta?</v-card-title>
+        <v-card-text class="text-center">
+          <v-icon size="75" class="mr-2" max-widht="300px" elevation="2"
+            fab
+            color="error"
+            >
+            mdi-delete
+          </v-icon>
+        </v-card-text>
+        <v-card-actions class="my-3">
+          <v-spacer></v-spacer>
+          <v-btn color="blue darken-1" text @click="deleteConfirm">Aceptar</v-btn>
+          <v-btn color="red darken-1" text @click="deleteCancel">Cancelar</v-btn>
+          <v-spacer></v-spacer>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
     
 </template>
 
@@ -103,7 +123,6 @@ import axios from 'axios';
 import {useUserStore} from "../../store/app";
 import config from '../../../config.json';
 const store = useUserStore();
-const vinculacion = store.vinculacion;
 function fileToBlob(file) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -127,8 +146,10 @@ export default {
                 return !value || !value.length || value[0].size < 2000000 || 'Avatar size should be less than 2 MB!'
             },
         ],
+        dialogDelete: false,
         file: null,
         editing: false,
+        hideButtons: false,
         variant: "plain",
         items: ['Masculino', 'Femenino'],
         nivelTea: ['Nivel de Apoyo 1', 'Nivel de Apoyo 2', 'Nivel de Apoyo 3'],
@@ -139,17 +160,14 @@ export default {
             apellidoPaterno: store.secondUser.apellidoPaterno,
             apellidoMaterno: store.secondUser.apellidoMaterno,
             email: store.secondUser.email,
+            edad: store.secondUser.edad,
+            sexo: store.secondUser.sexo,
+            nivelTea: store.secondUser.nivelTea,
             url: store.secondUser.url,
             password: store.secondUser.password,
-            passwordConfirm: store.secondUser.password,
-            tutor: (store.user.typeAccount == "Tutor") ? store.user.fullname : store.secondUser.tutor,
-            terapeutaOcupacional: store.secondUser.terapeutaOcupacional || 'Sin Asignar'
-        },
-        userNino : {
-            edad: store.secondUser.infoNino ? store.secondUser.infoNino.edad : null,
-            nivelTea: store.secondUser.infoNino ? store.secondUser.infoNino.nivelTea : null,
-            sexo: store.secondUser.infoNino ? store.secondUser.infoNino.sexo : null
-
+            passwordConfirm: store.secondUser.passwordConfirm,
+            tutor: null,
+            terapeutaOcupacional: null
         },
         snackbar: {
             color: null,
@@ -157,12 +175,6 @@ export default {
             text: null,
             timeout: 3000,
         },
-        activeInputs: false,
-        activeButtonEnviar: false,
-        activeInputsNino: store.secondUser.infoNino ? false : true,
-        activeButtonEnviarNino: store.secondUser.infoNino ? false : true,
-        activeButtonActualizarNino: store.secondUser.infoNino ? true : false,
-        dialogSuccess: false,
     }),
 
     methods:{
@@ -205,17 +217,41 @@ export default {
                 let respuesta = response.data;
                 if (respuesta.state) {
                     this.editing = false;
-                    this.snackbar.text = 'Se ha modificado la cuenta del niño correctamente';
-                    this.snackbar.color = 'success';
-                    this.snackbar.active = true;
                     store.$patch({
-                        secondUser: this.user,
-                        user: store.user.typeAccount == "Terapeuta Ocupacional" ? response.data.terapeuta : response.data.tutor
+                        secondUser: respuesta.item,
                     })
+                    //Actualizar listados de tutor y terapeuta
+                    let urlUpdateUsers = `${config.PathAPI}user/updateUser`
+                    let formData = {idTutor: null, idTerapeuta: null, secondUser: respuesta.item}
+                    let vinculacion = store.vinculacion
+                    formData.idTutor = vinculacion ? vinculacion.tutor._id : store.user._id
+                    formData.idTerapeuta = vinculacion ? vinculacion.terapeuta._id : null
+                    axios.post(urlUpdateUsers, formData)
+                    .then( response => {
+                        if (response.data.status){
+                            this.snackbar.text = 'Se ha modificado la cuenta del niño correctamente';
+                            this.snackbar.color = 'success';
+                            this.snackbar.active = true;
+                            console.log(response.data.item)
+                        }
+                        
+                        store.$patch({
+                            user: store.user.typeAccount == "Terapeuta Ocupacional" ? response.data.item.terapeuta : response.data.item.tutor
+                        })
+                        
+                    })
+                    .catch ( error => {
+                        this.snackbar.text = 'No se ha logrado modificar la cuenta. Intente nuevamente';
+                        this.snackbar.color = 'error';
+                        this.snackbar.active = true;
+                    })
+
                 }
-                this.snackbar.text = 'No se pudo modificar la cuenta del niño';
-                this.snackbar.color = 'error';
-                this.snackbar.active = true
+                else{
+                    this.snackbar.text = 'No se pudo modificar la cuenta del niño';
+                    this.snackbar.color = 'error';
+                    this.snackbar.active = true
+                }
             })
             .catch( error => {
                 this.snackbar.text = 'Ha ocurrido un error'
@@ -223,12 +259,65 @@ export default {
                 this.snackbar.active = true
             })           
         },
-        deleteAccount(cuenta) {
-
+        deleteAccount(cuenta){
+            this.dialogDelete = true
+            this.cuenta = Object.assign({}, cuenta)
+            console.log(this.cuenta)
+        },
+        async deleteConfirm(){
+            let idChild = this.cuenta._id
+            let vinculacion = store.vinculacion ? true : false
+            let idTerapeuta = vinculacion ? store.vinculacion.terapeuta._id : null
+            let idTutor = vinculacion ? store.vinculacion.tutor._id : store.user._id
+            let formMetadata = {idTutor, idChild, idTerapeuta, vinculacion}
+            let urlDeleteChild = `${config.PathAPI}user/deleteAccountChild`
+            axios.post(urlDeleteChild, formMetadata)
+            .then( result => {
+                if (result.data.status){
+                    console.log(result)
+                    // actualizar el store eliminado el userChild
+                    let responseUsers = result.data.items
+                    let newUser = store.user
+                    newUser.users = responseUsers
+                    console.log(newUser)
+                    store.$patch({
+                        user: newUser
+                    })
+                    this.snackbar.text =  result.data.message;
+                    this.snackbar.color = 'success';
+                    this.snackbar.active = true;
+                    this.$router.push({path: '/Usuarios'})
+                }
+                else{
+                    if (result.data.status){
+                        this.snackbar.text =  result.data.message;
+                        this.snackbar.color = 'error';
+                        this.snackbar.active = true;
+                    }
+                }
+            })
+            .catch( error => {
+                this.snackbar.text =  'No se ha logrado eliminar la cuenta. Intente nuevamente...';
+                this.snackbar.color = 'error';
+                this.snackbar.active = true;
+            })
+        
+        },
+        deleteCancel(){
+            this.dialogDelete = false;
+        },
+        async getVinculacion(){
+            await store.getVinculacion(store.secondUser._id)
+            let vinculacion = store.vinculacion ? true : false
+            let terapeutaFullName = vinculacion ? store.vinculacion.terapeuta.userName : "Sin Asignar"
+            let tutorFullName = vinculacion ? store.vinculacion.tutor.userName : store.user.fullname
+            this.hideButtons = (store.user.typeAccount == "Terapeuta Ocupacional") ? true : false
+            this.user.terapeutaOcupacional = terapeutaFullName 
+            this.user.tutor = tutorFullName
         }
     },    
-    created () {
-        store.getVinculacion()
+     created () {
+         this.getVinculacion()
     }
 }
 </script>

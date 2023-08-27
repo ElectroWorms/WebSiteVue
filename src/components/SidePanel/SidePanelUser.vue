@@ -6,13 +6,20 @@
       <v-container class="px-0" style="margin-top: 10px">
         <v-container fluid class="px-0"> 
           <v-list density="compact" class=" border mx-0" nav >
-          <v-list-item  prepend-icon="mdi-apps" title="Actividades"  :to="{ name: 'MenuActividades', params: { UserId: userId }}"></v-list-item>
-          <v-divider inset></v-divider>
-          <v-list-item  prepend-icon="mdi-image" title="Mis imágenes" :to="{ path: '/User/Imagenes' }"></v-list-item>
-          <v-divider inset></v-divider>
-          <v-list-item c prepend-icon="mdi-chart-line" title="Dashboards"  :to="{ path: '/User/Dashboards' }">
-          </v-list-item> 
-        </v-list>
+              <v-list-item  prepend-icon="mdi-home" title="Home"  :to="{ name: 'Home' }"></v-list-item>
+              <v-divider inset></v-divider>
+              <v-list-item  prepend-icon="mdi-account" title="Mi cuenta"  :to="{ path: '/User/MiCuenta'}"></v-list-item>
+              <v-divider inset></v-divider>
+              <v-list-item  prepend-icon="mdi-account-box-multiple-outline" title="Vincular cuenta"  :to="{ path: '/Vincular' }"></v-list-item>
+              <v-divider inset></v-divider>
+              <v-list-item  prepend-icon="mdi-apps" title="Actividades"  :to="{ name: 'MenuActividades', params: { UserId: userId }}"></v-list-item>
+              <v-divider inset></v-divider>
+              <v-list-item  prepend-icon="mdi-image" title="Mis imágenes" :to="{ path: '/User/Imagenes' }"></v-list-item>
+              <v-divider inset></v-divider>
+              <v-list-item c prepend-icon="mdi-chart-line" title="Dashboards" :to="{ path: '/User/Dashboards' }"></v-list-item> 
+              <v-divider inset></v-divider>
+              <v-list-item c prepend-icon="mdi-logout" title="Cerrar Sesión" value="/" @click="logout"></v-list-item> 
+          </v-list>
         </v-container>
       </v-container> 
     </v-navigation-drawer>
@@ -20,11 +27,10 @@
     <!-- dialog de logout -->
     <v-dialog v-model="dialogLogout" max-width="500px">
       <v-card>
-        <v-card-title class="text-h5 justify-center">¿Está seguro de cerrar sesión?</v-card-title>
+        <v-card-title class="text-h5 text-center">¿Está seguro de cerrar sesión?</v-card-title>
         <v-card-text class="text-center">
           <v-icon size="75" class="mr-2" max-widht="300px" elevation="2"
             fab
-            color="error"
             >
             mdi-logout
           </v-icon>

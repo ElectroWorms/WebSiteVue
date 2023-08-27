@@ -17,7 +17,7 @@
 </style>
 <template>
     
-    <SidePanelTutor/>
+    <SidePanelUser/>
     <v-app-bar :elevation="2" class="pl-4">
         <v-btn @click="back" icon="mdi-arrow-left"></v-btn>
         Detalle de la Actividad
@@ -77,7 +77,7 @@
 
 // Imports
 
-import SidePanelTutor from '@/components/SidePanel/SidePanelTutor.vue';
+import SidePanelUser from '@/components/SidePanel/SidePanelUser.vue';
 import { ref, toRefs,onMounted } from 'vue'
 import router from '@/router'
 import {getActivity, fetchRoutines} from '../functions/activityDetailFunctions'

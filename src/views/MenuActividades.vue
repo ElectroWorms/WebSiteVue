@@ -15,7 +15,7 @@
 }
 </style>
 <template>
-    <SidePanelTutor/>
+    <SidePanelUser/>
     <v-app-bar :elevation="2" class="pl-4">
         <v-btn @click="back" icon="mdi-arrow-left"></v-btn>
         Menú de Actividades
@@ -50,7 +50,7 @@
 /*
     Imports
 */
-import SidePanelTutor from '@/components/SidePanel/SidePanelTutor.vue';
+import SidePanelUser from '@/components/SidePanel/SidePanelUser.vue';
 import axios from 'axios';
 import { ref, toRefs,onMounted } from 'vue';
 import config from '../../config.json';

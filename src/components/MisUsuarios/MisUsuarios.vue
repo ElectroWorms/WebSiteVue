@@ -31,7 +31,7 @@
             </v-row>
             <v-row>                    
                 <v-col cols="3" v-for="item in users" :key="item._id">      
-                    <v-card class="mx-auto" max-width="100%" style="height: 340px;">
+                    <v-card class="mx-auto" max-width="100%" style="height: 380px;">
                         <v-img :src="getCardImg(item.url,item.sexo)" class="mt-5 mb-5" height="150px" aspect-ratio="1/1"></v-img>
 
                         <v-card-title style="text-align: center;">
@@ -45,9 +45,18 @@
                         </v-card-subtitle>
                         
                         <v-card-actions class="actions-center">
-                            <v-btn color="orange-lighten-2" variant="text" @click="loadPerfil(item)">
-                                Ver Perfil
-                            </v-btn>
+                            <v-row>
+                                <v-col cols="12" class="py-0  text-center">
+                                    <v-btn color="orange-lighten-2" variant="text" @click="loadPerfil(item)">
+                                        Ver Perfil
+                                    </v-btn>
+                                </v-col>
+                                <v-col cols="12" class="py-0  text-center" v-if="showDelete">
+                                    <v-btn color="red-lighten-2" variant="text" @click="deleteAccount(item)">
+                                        Eliminar Perfil
+                                    </v-btn>
+                                </v-col>
+                            </v-row>
                         </v-card-actions>
                     </v-card>
                 </v-col>
@@ -121,7 +130,7 @@
                         <v-btn color="blue darken-1" text variant="tonal" @click="validate" >
                             Registrar
                         </v-btn>                    
-                        <v-btn color="red darken-1" text variant="tonal" @click="dialogCreateUser = false" >
+                        <v-btn color="red darken-1" text variant="tonal" @click="dialogCreateUser = false">
                             Cancelar
                         </v-btn>
                     </v-card-actions>                    
@@ -137,6 +146,28 @@
             </v-btn>
         </template>
     </v-snackbar>
+
+    <!-- Estas seguro de eliminar la cuenta -->
+    <v-dialog v-model="dialogDelete" max-width="500px">
+      <v-card>
+        <v-card-title class="text-h5 text-center">¿Está seguro de eliminar la cuenta?</v-card-title>
+        <v-card-text class="text-center">
+          <v-icon size="75" class="mr-2" max-widht="300px" elevation="2"
+            fab
+            color="error"
+            >
+            mdi-delete
+          </v-icon>
+        </v-card-text>
+        <v-card-actions class="my-3">
+          <v-spacer></v-spacer>
+          <v-btn color="blue darken-1" text @click="deleteConfirm">Aceptar</v-btn>
+          <v-btn color="red darken-1" text @click="deleteCancel">Cancelar</v-btn>
+          <v-spacer></v-spacer>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
 </template>
 <script>
 import axios from 'axios'
@@ -144,7 +175,6 @@ import {useUserStore} from "../../store/app"
 const store = useUserStore()
 const vinculacion = store.vinculacion
 var cuentaVinculada = false
-var formData = {}
 import config from '../../../config.json'
 export default {
     data: () =>({
@@ -172,6 +202,9 @@ export default {
             sexo: null,
             typeAccount: "Niño",
         },
+        showDelete: (store.user.typeAccount == "Tutor") ? true : false,
+        dialogDelete: false,
+        cuenta: {},
         dialogCreateUser: false,
         users: store.user.users ? store.user.users : null,
         respaldoUsers: store.user.users ? store.user.users : [],
@@ -221,13 +254,13 @@ export default {
             let typePlan = store.user.typePlan ? store.user.typePlan : null
             // verificar el plan de la cuenta
             if (typePlan == "Basic" && currentUsers == 2 ){
-                this.snackbar.text = 'No puede crear un nuevo usuario. La cuenta básica permite un máximo de 5 usuarios.';
+                this.snackbar.text = 'No puede crear un nuevo usuario. La cuenta básica permite un máximo de 2 usuarios.';
                 this.snackbar.color = 'error';
                 this.snackbar.active = true;
                 this.dialogCreateUser = false;
             }
             else if (typePlan == "Premium" && currentUsers == 5){
-                this.snackbar.text = 'No puede crear un nuevo usuario. La cuenta premium permite un máximo de 10 usuarios.';
+                this.snackbar.text = 'No puede crear un nuevo usuario. La cuenta premium permite un máximo de 5 usuarios.';
                 this.snackbar.color = 'error';
                 this.snackbar.active = true;
                 this.dialogCreateUser = false;
@@ -235,10 +268,9 @@ export default {
             else{
                 newUser.fullname = `${newUser.nombre} ${newUser.apellidoPaterno} ${newUser.apellidoMaterno}`;
                 axios.post(urlCreateUser, this.user).then (responseUser => {
-                    console.log(responseUser)
                     if (responseUser.data.state && responseUser.data.item.length == 1) {
                         let nuevoUsuario = responseUser.data.item[0];
-                        formData.user = nuevoUsuario;                    
+                        let formData = {idTutor: store.user._id, user:nuevoUsuario}                  
                         axios.post(urlAddUser, formData).then(response => { 
                             if (response.data.state) {
                                 this.snackbar.text = 'La cuenta ha sido agregada correctamente';
@@ -295,11 +327,59 @@ export default {
         
         },
         deleteAccount(cuenta){
-            let urlCreateUser = `${config.PathAPI}user/deleteUser`
-            // se debe enviar el ID del niño, verificar si hay vinculación, si es asi eliminar
-            console.log('Cuenta eliminada:',cuenta)
-
+            this.dialogDelete = true
+            this.cuenta = Object.assign({}, cuenta)
+            console.log(this.cuenta)
+        },
+        async deleteConfirm(){
+            await store.getVinculacion(this.cuenta._id)
+            
+            let idChild = this.cuenta._id
+            let vinculacion = store.vinculacion ? true : false
+            let idTerapeuta = vinculacion ? store.vinculacion.terapeuta._id : null
+            let idTutor = vinculacion ? store.vinculacion.tutor._id : store.user._id
+            let formMetadata = {idTutor, idChild, idTerapeuta, vinculacion}
+            let urlDeleteChild = `${config.PathAPI}user/deleteAccountChild`
+            
+            
+            axios.post(urlDeleteChild, formMetadata)
+            .then( result => {
+                if (result.data.status){
+                    console.log(result)
+                    // actualizar el store eliminado el userChild
+                    let responseUsers = result.data.items
+                    let newUser = store.user
+                    newUser.users = responseUsers
+                    console.log(newUser)
+                    store.$patch({
+                        user: newUser
+                    })
+                    this.users = responseUsers
+                    this.MensajeBusqueda = 'Aún no has creado ninguna cuenta.'
+                    this.dialogDelete = false
+                    this.snackbar.text =  result.data.message;
+                    this.snackbar.color = 'success';
+                    this.snackbar.active = true;
+                }
+                else{
+                    if (result.data.status){
+                        this.snackbar.text =  result.data.message;
+                        this.snackbar.color = 'error';
+                        this.snackbar.active = true;
+                    }
+                }
+            })
+            .catch( error => {
+                this.snackbar.text =  'No se ha logrado eliminar la cuenta. Intente nuevamente...';
+                this.snackbar.color = 'error';
+                this.snackbar.active = true;
+            })
+        
+        },
+        deleteCancel(){
+            this.dialogDelete = false;
         }
+
     },   
     watch: {
         search(newVal, oldVal) {
@@ -310,27 +390,6 @@ export default {
     },
     created () {
         // verifica si hay cuenta vinculada, en ese caso al TO se le agregan los usuarios creados
-        if (vinculacion) {
-            if (vinculacion.estado !== "Aprobado") {
-                cuentaVinculada = false;
-                formData = {
-                    idTutor: store.user._id,
-                    idTerapeuta: null,
-                    user: null,
-                    cuentaVinculada
-                };
-            }
-            else{
-                cuentaVinculada = true;
-                store.getVinculacion();
-                formData = {
-                    idTutor: store.vinculacion.tutor._id,
-                    idTerapeuta: store.vinculacion.terapeuta._id,
-                    user: null,
-                    cuentaVinculada
-                };
-            }
-        }
         
         this.isTutor= store.user.typeAccount == "Tutor" ? true : false;
     }

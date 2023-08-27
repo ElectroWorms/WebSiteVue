@@ -1,10 +1,5 @@
 <template>
- <!--  <div v-if="typeAccount === 'Terapeuta Ocupacional'">
-      <SidePanelTerapeuta/>
-  </div>
-  <div v-if="typeAccount === 'Tutor'">
-    <SidePanelTutor/>
-  </div> -->
+  <SidePanelUser/>
   
   <v-app-bar :elevation="2" class="pl-4">
       Vincular Cuentas
@@ -14,8 +9,7 @@
 
 </template>
 <script setup>
-  import SidePanelTutor from '@/components/SidePanel/SidePanelTutor.vue'
-  import SidePanelTerapeuta from '@/components/SidePanel/SidePanelTerapeuta.vue'
+  import SidePanelUser from '@/components/SidePanel/SidePanelUser.vue'
   import FormVincular from '@/components/Vincular/VincularCuentas.vue'
   import UpperPanel from '@/components/UpperPanel/UpperPanel.vue'
   import { ref } from 'vue'
