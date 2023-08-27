@@ -1,0 +1,8 @@
+{
+    "PathAPI": "http://localhost:4000/",
+    "Themes": [
+        {
+            "BackgroundImage": "@/assets/juego.jpg"
+        }
+    ]
+}
