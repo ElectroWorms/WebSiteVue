@@ -1,52 +1,41 @@
+<style>
+.center {
+    display: flex;
+    justify-content: center;
+}
+</style>
 <template>
     <div>
-        <v-card-title class="text-subtitle-1 ">Vincular Cuenta</v-card-title>
-        <v-container class="border d-flex justify-start w-75 mx-2 mb-5 elevation-0" >
-            <v-card class="w-50 px-1 py-1">           
+        <v-container class="justify-center w-100 mx-2 elevation-0 center pb-1" >
+            <v-card class="w-50 px-5 pb-5">           
+                <v-card-title class="text-subtitle-1">Vincular Cuenta</v-card-title>
                 <v-form ref="form">
-                    <v-select
-                        v-model="userNameTerapeuta"
-                        :items="userNameTerapeutas"
-                        :disabled="!stateSelect"
-                        :rules="[v => !!v || 'El terapeuta ocupacional es requerido']"
-                        label="Seleccione al terapeuta"
-                        required
-                    ></v-select>
+                    <!-- <v-autocomplete v-model="userNameTerapeuta" :items="userNameTerapeutas" label="Ingrese el nombre de usuario de un terapeuta..." :disabled="!stateSelect" :rules="[v => !!v || 'El terapeuta ocupacional es requerido']"  required></v-autocomplete>-->
+                    <v-text-field label="Código de terapeuta" v-model="codigo" :rules="[v => !!v || 'Código es requerido']"  :readonly="!stateSelect"></v-text-field>
                 </v-form>
                 <v-row>
                     <v-col cols="12" sm="12">
                         <div class="d-flex flex-column">
-                            <v-btn
-                            color="success"
-                            class="mt-4"
-                            block
-                            :disabled="!activeButton"
-                            @click="vincular"
-                            >
+                            <v-btn color="success" class="mt-4" block  :disabled="!activeButton" @click="vincular" >
                             Vincular
                             </v-btn>
                         </div>
                     </v-col>
                     <v-col cols="12" sm="12" v-if="showChangeTo">
                         <div class="d-flex flex-column">
-                            <v-btn
-                            color="info"
-                            class="mt-4"
-                            block
-                            @click="changeTo"
-                            >
-                            Cambiar Terapeuta Ocupacional
+                            <v-btn color="info" class="mt-4" block @click="changeTo" >
+                                Cambiar Terapeuta Ocupacional
                             </v-btn>
                         </div>
                     </v-col>
                 </v-row>
 
-                <v-card class=" mt-10 fill-height my-1 mx-1" v-if="showCard">           
-                <v-alert
-                    :type="typeAlert"
-                    :text="typeText"
-                    variant="outlined"
-                ></v-alert>
+                <v-card class=" mt-5" v-if="showCard">           
+                    <v-alert
+                        :type="typeAlert"
+                        :text="typeText"
+                        variant="outlined"
+                    ></v-alert>
                 </v-card>
                 
             </v-card>
@@ -54,74 +43,79 @@
     </div>
 
     <div v-if="showDataTerapeuta">
-        <v-card-title class="text-subtitle-1 ">Información Terapeuta Ocupacional</v-card-title>
-            <v-container class="border d-flex justify-start w-75 mx-2 mb-5 elevation-0" >
-                <v-card class="w-75 border">
-                    <v-card-text class="mt-6">
-                        <v-form
-                        ref="form"
-                        >
-                        <v-row >
-                        <v-col class="px-1"
-                        cols="12"
-                        md="6"
-                        >
-                            <v-text-field
-                            v-model="terapeutaSolicitud.firstName"
-                            label="Nombre"
-                            disabled="true"
-                            ></v-text-field>
-                        </v-col>
-
-                        <v-col
-                            cols="12"
-                            md="6"
-                        >
-                            <v-text-field
-                            v-model="terapeutaSolicitud.secondName"
-                            label="Apellido"
-                            disabled="true"
-                            ></v-text-field>
-                        </v-col>
+        
+        <v-container class=" d-flex justify-start fluid justify-center mb-5 " >
+            <v-card class="w-75 border">
+                <v-card-title class="text-subtitle-1 my-2 px-7 ">Información Terapeuta Ocupacional</v-card-title>
+                <v-card-text class="mt-6">
+                    <v-form>
+                        <v-row class="py-1">
+                            <v-col cols="4" md="4" class="">
+                                <v-row rows="2" class="center">
+                                    <v-img class="border bg-white" max-width="200px" :aspect-ratio="1" :src="getCardImg()" cover></v-img>
+                                </v-row>
+                                <v-row class="center mt-6">
+                                    <p>Foto de Perfil</p>
+                                </v-row>
+                            </v-col>
+                            <v-col cols="8" md="8" class="px-5">
+                                <v-row>
+                                    <v-col cols="6" md="6">
+                                        <v-text-field
+                                            v-model="terapeutaSolicitud.apellidoPaterno"
+                                            label="Nombre"
+                                            readonly="true"
+                                            variant="plain"
+                                        ></v-text-field>
+                                    </v-col>
+                                    <v-col cols="6" md="6">         
+                                        <v-text-field
+                                            v-model="terapeutaSolicitud.apellidoMaterno"
+                                            label="Apellido"
+                                            readonly="true"
+                                            variant="plain"
+                                        ></v-text-field>
+                                    </v-col>
+                                    <v-col cols="6" md="6">
+                                        <v-text-field
+                                            label="Nombre de usuario"
+                                            v-model="terapeutaSolicitud.userName"
+                                            readonly="true"
+                                            variant="plain"
+                                        ></v-text-field>
+                                    </v-col>
+                                    <v-col cols="6" md="6">
+                                        <v-text-field
+                                            label="Correo"
+                                            v-model="terapeutaSolicitud.email"
+                                            readonly="true"
+                                            variant="plain"
+                                        ></v-text-field>
+                                    </v-col>
+                                </v-row>
+                            </v-col>   
                         </v-row>
-
-                        <v-row >
-                        <v-col class="px-1"
-                        cols="12"
-                        md="6"
-                        >
-                            <v-text-field
-                            label="Nombre de usuario"
-                            v-model="terapeutaSolicitud.userName"
-                            disabled="true"
-                            ></v-text-field>
-                        </v-col>
-
-                        <v-col class=""
-                        cols="12"
-                        md="6"
-                        >
-                            <v-text-field
-                            label="Correo"
-                            v-model="terapeutaSolicitud.email"
-                            disabled="true"
-                            ></v-text-field>
-                        </v-col>
-                        </v-row>
-                        </v-form>
-                    </v-card-text>
-                </v-card>
-            </v-container>
-
-
+                        
+                    </v-form>
+                </v-card-text>
+            </v-card>
+        </v-container> 
     </div>
-    
+        
 
+    <v-snackbar v-model="snackbar.active" :timeout="snackbar.timeout" :color="snackbar.color">
+        {{ snackbar.text }}
+        <template v-slot:action="{ attrs }">
+            <v-btn color="blue" text v-bind="attrs" @click="snackbar.active = false">
+            Close
+            </v-btn>
+        </template>
+    </v-snackbar>
 </template>
-
 <script>
 import axios from 'axios'
 import {useUserStore} from "../../store/app"
+import config from '../../../config.json'
 const store = useUserStore()
 export default {
     data: () =>({
@@ -142,6 +136,13 @@ export default {
             userName: null,
             email: null,
         },
+        snackbar: {
+            color: null,
+            active: false,
+            text: null,
+            timeout: 3000,
+        },
+        codigo: null,
         
     }),
 
@@ -150,8 +151,11 @@ export default {
             this.activeButton = true
             this.stateSelect = true
         },
+        getCardImg(){
+            return '/src/assets/icons/perfil_man.png';
+        },
         getTerapeutas(){
-            var url = 'http://localhost:4000/solicitudes/listTerapeutas'
+            var url = `${config.PathAPI}solicitudes/listTerapeutas`
             axios.get(url)
             .then(response => {
                 var userNameTerapeutas = response.data.map(terapeuta  => terapeuta.userName)
@@ -162,33 +166,89 @@ export default {
                 console.log(error)
             })
         },
-        vincular () {
-            var url = 'http://localhost:4000/solicitudes/enlazar'
-            var terapeuta = this.terapeutas.filter (terapeuta => terapeuta.userName == this.userNameTerapeuta)[0]
+        async vincular () {
+            var urlEnlazar = `${config.PathAPI}solicitudes/enlazar`
+            //var terapeuta = this.terapeutas.filter (terapeuta => terapeuta.userName == this.userNameTerapeuta)[0]
             var tutor = store.user
-            var formMetada = {tutorUser: tutor, terapeutaUser: terapeuta, estado: 'En espera'}
-            axios.post(url, formMetada)
-            .then(response => {
-                console.log(response)
-                console.log(store.user)
-                this.showCard = true
-                this.activeButton = false
-                this.typeAlert = "info"
-                this.stateSelect = false,
-                this.typeText = "La solicitud se encuentra en estado: En espera"
+            var childUser = store.secondUser
+            var formMetada = {tutorUser: tutor, terapeutaCodigo: this.codigo, childUser, estado: 'En espera'}
 
-            })
-            .catch(error => {
-                console.log(error)
-            })
+            // eliminar los usuarios del to, el usuario ha decidido desvincular la cuenta
+            if (this.showChangeTo == true){
+                var urlObtenerTo = `${config.PathAPI}user/getUser/${store.vinculacion.terapeuta._id}`
+                var urlUpdateUsersTo = `${config.PathAPI}solicitudes/updateUsers`
+                var users = store.user.users.map(user => user.userName)
+
+                // obtener los datos del terapeuta y modificar su lista de users (eliminar niños)
+                axios.get(urlObtenerTo)
+                    .then( response => {
+                        console.log(response)
+                        var terapeuta = response.data.user
+                        var newUsersTerapeuta = []
+                        terapeuta.users.forEach(user => {
+                            if (!users.includes(user.userName)){
+                                newUsersTerapeuta.push(user)
+                            }
+                        });
+                        var formData ={
+                            idTerapeuta: terapeuta._id,
+                            users: newUsersTerapeuta
+                        }
+                        // enviar al terapeuta su lista de users modificado (niños eliminados)
+                        axios.post(urlUpdateUsersTo, formData)
+                        .then(response => {
+                            // Agregar al tutor la nueva vinculacion
+                            axios.post(urlEnlazar, formMetada)
+                            .then(response => {
+                                this.$router.go()
+                            })
+                            .catch(error => {
+                                this.snackbar.text = 'No se encuentra un terapeuta con ese código. Intente nuevamente...'
+                                this.snackbar.color = 'error'
+                                this.snackbar.active = true
+                            })
+                        })
+                        .catch(error => {
+                            this.snackbar.text = 'No se ha logrado vincular la cuenta. Intente nuevamente'
+                            this.snackbar.color = 'error'
+                            this.snackbar.active = true
+                        })
+
+                    })
+                    .catch(error => {
+                        this.snackbar.text = 'No se ha logrado vincular la cuenta. Intente nuevamente'
+                        this.snackbar.color = 'error'
+                        this.snackbar.active = true
+                    })
+                
+            }
+
+            else{
+                axios.post(urlEnlazar, formMetada)
+                .then(response => {
+                    this.showCard = true
+                    this.activeButton = false
+                    this.typeAlert = "info"
+                    this.stateSelect = false,
+                    this.typeText = "La solicitud se encuentra en estado: En espera"
+
+                })
+                .catch(error => {
+                    this.snackbar.text = 'No se encuentra un terapeuta con ese código. Intente nuevamente...'
+                    this.snackbar.color = 'error'
+                    this.snackbar.active = true
+                })
+            }
+        
         },
         getSolicitud(){
-            var url = `http://localhost:4000/solicitudes/listSolicitud/${store.user._id}`
+            var url = `${config.PathAPI}solicitudes/listSolicitud/${store.secondUser._id}`
             axios.get(url)
             .then(response => {
                 var solicitud = response.data ? response.data[0] : null
                 this.getTerapeutas()
                 if (solicitud){
+                    
                     // set user
                     this.terapeutaSolicitud.userName = solicitud.terapeuta.userName
                     this.terapeutaSolicitud.firstName = solicitud.terapeuta.firstName
@@ -196,7 +256,7 @@ export default {
                     this.terapeutaSolicitud.email = solicitud.terapeuta.email
 
                     // estados
-                    this.userNameTerapeuta = solicitud.terapeuta.userName
+                    this.codigo = solicitud.terapeuta.uuid
                     this.showCard = true
                     if (solicitud.estado == "En espera"){
                         this.typeAlert = "info"
@@ -221,21 +281,22 @@ export default {
                         this.activeButton = true
                     }
                 }
-
                 else{
                     this.showCard = false
                 }
                 
             })
             .catch(error => {
-                console.log(error)
+                this.snackbar.text = 'No se ha logrado obtener la solicitud. Intente nuevamente'
+                this.snackbar.color = 'error'
+                this.snackbar.active = true
             })
         },
         
     },
-    
     created () {
         this.getSolicitud()
+        store.getVinculacion(store.secondUser._id)
     }
 }
 </script>

@@ -91,12 +91,7 @@
                 </v-form>
             </v-card-text>
             <v-card-text class="px-1">
-              <v-alert
-                  type="error"
-                  v-model = "alertError"
-                  variant="outlined"
-                  text="Error al crear la cuenta. Por favor, intente nuevamente..."
-                ></v-alert>
+              
             </v-card-text>
             <v-container class="px-0">
                 <v-card-actions >
@@ -124,33 +119,28 @@
         </v-responsive>
     </v-container>
 
-  <v-dialog v-model="dialogSuccess" max-width="580px">
-    <v-card >
-      <v-card-title class="text-h5 text-center">La cuenta se ha creado la cuenta correctamente!</v-card-title>
-      <v-card-text class="text-center">
-        <v-icon size="75" class="align-text" max-widht="300px" color="green">
-            mdi-checkbox-marked-circle-outline
-        </v-icon>
-    </v-card-text>
-      <v-card-actions>
-        <v-spacer></v-spacer>
-        <v-btn color="blue darken-1" text variant="outlined" @click="closeDialogSuccess">Aceptar</v-btn>
-        <v-spacer></v-spacer>
-      </v-card-actions>
-    </v-card>
-  </v-dialog>
-
-
-
+    <v-snackbar v-model="snackbar.active" :timeout="timeout" :color="snackbar.color">
+        {{ snackbar.text }}
+        <template v-slot:action="{ attrs }">
+            <v-btn color="blue" text v-bind="attrs" @click="snackbar.active = false">
+            Close
+            </v-btn>
+        </template>
+    </v-snackbar>
 </template>
+
 <script>
 import axios from 'axios'
+import config from '../../../config.json'
   export default {
     data: () => ({
       typeAccount: ['Terapeuta Ocupacional', 'Tutor', 'Niño'],
-      alertError: false,
-      dialogSuccess: false,
-
+      snackbar: {
+        color: null,
+        active: false,
+        text: null,
+        timeout: 3000,
+      },
       user:{
         userName: null,
         firstName: null,
@@ -172,23 +162,23 @@ import axios from 'axios'
           this.save()
         }
       },
-      closeDialogSuccess (){
-        this.$emit("changeDialogRegister", false);
-      },
-      cancelar () {
+      cancelar() {
         this.$emit("changeDialogRegister", false);
       },
       save (){
-        var url = 'http://localhost:4000/createUser'
+        var url = `${config.PathAPI}createUser`
         axios.post(url, this.user)
         .then (response => {
-          console.log(response)
-          this.dialogSuccess = true
+          this.snackbar.text = 'La cuenta fue creada correctamente'
+          this.snackbar.color = 'success'
+          this.snackbar.active = true
+          this.cancelar()
 
         })
         .catch(error => {
-          console.log(error)
-          this.alertError = true
+          this.snackbar.text = 'No se puedo crear la cuenta. Intente nuevamente'
+          this.snackbar.color = 'error'
+          this.snackbar.active = true
         })
       }
 

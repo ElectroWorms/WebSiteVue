@@ -4,26 +4,39 @@ import { ref, computed, watch } from 'vue'
 import axios from 'axios'
 export const useUserStore = defineStore("app", () => {
   const user = ref({
-    _id : null,
     userName: null,
-    firstName: null,
-    secondName: null,
-    email: null,
+    nombre: null,
+    apellidoPaterno: null,
+    apellidoMaterno: null,
+    fechaNacimiento: null,
+    url: null,
     password: null,
+    confirmPassword: null,
+    email: null,
+    nivelTea: null,
+    edad: null,
+    sexo: null,
     typeAccount: null,
-  }) 
+}) 
 
   const secondUser = ref({
-    _id : null,
+    _id: null,
     userName: null,
-    firstName: null,
-    secondName: null,
-    email: null,
+    nombre: null,
+    apellidoPaterno: null,
+    apellidoMaterno: null,
+    fechaNacimiento: null,
+    url: null,
     password: null,
-    typeAccount: null,
+    confirmPassword: null,
+    email: null,
+    nivelTea: null,
+    edad: null,
+    sexo: null,
+    typeAccount: "Niño",
   }) 
 
-  const solicitud = ref({
+  const vinculacion = ref({
     estado: null,
     terapeuta: null,
     tutor: null,
@@ -38,17 +51,18 @@ export const useUserStore = defineStore("app", () => {
     secondUser.value = JSON.parse(localStorage.getItem("secondUser"))
   }
 
-  const getSolicitud = () => {
-      var url = `http://localhost:4000/solicitudes/listSolicitud/${user.value._id}`
-      axios.get(url)
-      .then(response => {
-          var _solicitud = response.data ? response.data[0] : null
-          solicitud.value = _solicitud 
-          console.log("valor solicitud", solicitud)
-      })
-      .catch(error => {
-          console.log(error)
-      })
+  const getVinculacion =  async (id) => {
+    var url = `http://localhost:4000/solicitudes/listSolicitud/${id}`
+    await axios.get(url)
+    .then(response => {
+      console.log(response)
+        var _solicitud = response.data.length ? response.data[0] : null
+        vinculacion.value = _solicitud 
+        console.log("valor solicitud", _solicitud)
+    })
+    .catch(error => {
+        console.log(error)
+    })
   }
 
   const getTerapeuta = () => {
@@ -56,8 +70,8 @@ export const useUserStore = defineStore("app", () => {
     axios.get(url)
     .then(response => {
         var _solicitud = response.data ? response.data[0] : null
-        solicitud.value = _solicitud 
-        console.log("valor solicitud", solicitud)
+        vinculacion.value = _solicitud 
+        console.log("valor solicitud", vinculacion)
     })
     .catch(error => {
         console.log(error)
@@ -83,8 +97,8 @@ export const useUserStore = defineStore("app", () => {
   return{
     user,
     secondUser,
-    solicitud,
-    getSolicitud
+    vinculacion,
+    getVinculacion
   }
 })
 

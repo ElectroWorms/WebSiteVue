@@ -1,109 +1,113 @@
+<style>
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.form {
+  max-width: 300px;
+  max-height: 400px;
+}
+</style>
 <template>
     <v-container class="fill-height">
-        <v-responsive class="align-center fill-height">
-        <v-card class="w-50  mx-auto px-6 py-5" style="height:500px;">
+        <v-responsive class="mt-12 fill-height">
+        <v-card class="w-50  mx-auto px-6 py-5 form" style="height:500px;">
             <v-card-title class="justify-center mt-2">
                 <span class="text-h5">Iniciar Sesión</span>
             </v-card-title>
             <v-card-text class="mt-6">
-                <v-form
-                ref="form"
-                >
-                <v-row>
-                    <v-text-field
-                    label="Nombre de usuario"
-                    v-model="user.userName"
-                    :rules="[v => !!v || 'Nombre de usuario es requerido']"
-                    
-                    ></v-text-field>
-                </v-row>
-                <v-row>
-                    <v-text-field
-                    label="Contraseña"
-                    v-model="user.password"
-                    :rules="[v => !!v || 'Contraseña es requerido']"
-                    type="password"
-                    ></v-text-field>
-                </v-row>
+                <v-form ref="form">
+                  <v-row>
+                      <v-text-field label="Nombre de usuario" v-model="user.username" :rules="[v => !!v || 'Nombre de usuario es requerido']" variant="underlined"></v-text-field>
+                  </v-row>
+                  <v-row>
+                      <v-text-field label="Contraseña" v-model="user.password" :rules="[v => !!v || 'Contraseña es requerido']" type="password" variant="underlined"></v-text-field>
+                  </v-row>
                 </v-form>
             </v-card-text>
             <v-card-text class="px-1">
-              <v-alert
-                  type="error"
-                  v-model = "alertError"
-                  variant="outlined"
-                  text="No coinciden las credenciales. Por favor, intente nuevamente..."
-                ></v-alert>
+              <a class="center" style="color: #5687dc;">Olvidaste tu contraseña?</a>
             </v-card-text>
+
             <v-container class="px-0">
-                <v-card-actions >
-                    <v-btn
-                        color="blue darken-1"
-                        text
-                        variant="outlined"
-                        @click="validate"
-                        >
+                <v-card-actions class="center">
+                    <v-btn color="success" prepend-icon="mdi-login" variant="tonal" @click="validate">
                         Iniciar Sesión
-                    </v-btn>
-                    
-                    <v-btn
-                        color="red darken-1"
-                        text
-                        variant="outlined"
-                        @click="cancelar"
-                        >
-                        Cancelar
-                    </v-btn>
+                    </v-btn>    
                 </v-card-actions>
             </v-container>
         </v-card>
         </v-responsive>
     </v-container>
+
+    <v-snackbar v-model="snackbar.active" :timeout="snackbar.timeout" :color="snackbar.color">
+        {{ snackbar.text }}
+        <template v-slot:action="{ attrs }">
+            <v-btn color="blue" text v-bind="attrs" @click="snackbar.active = false">
+            Close
+            </v-btn>
+        </template>
+    </v-snackbar>
     
 </template>
 <script>
 import axios from 'axios'
 import {useUserStore} from "../../store/app"
+import config from '../../../config.json'
 const store = useUserStore()
-  export default {
-    data: () => ({
-      alertError: false,
-      user:{
-        userName: null,
-        password: null,
-      }
-    }),
-    computed: {
-      
+export default {
+  data: () => ({
+    snackbar: {
+      color: null,
+      active: false,
+      text: null,
+      timeout: 3000,
     },
-    methods: {
-      async validate () {
-        const { valid } = await this.$refs.form.validate()
-        if (valid) {
-          this.save()
-        }
-      },
-      
-      cancelar () {
-        this.$emit("changeDialogLogin", false);
-      },
-      save (){
-        //this.$router.push({path: '/Usuarios'})
-        var url = 'http://localhost:4000/login'
-        axios.post(url, this.user)
-        .then (response => {
+    user:{
+      username: null,
+      password: null,
+    }
+  }),
+  computed: {
+    
+  },
+  methods: {
+    async validate () {
+      const { valid } = await this.$refs.form.validate()
+      if (valid) {
+        this.save()
+      }
+    },
+    cancelar () {
+      this.$emit("changeDialogLogin", false);
+    },
+    save (){
+      var url = `${config.PathAPI}user/login`
+      axios.post(url, this.user)
+      .then (response => {
+        console.log(response)
+        if (response.data.state && response.data.item.length == 1) {
+          let Usuario = response.data.item[0];
           store.$patch({
-            user: response.data
+            user: Usuario
           })
           this.$emit("changeDialogLogin", false);
           this.$router.push({path: '/Usuarios'})
-        })
-        .catch(error => {
-            console.log(error)
-            this.alertError = true
-        })
-      }
+        }
+        else {
+          this.snackbar.text = response.data.message
+          this.snackbar.color = 'error'
+          this.snackbar.active = true
+        }
+      })
+      .catch(error => {
+          this.snackbar.text = 'Credenciales incorrectas'
+          this.snackbar.color = 'error'
+          this.snackbar.active = true
+      })
+    }
 
-    },
-  }
+  },
+}
 </script>
