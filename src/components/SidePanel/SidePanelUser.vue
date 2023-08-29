@@ -1,3 +1,6 @@
+<style>
+
+</style>
 <template>
     <v-navigation-drawer permanent location="left">
       <template v-slot:prepend >
@@ -54,8 +57,8 @@ function getCardImg(url,sexo){
 }
 export default {
     data: () =>({
-      userId: store.user._id,
-      dialogLogout: false,
+      model: true,
+      userId: store.secondUser._id,
       profile: {
         avatar: getCardImg(store.user.url,store.user.sexo),
         fullname: store.user.fullname || "Usuario",
