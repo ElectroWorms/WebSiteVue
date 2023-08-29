@@ -27,10 +27,11 @@ const routes = [
     path: '/Vincular',
     component: () => import('@/views/Vincular.vue'),
   },
+  /*
   {
     path: '/Dashboard',
     component: () => import('@/views/Dashboard.vue'),
-  },
+  }*/
   {
     path: '/Solicitudes',
     component: () => import('@/views/Solicitudes.vue'),
