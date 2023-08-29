@@ -268,6 +268,7 @@ export default {
             else{
                 newUser.fullname = `${newUser.nombre} ${newUser.apellidoPaterno} ${newUser.apellidoMaterno}`;
                 axios.post(urlCreateUser, this.user).then (responseUser => {
+                    console.log("Response User:",responseUser)
                     if (responseUser.data.state && responseUser.data.item.length == 1) {
                         let nuevoUsuario = responseUser.data.item[0];
                         let formData = {idTutor: store.user._id, user:nuevoUsuario}                  
