@@ -139,6 +139,7 @@ onMounted(async () => {
     activityData = await getActivity(ActividadId);
     activityData = activityData.items;
     actividad.value = activityData;
+    console.log("actividad:", actividad.value);
 
     // get the list of routines for the activity
     routineList = (await fetchRoutines(UserId.value, ActividadId.value)).item;
