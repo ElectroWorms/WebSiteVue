@@ -226,7 +226,7 @@ export default {
         getCardImg(url,sexo){
             console.log(sexo)
             if (url != "" && url != undefined) return url; 
-            else return (sexo == 'Masculino') ? '/src/assets/icons/nino_1.png' : '/src/assets/icons/nina_1.png';
+            else return (sexo == 'Masculino') ? '/img/nino_1.png' : '/img/nina_1.png';
         },
         updateUserCards() {
             console.log(this.search);

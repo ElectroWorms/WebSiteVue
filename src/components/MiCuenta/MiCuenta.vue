@@ -181,7 +181,7 @@ export default {
         getCardImg(item){
             console.log("item",item)
             if (item.url != '' && item.url != undefined) return item.url; 
-            else return (item.sexo == 'Masculino') ? '/src/assets/icons/nino_1.png' : '/src/assets/icons/nina_1.png';
+            else return (item.sexo == 'Masculino') ? '/img/nino_1.png' : '/img/nina_1.png';
         },
         actualizar() {            
             this.variant = (this.variant == "plain") ? "outlined" : "plain";

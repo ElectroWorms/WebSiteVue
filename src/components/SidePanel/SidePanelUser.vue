@@ -50,7 +50,7 @@ import {useUserStore} from "../../store/app"
 const store = useUserStore()
 function getCardImg(url,sexo){
     if (url != "" && url != undefined) return url; 
-    else return (sexo == 'Masculino') ? '/src/assets/icons/perfil_man.png' : '/src/assets/icons/perfil_woman.png';
+    else return (sexo == 'Masculino') ? '/img/perfil_man.png' : '/img/perfil_woman.png';
 }
 export default {
     data: () =>({
