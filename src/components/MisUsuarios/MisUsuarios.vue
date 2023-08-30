@@ -206,7 +206,7 @@ export default {
         dialogDelete: false,
         cuenta: {},
         dialogCreateUser: false,
-        users: store.user.users ? store.user.users : null,
+        users: store.user.users ? store.user.users : [],
         respaldoUsers: store.user.users ? store.user.users : [],
         search: null,
     }),
@@ -230,9 +230,10 @@ export default {
         },
         updateUserCards() {
             console.log(this.search);
+            let search = this.search.toLowerCase();
             this.users = this.respaldoUsers.filter(m => 
-            (m.fullname || '').toLowerCase().includes(this.search) ||
-            (m.nivelTea || '').toLowerCase().includes(this.search));
+            (m.fullname || '').toLowerCase().includes(search) ||
+            (m.nivelTea || '').toLowerCase().includes(search));
             if (this.users.length == 0) {
                 this.MensajeBusqueda = "Ninguna cuenta coincide con la búsqueda.";
             }
@@ -283,6 +284,8 @@ export default {
                                 store.$patch({
                                     user: newUser
                                 });
+                                this.users = newUser.users;
+                                this.respaldoUsers = newUser.users;
                                 // Reset user form
                                 this.user = {
                                     userName: null,
