@@ -16,7 +16,7 @@
                 <v-row>
                     <v-col cols="12" sm="12">
                         <div class="d-flex flex-column">
-                            <v-btn color="success" class="mt-4" block  :disabled="!activeButton" @click="vincular" >
+                            <v-btn color="success" class="mt-4" block  :disabled="!activeButton" @click="validate" >
                             Vincular
                             </v-btn>
                         </div>
@@ -62,28 +62,21 @@
                                 <v-row>
                                     <v-col cols="6" md="6">
                                         <v-text-field
-                                            v-model="terapeutaSolicitud.apellidoPaterno"
-                                            label="Nombre"
-                                            readonly="true"
-                                            variant="plain"
-                                        ></v-text-field>
-                                    </v-col>
-                                    <v-col cols="6" md="6">         
-                                        <v-text-field
-                                            v-model="terapeutaSolicitud.apellidoMaterno"
-                                            label="Apellido"
-                                            readonly="true"
-                                            variant="plain"
-                                        ></v-text-field>
-                                    </v-col>
-                                    <v-col cols="6" md="6">
-                                        <v-text-field
                                             label="Nombre de usuario"
                                             v-model="terapeutaSolicitud.userName"
                                             readonly="true"
                                             variant="plain"
                                         ></v-text-field>
                                     </v-col>
+                                    <v-col cols="6" md="6">         
+                                        <v-text-field
+                                            v-model="terapeutaSolicitud.fullname"
+                                            label="Apellido"
+                                            readonly="true"
+                                            variant="plain"
+                                        ></v-text-field>
+                                    </v-col>
+
                                     <v-col cols="6" md="6">
                                         <v-text-field
                                             label="Correo"
@@ -132,8 +125,7 @@ export default {
         showChangeTo: false,
         terapeutaSolicitud: {
             firstName: null,
-            secondName: null,
-            userName: null,
+            fullname: null,
             email: null,
         },
         snackbar: {
@@ -147,6 +139,12 @@ export default {
     }),
 
     methods:{
+        async validate () {
+            const { valid } = await this.$refs.form.validate()
+            if (valid) {
+                this.vincular()
+            }
+        },
         changeTo(){
             this.activeButton = true
             this.stateSelect = true
@@ -248,7 +246,6 @@ export default {
                 var solicitud = response.data ? response.data[0] : null
                 this.getTerapeutas()
                 if (solicitud){
-                    
                     // set user
                     this.terapeutaSolicitud.userName = solicitud.terapeuta.userName
                     this.terapeutaSolicitud.firstName = solicitud.terapeuta.firstName

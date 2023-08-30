@@ -41,12 +41,6 @@
                                     <v-text-field label="Nombre de usuario" v-model="user.userName" :readonly="!editing" :variant="variant"></v-text-field>
                                 </v-col>
                                 <v-col cols="4" md="4">
-                                    <v-text-field label="Contraseña" v-model="user.password" :readonly="!editing" :variant="variant" type="password" :rules="[v => !!v || 'Contraseña es requerido', v => (user.password == user.passwordConfirm) ? true: 'Las Contraseñas no coinciden.']"></v-text-field>
-                                </v-col>
-                                <v-col cols="4" md="4">
-                                    <v-text-field label="Confirmar Contraseña" v-model="user.passwordConfirm" :readonly="!editing" :variant="variant" type="password" v-if="editing" :rules="[v => !!v || 'Contraseña es requerido', v => (user.password == user.passwordConfirm) ? true: 'Las Contraseñas no coinciden.']"></v-text-field>
-                                </v-col>
-                                <v-col cols="4" md="4">
                                     <v-text-field label="Correo" v-model="user.email" :readonly="!editing" :variant="variant"></v-text-field>
                                 </v-col>
                                 <v-col cols="4" md="4">
