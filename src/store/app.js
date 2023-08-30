@@ -2,6 +2,7 @@
 import { defineStore } from 'pinia'
 import { ref, computed, watch } from 'vue'
 import axios from 'axios'
+import config from '../../config.json'
 export const useUserStore = defineStore("app", () => {
   const user = ref({
     userName: null,
@@ -52,7 +53,7 @@ export const useUserStore = defineStore("app", () => {
   }
 
   const getVinculacion =  async (id) => {
-    var url = `http://localhost:4000/solicitudes/listSolicitud/${id}`
+    var url = `${config.PathAPI}solicitudes/listSolicitud/${id}`
     await axios.get(url)
     .then(response => {
       console.log(response)
@@ -66,7 +67,7 @@ export const useUserStore = defineStore("app", () => {
   }
 
   const getTerapeuta = () => {
-    var url = `http://localhost:4000/solicitudes/listSolicitud/${user.value._id}`
+    var url = `${config.PathAPI}solicitudes/listSolicitud/${user.value._id}`
     axios.get(url)
     .then(response => {
         var _solicitud = response.data ? response.data[0] : null
