@@ -62,6 +62,12 @@ const routes = [
     path: '/Rutina/Detalle/:routineId/:activityId/:userId',
     props: true,
     component: () => import('@/views/DetalleRutina.vue'),
+  },
+  {
+    name: 'MantenedorImagenes',
+    path: '/User/Imagenes/:userId',
+    props: true,
+    component: () => import('@/views/MantenedorImagenes.vue'),
   }
 ]
 
