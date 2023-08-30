@@ -1,5 +1,5 @@
 {
-    "PathAPI": "https://rapni.azurewebsites.net/",
+    "PathAPI": "https://rapniapi.azurewebsites.net/",
     "Themes": [
         {
             "BackgroundImage": "@/assets/juego.jpg"
