@@ -13,8 +13,9 @@
         <v-card-text>
           <v-container>
 
-            <p>¿Está seguro de que desea eliminar este recurso?<br>
-            Actualmente se está utilizando en {{ routinesReached }} rutina(s):</p><br>
+            <p>¿Está seguro de que desea actualizar este recurso?<br>
+            Actualmente se está utilizando en {{ routinesReached }} rutina(s). <br><br>
+            Si lo modifica acá, también se modificará en todas las rutinas que lo usan.</p><br>
           
             <v-row class="">
               <v-col cols="12" sm="12">
@@ -127,6 +128,7 @@ async function getValidation() {
     let response = (await validateDeleteResource(actualResource!.value._id, actualResource!.value.user)).item;
     isValidDelete.value = response.isValid;
     routinesReached.value = response.routinesWithThisResource;
+    console.log("routinesReached:", routinesReached.value, "isValidDelete:", isValidDelete.value);
 }
 
 // watch changes in the routineStep prop
