@@ -116,3 +116,25 @@ export async function deleteImage(imageUrl: string) {
         console.error(error);
     }
 }
+
+export async function getImage(imageUrl: string) {
+    
+    try {
+        const response = await axios.get(`${config.PathAPI}utility/getDocument/${imageUrl}`);
+        return response.data;
+
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+export async function getAllImages(userId: string) {
+    
+    try {
+        const response = await axios.get(`${config.PathAPI}utility/getAllDocuments/${userId}`);
+        return response.data;
+
+    } catch (error) {
+        console.error(error);
+    }
+}
