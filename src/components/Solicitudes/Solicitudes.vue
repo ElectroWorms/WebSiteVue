@@ -131,7 +131,7 @@ const store = useUserStore()
         return this.headers.filter(header => header.title != '_id')  
       }
     },
-
+    //a
     watch: {
       dialog (val) {
         val || this.close()
