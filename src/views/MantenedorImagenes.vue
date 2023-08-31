@@ -44,7 +44,7 @@
         @new-resource="handleNewResource" :resources="resources!" :user="userId"/>
 
     <UpdateResourceDialog v-model="showDialogUpdate" @close="handleClose" 
-        @update-step="handleUpdateResource" :routine="resources!" :user="userId" :actual-resource="selectedResource"/>
+        @update-resource="handleUpdateResource" :routine="resources!" :user="userId" :actual-resource="selectedResource"/>
 
     <DeleteResourceDialog v-model="showDialogDelete" @close="handleClose" 
         @deleted="handleDeleteResource" :resource="selectedResource"/>

@@ -42,6 +42,7 @@ export async function updateResource(resource: any) {
     
     try {
         const response = await axios.put(`${config.PathAPI}recurso/update`, resource);
+        console.log("response update", response.data);
         return response.data;
 
     } catch (error) {

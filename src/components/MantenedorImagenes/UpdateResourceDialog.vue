@@ -77,7 +77,7 @@
 <script setup lang="ts">
 // Imports
 
-import { createResource, getAllImages, updateResource, uploadImage, validateDeleteResource } from "../../functions/resourceFunctions";
+import { updateResource, uploadImage, validateDeleteResource } from "../../functions/resourceFunctions";
 import { Resource } from "../../interfaces/Resource";
 import { onMounted, ref, toRefs, watch } from "vue";
 
@@ -86,14 +86,12 @@ const props = defineProps(["user", "actualResource"]);
 const { user, actualResource } = toRefs(props);
 
 // emmit the close event to the parent component
-const emit = defineEmits(["close", "newResource"]);
+const emit = defineEmits(["close", "updateResource"]);
 
 // Form
 const form = ref();
 
-let isValidDelete = ref(false);
 let routinesReached = ref(0);
-let resources: Resource[] = [];
 
 let resourceName = ref("");
 const resourceNameRules = [
@@ -102,7 +100,7 @@ const resourceNameRules = [
     return "Es necesario ingresar un nombre para el recurso";
   }
 ]
-  
+
 let newImage = ref<File[]>([]);
 const newImageRules = [
   (value: any) => (!!value) || "La imagen es requerida",
@@ -112,13 +110,11 @@ const newImageRules = [
 // Functions
 
 onMounted(async () => {
-  // get all the resources of this user
-  resources = (await getAllImages(user!.value)).item;
+
 });
 
 // watch changes in the resource prop
 watch(() => actualResource!.value, () => {
-    console.log("actualResource!.value", actualResource!.value);
     getValidation();
 });
 
@@ -126,9 +122,7 @@ async function getValidation() {
 
     // validate if the resource can be deleted
     let response = (await validateDeleteResource(actualResource!.value._id, actualResource!.value.user)).item;
-    isValidDelete.value = response.isValid;
     routinesReached.value = response.routinesWithThisResource;
-    console.log("routinesReached:", routinesReached.value, "isValidDelete:", isValidDelete.value);
 }
 
 // watch changes in the routineStep prop
@@ -146,8 +140,6 @@ async function submitValidations(): Promise<boolean> {
   
   // validation of the form
   const {valid} = await form.value.validate();
-  console.log("valid:", valid);
-
   if (!valid) return false;
 
   // check if the form is valid with the validation given by the rules of each input
@@ -156,7 +148,7 @@ async function submitValidations(): Promise<boolean> {
   return true;
 }
 
-async function createWithNewImage() {
+async function updateWithNewImage() {
 
   // upload the image to the server passing the data in blob format
   let imageUrl = (await uploadImage(newImage.value[0])).item.url;
@@ -164,16 +156,23 @@ async function createWithNewImage() {
   // get the last part of the url, which is the filename
   imageUrl.split("/").pop();
 
-  // create the resource
+  // update the resource
   let resourceData = {
+    _id: actualResource!.value._id,
     title: resourceName.value,
     user: user!.value,
     url: imageUrl,
     filename: newImage.value[0].name,
   }
 
-  // create the resource in the db
+  console.log("resourceData:", resourceData);
+
+  // update the resource in the db
   await updateResource(resourceData);
+}
+
+function clearNewImage() {
+  newImage.value = [];
 }
 
 async function submitForm() {
@@ -182,17 +181,20 @@ async function submitForm() {
   if (!(await submitValidations())) return;
 
   // create the step
-  await createWithNewImage();
+  await updateWithNewImage();
 
   // send the new step to the parent component to update the list
-  emitNewResource();
+  emitUpdateResource();
+
+  // clear new image
+  clearNewImage();
 
   // close the dialog
   closeDialog();
 }
 
-function emitNewResource() {
-  emit("newResource");
+function emitUpdateResource() {
+  emit("updateResource");
 }
 
 function closeDialog() {

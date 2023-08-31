@@ -73,7 +73,7 @@
 <script setup lang="ts">
 // Imports
 
-import { createResource, getAllImages, uploadImage } from "../../functions/resourceFunctions";
+import { createResource, uploadImage } from "../../functions/resourceFunctions";
 import { Resource } from "../../interfaces/Resource";
 import { onMounted, ref, toRefs } from "vue";
 
@@ -106,8 +106,7 @@ const newImageRules = [
 // Functions
 
 onMounted(async () => {
-  // get all the resources of this user
-  resources = (await getAllImages(user!.value)).item;
+
 });
   
 async function submitValidations(): Promise<boolean> {
