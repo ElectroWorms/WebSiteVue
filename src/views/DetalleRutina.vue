@@ -28,7 +28,7 @@
 </style>
 <template>
     
-    <SidePanelTutor/>
+    <SidePanelUser/>
     <v-app-bar :elevation="2" class="pl-4">
         <v-btn @click="back" icon="mdi-arrow-left"></v-btn>
         <span>Detalle de la Rutina</span>
@@ -85,7 +85,7 @@
 
 // Imports
 
-import SidePanelTutor from '@/components/SidePanel/SidePanelTutor.vue';
+import SidePanelUser from '@/components/SidePanel/SidePanelUser.vue';
 import CreateRoutineStepDialog from '@/components/RoutineCRUD/CreateRoutineStepDialog.vue';
 import UpdateRoutineStepDialog from '@/components/RoutineCRUD/UpdateRoutineStepDialog.vue';
 import { ref, toRefs, onMounted } from 'vue'
@@ -116,7 +116,8 @@ async function getUpdatedRoutine() {
 }
 
 onMounted(async () => {
-
+    console.log(activityId.value)
+    console.log(userId.value)
     await getUpdatedRoutine();
 });
 
