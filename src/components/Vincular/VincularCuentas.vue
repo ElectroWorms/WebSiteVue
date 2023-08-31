@@ -60,18 +60,10 @@
                             </v-col>
                             <v-col cols="8" md="8" class="px-5">
                                 <v-row>
-                                    <v-col cols="6" md="6">
-                                        <v-text-field
-                                            label="Nombre de usuario"
-                                            v-model="terapeutaSolicitud.userName"
-                                            readonly="true"
-                                            variant="plain"
-                                        ></v-text-field>
-                                    </v-col>
                                     <v-col cols="6" md="6">         
                                         <v-text-field
                                             v-model="terapeutaSolicitud.fullname"
-                                            label="Apellido"
+                                            label="Terapeuta Ocupacional"
                                             readonly="true"
                                             variant="plain"
                                         ></v-text-field>
@@ -248,8 +240,7 @@ export default {
                 if (solicitud){
                     // set user
                     this.terapeutaSolicitud.userName = solicitud.terapeuta.userName
-                    this.terapeutaSolicitud.firstName = solicitud.terapeuta.firstName
-                    this.terapeutaSolicitud.secondName = solicitud.terapeuta.secondName
+                    this.terapeutaSolicitud.fullname = solicitud.terapeuta.fullname
                     this.terapeutaSolicitud.email = solicitud.terapeuta.email
 
                     // estados

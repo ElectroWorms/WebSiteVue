@@ -100,10 +100,7 @@ const store = useUserStore()
       estados: ['En espera', 'Rechazado', 'Aprobado'],
       dialogDelete: false,
       headers: [
-        { title: 'Nombre de usuario tutor', key: 'tutorName' },
-        { title: 'Correo tutor', key: 'tutorEmail' },
-        { title: 'Nombre tutor', key: 'firstName' },
-        { title: 'Apellido tutor', key: 'secondName' },
+        { title: 'Nombre Tutor', key: 'fullname' },
         { title: 'Estado', key: 'estado' },
         { title: '_id', key: '_id' },
         { title: 'Acciones', key: 'actions', sortable: false },
@@ -158,9 +155,7 @@ const store = useUserStore()
             console.log(solicitudes)
             solicitudes.forEach(solicitud => {
                 let structureSolicitud = {
-                    tutorName: solicitud.tutor.userName,
-                    firstName: solicitud.tutor.firstName,
-                    secondName: solicitud.tutor.secondName,
+                    fullname: solicitud.tutor.fullname,
                     tutorEmail:solicitud.tutor.email,
                     estado: solicitud.estado,
                     _id: solicitud._id
