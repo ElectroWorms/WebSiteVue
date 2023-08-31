@@ -158,7 +158,6 @@ export default {
             sexo: store.secondUser.sexo,
             nivelTea: store.secondUser.nivelTea,
             url: store.secondUser.url,
-            sexo: store.secondUser.sexo,
             password: store.secondUser.password,
             passwordConfirm: store.secondUser.passwordConfirm,
             tutor: null,
