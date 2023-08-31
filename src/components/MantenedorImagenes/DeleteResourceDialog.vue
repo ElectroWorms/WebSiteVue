@@ -21,7 +21,7 @@
                 que tienen menos de 6 pasos. <br><br>
             </p>
 
-            <p>Rutina: {{ routinesReached }}</p>
+            <p v-for="name in routineNames">- {{ name }}</p>
 
         </v-container>
         </v-card-text>
@@ -51,8 +51,7 @@
 <script setup lang="ts">
 // Imports
 
-import { createResource, deleteResource, getAllResources, uploadImage, validateDeleteResource } from "../../functions/resourceFunctions";
-import { Resource } from "../../interfaces/Resource";
+import { deleteResource, validateDeleteResource } from "../../functions/resourceFunctions";
 import { onMounted, ref, toRefs, watch } from "vue";
 
 // define props
@@ -67,6 +66,7 @@ const form = ref();
 
 let isValidDelete = ref(false);
 let routinesReached = ref(0);
+let routineNames = ref<string[]>([]);
 
 // Functions
 
@@ -77,21 +77,30 @@ onMounted(async () => {
 // watch changes in the resource prop
 watch(() => resource!.value, () => {
     console.log("resource!.value", resource!.value);
-    fillForm();
+    getValidation();
 });
 
-async function fillForm() {
+async function getValidation() {
 
     // validate if the resource can be deleted
     let response = (await validateDeleteResource(resource!.value._id, resource!.value.user)).item;
     isValidDelete.value = response.isValid;
     routinesReached.value = response.routinesWithThisResource;
-    console.log("isValidDelete", isValidDelete.value, "\nroutinesReached", routinesReached.value);
+    routineNames.value = response.routineNames;
 }
 
 async function submitForm() {
-    // if not valid, return
+
+    // if not valid, do not delete
     if (!isValidDelete.value) return;
+
+    // delete the resource
+    await deleteResource(resource!.value._id);
+
+    routineNames.value = [];
+    isValidDelete.value = false;
+    routinesReached.value = 0;
+
     emitDeletedResource();
     closeDialog();
 }

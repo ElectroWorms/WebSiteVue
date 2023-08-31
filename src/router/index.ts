@@ -36,6 +36,7 @@ const routes = [
     component: () => import('@/views/Solicitudes.vue'),
   },
   {
+    name: 'MiCuenta',
     path:'/User/MiCuenta',
     component: () => import('@/views/MiCuenta.vue'),
   },
