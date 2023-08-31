@@ -60,6 +60,20 @@ export async function deleteResource(resourceId: string) {
     }
 }
 
+export async function validateDeleteResource(resourceId: string, userId: string) {
+
+    try {
+        const response = await axios.get(`${config.PathAPI}recurso/delete/validate/${userId}/${resourceId}`);
+        console.log(response.data);
+        return response.data;
+
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+// ========================================= Images =========================================
+
 async function imageToBlob(file: File): Promise<Blob> {
     return new Promise((resolve) => {
         const reader = new FileReader();
@@ -80,13 +94,22 @@ export async function uploadImage(imageFile: File) {
         // change the name of the blob file to the original name of the file
         form.append("files", files, imageFile.name);
 
-        console.log("uploadImage files:", files);
 
         const response = await axios.post(`${config.PathAPI}utility/uploadDocument`, form, { 
             headers: { "Content-Type": "multipart/form-data" } 
         });
 
-        console.log("uploadImage response:", response.data);
+        return response.data;
+
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+export async function deleteImage(imageUrl: string) {
+    
+    try {
+        const response = await axios.delete(`${config.PathAPI}utility/deleteDocument/${imageUrl}`);
         return response.data;
 
     } catch (error) {

@@ -150,7 +150,7 @@ const resourceNameRules = [
 
 let newImage = ref<File[]>([]);
 const newImageRules = [
-  (value: any) => (!value && newResource) || "La imagen es requerida",
+  (value: any) => (!!value && newResource) || "La imagen es requerida",
   (value: any) => (value && value[0].size < 2000000000) || "Imagen debe ser menor a 2 MB!",
 ]
 

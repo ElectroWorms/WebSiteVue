@@ -30,7 +30,7 @@
                 
             </v-row>
             <v-row>                    
-                <v-col cols="3" v-for="item in users" :key="item._id">      
+                <v-col xs="12" sm="6" md="4" lg="3" v-for="item in users" :key="item._id">      
                     <v-card class="mx-auto" max-width="100%" style="height: 380px;">
                         <v-img :src="getCardImg(item.url,item.sexo)" class="mt-5 mb-5" height="150px" aspect-ratio="1/1"></v-img>
 
@@ -206,7 +206,7 @@ export default {
         dialogDelete: false,
         cuenta: {},
         dialogCreateUser: false,
-        users: store.user.users ? store.user.users : null,
+        users: store.user.users ? store.user.users : [],
         respaldoUsers: store.user.users ? store.user.users : [],
         search: null,
     }),
@@ -230,9 +230,10 @@ export default {
         },
         updateUserCards() {
             console.log(this.search);
+            let search = this.search.toLowerCase();
             this.users = this.respaldoUsers.filter(m => 
-            (m.fullname || '').toLowerCase().includes(this.search) ||
-            (m.nivelTea || '').toLowerCase().includes(this.search));
+            (m.fullname || '').toLowerCase().includes(search) ||
+            (m.nivelTea || '').toLowerCase().includes(search));
             if (this.users.length == 0) {
                 this.MensajeBusqueda = "Ninguna cuenta coincide con la búsqueda.";
             }
@@ -284,6 +285,8 @@ export default {
                                 store.$patch({
                                     user: newUser
                                 });
+                                this.users = newUser.users;
+                                this.respaldoUsers = newUser.users;
                                 // Reset user form
                                 this.user = {
                                     userName: null,

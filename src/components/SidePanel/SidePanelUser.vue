@@ -1,3 +1,6 @@
+<style>
+
+</style>
 <template>
     <v-navigation-drawer permanent location="left">
       <template v-slot:prepend >
@@ -14,7 +17,7 @@
               <v-divider inset></v-divider>
               <v-list-item  prepend-icon="mdi-apps" title="Actividades"  :to="{ name: 'MenuActividades', params: { UserId: userId }}"></v-list-item>
               <v-divider inset></v-divider>
-              <v-list-item  prepend-icon="mdi-image" title="Mis imágenes" :to="{ path: '/User/Imagenes' }"></v-list-item>
+              <v-list-item  prepend-icon="mdi-image" title="Mis imágenes" :to="{ path: '/User/Imagenes/' + userId}"></v-list-item>
               <v-divider inset></v-divider>
               <v-list-item c prepend-icon="mdi-chart-line" title="Dashboards" :to="{ path: '/User/Dashboards' }"></v-list-item> 
               <v-divider inset></v-divider>
@@ -54,8 +57,8 @@ function getCardImg(url,sexo){
 }
 export default {
     data: () =>({
-      userId: store.user._id,
-      dialogLogout: false,
+      model: true,
+      userId: store.secondUser._id,
       profile: {
         avatar: getCardImg(store.user.url,store.user.sexo),
         fullname: store.user.fullname || "Usuario",

@@ -7,6 +7,7 @@ export async function getActivity(idObj: any) {
     let Respuesta;
     Respuesta = {status: true, message: 'Actividad obtenida con éxito.', item: {}};
 
+    console.log("idActivity:", idObj.value);
     await axios.get(config.PathAPI + 'actividad/get/' + idObj.value)
     .then(response => {
         Respuesta = response.data;

@@ -16,13 +16,14 @@
 }
 </style>
 <template>
-    <SidePanelTutor/>
+    <SidePanelUser />
     <v-app-bar :elevation="2" class="pl-4">
+        <v-btn @click="showSidebarUser" class="" icon="mdi-menu"></v-btn>
         <v-btn @click="back" icon="mdi-arrow-left"></v-btn>
         Listado de Juegos
     </v-app-bar>
     <v-row class="mx-4 mt-2">
-        <v-col v-for="(juego,index) in Juegos" :key="index" cols="3" justify="center" aspect-ratio="4/3">
+        <v-col v-for="(juego,index) in Juegos" :key="index" xs="12" sm="6" md="4" lg="3" justify="center" aspect-ratio="4/3">
             <v-card class="card-content" height="400">
                 <v-img class="align-center mt-5 text-white mx-auto" height="250" :src="juego.url" aspect-ratio="1" >             
                 </v-img>
@@ -46,7 +47,7 @@
 /*
     Imports
 */
-import SidePanelTutor from '@/components/SidePanel/SidePanelTutor.vue';
+import SidePanelUser from '@/components/SidePanel/SidePanelUser.vue';
 import axios from 'axios';
 import { ref, toRefs,onMounted, reactive } from 'vue'
 import config from '../../config.json'
@@ -63,6 +64,7 @@ const snackbar = ref(false);
 const snackbarText = ref('ok');
 const snackbarColor = ref('success');
 const timeout = ref(1000);
+const sidebarExpandido = ref(false);
 /*
     Funciones
 */
@@ -98,6 +100,10 @@ async function getGames(){
         Respuesta = {state: false, code: 500, message: 'Error al obtener los datos:'+error, item: []};
     });
     return Respuesta;
+}
+function showSidebarUser() {
+    console.log("show sidebar user")
+    sidebarExpandido.value = !sidebarExpandido.value;
 }
 const Juegos:any = ref([]);
 onMounted(async () => {
