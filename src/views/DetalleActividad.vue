@@ -165,7 +165,8 @@ onMounted(async () => {
 
     // get the activity data and save it in ref 'actividad'
     activityData = await getActivity(ActividadId);
-    activityData = activityData.items;
+    console.log(activityData);
+    activityData = activityData.item;
     actividad.value = activityData;
     console.log("actividad:", actividad.value);
 

@@ -42,6 +42,7 @@ export async function updateResource(resource: any) {
     
     try {
         const response = await axios.put(`${config.PathAPI}recurso/update`, resource);
+        console.log("response update", response.data);
         return response.data;
 
     } catch (error) {
@@ -110,6 +111,28 @@ export async function deleteImage(imageUrl: string) {
     
     try {
         const response = await axios.delete(`${config.PathAPI}utility/deleteDocument/${imageUrl}`);
+        return response.data;
+
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+export async function getImage(imageUrl: string) {
+    
+    try {
+        const response = await axios.get(`${config.PathAPI}utility/getDocument/${imageUrl}`);
+        return response.data;
+
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+export async function getAllImages(userId: string) {
+    
+    try {
+        const response = await axios.get(`${config.PathAPI}utility/getAllDocuments/${userId}`);
         return response.data;
 
     } catch (error) {

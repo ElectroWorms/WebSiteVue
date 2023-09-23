@@ -29,12 +29,12 @@
 <template>
     
     <SidePanelUser/>
+    <v-app-bar :elevation="2" class="pl-4">
+        <v-btn @click="back" icon="mdi-arrow-left"></v-btn>
+        Mantenedor de imágenes
+    </v-app-bar>
     
-    <v-row class="d-flex justify-space-between mt-8 ml-8 mr-8">
-        <p class="text-h5">Mantenedor de imágenes</p>
-    </v-row>
-    
-    <v-btn class="add-step-btn pl-4 pr-4" prepend-icon="$plus" variant="tonal" 
+    <v-btn class="add-step-btn pl-4 pr-4" prepend-icon="$plus" 
         @click="addResourceBtn" color="green">
         Agregar Recurso 
     </v-btn>
@@ -44,12 +44,12 @@
         @new-resource="handleNewResource" :resources="resources!" :user="userId"/>
 
     <UpdateResourceDialog v-model="showDialogUpdate" @close="handleClose" 
-        @update-step="handleUpdateResource" :routine="resources!" :user="userId" :routineStep="selectedResource"/>
+        @update-resource="handleUpdateResource" :routine="resources!" :user="userId" :actual-resource="selectedResource"/>
 
     <DeleteResourceDialog v-model="showDialogDelete" @close="handleClose" 
         @deleted="handleDeleteResource" :resource="selectedResource"/>
 
-    <v-row class="mt-8 ml-4 mr-4">
+    <v-row class="mt-8 ml-4 mr-4 mb-16">
 
         <v-col v-for="(resource, index) in resources" :key="index" cols="3" justify="end">
             <v-card class="pt-2 card-step">
@@ -74,7 +74,6 @@
         </v-col>
     </v-row>
     
-    
 </template>
 <script setup lang="ts">
 
@@ -86,14 +85,11 @@ import { Resource } from '@/interfaces/Resource';
 import CreateResourceDialog from '@/components/MantenedorImagenes/CreateResourceDialog.vue';
 import UpdateResourceDialog from '@/components/MantenedorImagenes/UpdateResourceDialog.vue';
 import DeleteResourceDialog from '@/components/MantenedorImagenes/DeleteResourceDialog.vue';
-import { 
-    createResource, 
-    getAllResources, 
-    uploadImage, 
-    deleteResource, 
-    updateResource 
+import {
+    getAllResources,
+    uploadImage,
 } from "@/functions/resourceFunctions";
-
+import router from '@/router';
 
 
 // Route Params
@@ -111,8 +107,8 @@ let selectedResource = ref<Resource>();
 
 // Functions
 
+// get updated resource's list
 async function getUpdatedResources() {
-    // get updated resources
     let resourcesResp = await getAllResources(userId.value);
     resourcesResp = resourcesResp.item;
     resources.value = resourcesResp;
@@ -120,10 +116,9 @@ async function getUpdatedResources() {
 }
 
 onMounted(async () => {
-
+    
     await getUpdatedResources();
 });
-
 
 // function that called to delete a resource
 async function deleteResourceBtn(resource: Resource) {
@@ -131,20 +126,12 @@ async function deleteResourceBtn(resource: Resource) {
     // show confirmation dialog
     showDialogDelete.value = !showDialogDelete.value;
     selectedResource.value = resource;
-    
-    // delete the resource from the database
-    // await deleteResource(resource._id);
-
-    // // delete the resource from the resources array
-    // resources.value! = resources.value!.filter((resourceEl) => resourceEl._id !== resource._id);
-
-    // // get from the db the updated routine
-    // await getUpdatedResources();
 }
 
 // function that called to edit a resource
 async function editResourceBtn(resource: Resource) {
 
+    // show update dialog
     selectedResource.value = resource;
     showDialogUpdate.value = !showDialogUpdate.value;
 }
@@ -152,28 +139,33 @@ async function editResourceBtn(resource: Resource) {
 // function that called to add a new resource
 async function addResourceBtn() {
 
-    console.log("New");
+    // show new dialog
     showDialogNew.value = !showDialogNew.value;
 }
 
 function handleClose() {
+    // close any dialog that might be open
     showDialogNew.value = false;
     showDialogUpdate.value = false;
     showDialogDelete.value = false;
 }
 
-// call again the getResourceByActivityId function to get the new routine with the new step
 async function handleNewResource() {
     await getUpdatedResources();
 }
 
-// call again the getResourceByActivityId function to get the new routine with the updated step
 async function handleUpdateResource() {
     await getUpdatedResources();
 }
 
 async function handleDeleteResource() {
     await getUpdatedResources();
+}
+
+// Routes
+
+function back() {
+    router.push({ name: 'MiCuenta', params: { } });
 }
 
 </script>
