@@ -19,7 +19,7 @@
               <v-divider inset></v-divider>
               <v-list-item  prepend-icon="mdi-image" title="Mis imágenes" :to="{ path: '/User/Imagenes/' + userId}"></v-list-item>
               <v-divider inset></v-divider>
-              <v-list-item c prepend-icon="mdi-chart-line" title="Dashboards" :to="{ path: '/User/Dashboards' }"></v-list-item> 
+              <v-list-item c prepend-icon="mdi-chart-line" title="Dashboards" :to="{ path: '/User/Dashboard' }"></v-list-item> 
               <v-divider inset></v-divider>
               <v-list-item c prepend-icon="mdi-logout" title="Cerrar Sesión" value="/" @click="logout"></v-list-item> 
           </v-list>

@@ -127,10 +127,14 @@
                 </v-card-text>
                 <v-container class="px-0">
                     <v-card-actions class="justify-center">
-                        <v-btn color="blue darken-1" text variant="tonal" @click="validate" >
+                        <v-btn color="blue darken-1" variant="tonal" @click="validate" :loading="loading" class="px-5">
                             Registrar
+                            <template v-slot:loader>
+                                <v-progress-circular indeterminate :size="20" :width="2"></v-progress-circular>
+                                <p style="margin-left: 5px; opacity: 0.5;" >Enviando</p>
+                            </template>
                         </v-btn>                    
-                        <v-btn color="red darken-1" text variant="tonal" @click="dialogCreateUser = false">
+                        <v-btn color="red darken-1" text variant="tonal" @click="dialogCreateUser = false" class="px-5">
                             Cancelar
                         </v-btn>
                     </v-card-actions>                    
@@ -161,8 +165,14 @@
         </v-card-text>
         <v-card-actions class="my-3">
           <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" text @click="deleteConfirm">Aceptar</v-btn>
-          <v-btn color="red darken-1" text @click="deleteCancel">Cancelar</v-btn>
+          <v-btn color="blue darken-1" text @click="deleteConfirm" :loading="loading" class="px-10">
+            Aceptar
+            <template v-slot:loader>
+                <v-progress-circular indeterminate :size="20" :width="2" ></v-progress-circular>
+                <p style="margin-left: 3px; opacity: 0.5;">Eliminando</p>
+            </template>
+        </v-btn>
+          <v-btn color="red darken-1" text @click="deleteCancel" class="px-10">Cancelar</v-btn>
           <v-spacer></v-spacer>
         </v-card-actions>
       </v-card>
@@ -209,9 +219,11 @@ export default {
         users: store.user.users ? store.user.users : [],
         respaldoUsers: store.user.users ? store.user.users : [],
         search: null,
+        loading: false,
     }),
     methods:{
         async validate () {
+            this.loading = true;
             const { valid } = await this.$refs.form.validate()
             if (valid) {
                 this.registerAccount();
@@ -248,6 +260,7 @@ export default {
             this.$router.push({path: '/User/MiCuenta'})
         },
         registerAccount() {
+            this.loading = true;
             let urlCreateUser = `${config.PathAPI}user/createUser`
             let urlAddUser = `${config.PathAPI}user/addUser`
             let newUser = this.user;
@@ -258,12 +271,14 @@ export default {
                 this.snackbar.text = 'No puede crear un nuevo usuario. La cuenta básica permite un máximo de 2 usuarios.';
                 this.snackbar.color = 'error';
                 this.snackbar.active = true;
+                this.loading = false;
                 this.dialogCreateUser = false;
             }
             else if (typePlan == "Premium" && currentUsers == 5){
                 this.snackbar.text = 'No puede crear un nuevo usuario. La cuenta premium permite un máximo de 5 usuarios.';
                 this.snackbar.color = 'error';
                 this.snackbar.active = true;
+                this.loading = false;
                 this.dialogCreateUser = false;
             }
             else{
@@ -279,6 +294,7 @@ export default {
                                 this.snackbar.color = 'success';
                                 this.snackbar.active = true;
                                 this.dialogCreateUser = false;
+                                this.loading = false;
                                 // Modificar el usuario incluyendo el nuevo usuario niño a la lista de usuarios
                                 let newUser = store.user;
                                 newUser.users.push(responseUser.data.item[0]);
@@ -311,6 +327,7 @@ export default {
                             this.snackbar.text = 'No se ha podido vincular la cuenta. Intente nuevamente...';
                             this.snackbar.color = 'error';
                             this.snackbar.active = true;
+                            this.loading = false;
                             this.dialogCreateUser = false;
                         });
                     }
@@ -318,12 +335,14 @@ export default {
                         this.snackbar.text = 'No se ha podido crear la cuenta. Intente nuevamente...';
                         this.snackbar.color = 'error';
                         this.snackbar.active = true;
+                        this.loading = false;
                         this.dialogCreateUser = false;
                     }                
                 }).catch(error => {
                     this.snackbar.text = 'Ha ocurrido un error al crear la cuenta. Intente nuevamente...';
                     this.snackbar.color = 'error';
                     this.snackbar.active = true;
+                    this.loading = false;
                     this.dialogCreateUser = false;
                 });
             }
@@ -337,7 +356,7 @@ export default {
         },
         async deleteConfirm(){
             await store.getVinculacion(this.cuenta._id)
-            
+            this.loading = true;
             let idChild = this.cuenta._id
             let vinculacion = store.vinculacion ? true : false
             let idTerapeuta = vinculacion ? store.vinculacion.terapeuta._id : null
@@ -361,6 +380,7 @@ export default {
                     this.users = responseUsers
                     this.MensajeBusqueda = 'Aún no has creado ninguna cuenta.'
                     this.dialogDelete = false
+                    this.loading = false;
                     this.snackbar.text =  result.data.message;
                     this.snackbar.color = 'success';
                     this.snackbar.active = true;
@@ -370,6 +390,7 @@ export default {
                         this.snackbar.text =  result.data.message;
                         this.snackbar.color = 'error';
                         this.snackbar.active = true;
+                        this.loading = false;
                     }
                 }
             })
@@ -377,6 +398,7 @@ export default {
                 this.snackbar.text =  'No se ha logrado eliminar la cuenta. Intente nuevamente...';
                 this.snackbar.color = 'error';
                 this.snackbar.active = true;
+                this.loading = false;
             })
         
         },

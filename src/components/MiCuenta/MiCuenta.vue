@@ -65,8 +65,12 @@
             </v-card-text>
             <v-card-actions class="mt-5 mb-5" v-if="!hideButtons">
                 <v-spacer></v-spacer>
-                <v-btn color="blue" prepend-icon="mdi-content-save" text variant="tonal" v-if="editing" @click="validateCuenta()">
+                <v-btn color="blue" prepend-icon="mdi-content-save" class="px-10" text variant="tonal" v-if="editing" @click="validateCuenta()" :loading="loading">
                     Enviar
+                    <template v-slot:loader>
+                        <v-progress-circular indeterminate :size="20" :width="2" ></v-progress-circular>
+                        <p style="margin-left: 3px; opacity: 0.5;">Enviando</p>
+                    </template>
                 </v-btn>
                 <v-btn color="red" prepend-icon="$delete" variant="tonal" text v-if="editing" @click="actualizar()">
                     Cancelar
@@ -103,8 +107,14 @@
         </v-card-text>
         <v-card-actions class="my-3">
           <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" text @click="deleteConfirm">Aceptar</v-btn>
-          <v-btn color="red darken-1" text @click="deleteCancel">Cancelar</v-btn>
+          <v-btn color="blue darken-1" text @click="deleteConfirm" :loading="loading" class="px-10">
+            Aceptar
+            <template v-slot:loader>
+                <v-progress-circular indeterminate :size="20" :width="2" ></v-progress-circular>
+                <p style="margin-left: 3px; opacity: 0.5;">Eliminando</p>
+            </template>
+          </v-btn>
+          <v-btn color="red darken-1" text @click="deleteCancel" class="px-10">Cancelar</v-btn>
           <v-spacer></v-spacer>
         </v-card-actions>
       </v-card>
@@ -142,6 +152,7 @@ export default {
         ],
         dialogDelete: false,
         file: null,
+        loading: false,
         editing: false,
         hideButtons: false,
         variant: "plain",
@@ -188,12 +199,14 @@ export default {
             this.editing = !this.editing;
         },
         async validateCuenta () {
+            
             const { valid } = await this.$refs.form.validate()
             if (valid) {
                 this.saveCuenta()
             }
         },
-        async saveCuenta () {            
+        async saveCuenta () {
+            this.loading = true;            
             if (this.file != null) {
                 console.log(this.file)
                 let formData = new FormData();
@@ -226,6 +239,7 @@ export default {
                             this.snackbar.text = 'Se ha modificado la cuenta del niño correctamente';
                             this.snackbar.color = 'success';
                             this.snackbar.active = true;
+                            this.loading = false;
                             console.log(response.data.item)
                         }
                         
@@ -237,6 +251,7 @@ export default {
                     .catch ( error => {
                         this.snackbar.text = 'No se ha logrado modificar la cuenta. Intente nuevamente';
                         this.snackbar.color = 'error';
+                        this.loading = false;
                         this.snackbar.active = true;
                     })
 
@@ -244,13 +259,15 @@ export default {
                 else{
                     this.snackbar.text = 'No se pudo modificar la cuenta del niño';
                     this.snackbar.color = 'error';
-                    this.snackbar.active = true
+                    this.snackbar.active = true;
+                    this.loading = false;
                 }
             })
             .catch( error => {
                 this.snackbar.text = 'Ha ocurrido un error'
                 this.snackbar.color = 'error'
                 this.snackbar.active = true
+                this.loading = false;
             })           
         },
         deleteAccount(cuenta){
@@ -259,6 +276,7 @@ export default {
             console.log(this.cuenta)
         },
         async deleteConfirm(){
+            this.loading = true;
             let idChild = this.cuenta._id
             let vinculacion = store.vinculacion ? true : false
             let idTerapeuta = vinculacion ? store.vinculacion.terapeuta._id : null
@@ -280,6 +298,7 @@ export default {
                     this.snackbar.text =  result.data.message;
                     this.snackbar.color = 'success';
                     this.snackbar.active = true;
+                    this.loading = false;
                     this.$router.push({path: '/Usuarios'})
                 }
                 else{
@@ -287,6 +306,7 @@ export default {
                         this.snackbar.text =  result.data.message;
                         this.snackbar.color = 'error';
                         this.snackbar.active = true;
+                        this.loading = false;
                     }
                 }
             })
@@ -294,6 +314,7 @@ export default {
                 this.snackbar.text =  'No se ha logrado eliminar la cuenta. Intente nuevamente...';
                 this.snackbar.color = 'error';
                 this.snackbar.active = true;
+                this.loading = false;
             })
         
         },
