@@ -2,7 +2,7 @@
     <v-navigation-drawer permanent location="left">
           <template v-slot:prepend >
             <v-list-item
-              class="px-10 mt-7"
+              class="px-10 mt-7 text-wrap"
               lines="two"
               :prepend-avatar="profile.avatar"
               :title="profile.fullname"
@@ -15,8 +15,6 @@
                 <v-list-item  prepend-icon="mdi-home" title="Home"></v-list-item>
                 <v-divider inset></v-divider>
                   <v-list-item  prepend-icon="mdi-account" title="Mis usuarios"  :to="{ path: '/Usuarios' }"></v-list-item>
-                  <v-divider inset></v-divider>                
-                  <v-list-item c prepend-icon="mdi-chart-line" title="Dashboards"  :to="{ path: '/User/Dashboards' }"></v-list-item> 
                   <v-divider inset></v-divider>
                   <v-list-item c prepend-icon="mdi-logout" title="Cerrar Sesión" value="/" @click="logout"></v-list-item>                 
                 </v-list>

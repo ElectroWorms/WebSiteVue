@@ -16,8 +16,12 @@
                 <v-row>
                     <v-col cols="12" sm="12">
                         <div class="d-flex flex-column">
-                            <v-btn color="success" class="mt-4" block  :disabled="!activeButton" @click="validate" >
-                            Vincular
+                            <v-btn color="success" class="mt-4" block  :disabled="!activeButton" @click="validate" :loading="loading">
+                                Vincular
+                                <template v-slot:loader>
+                                    <v-progress-circular indeterminate :size="20" :width="2"></v-progress-circular>
+                                    <p style="margin-left: 5px; opacity: 0.5;">Vinculando</p>
+                                </template>
                             </v-btn>
                         </div>
                     </v-col>
@@ -127,11 +131,13 @@ export default {
             timeout: 3000,
         },
         codigo: null,
+        loading: false
         
     }),
 
     methods:{
         async validate () {
+            this.loading = true;
             const { valid } = await this.$refs.form.validate()
             if (valid) {
                 this.vincular()
@@ -157,12 +163,13 @@ export default {
             })
         },
         async vincular () {
+            this.loading = true;
             var urlEnlazar = `${config.PathAPI}solicitudes/enlazar`
             //var terapeuta = this.terapeutas.filter (terapeuta => terapeuta.userName == this.userNameTerapeuta)[0]
             var tutor = store.user
             var childUser = store.secondUser
             var formMetada = {tutorUser: tutor, terapeutaCodigo: this.codigo, childUser, estado: 'En espera'}
-
+            
             // eliminar los usuarios del to, el usuario ha decidido desvincular la cuenta
             if (this.showChangeTo == true){
                 var urlObtenerTo = `${config.PathAPI}user/getUser/${store.vinculacion.terapeuta._id}`
@@ -196,12 +203,14 @@ export default {
                                 this.snackbar.text = 'No se encuentra un terapeuta con ese código. Intente nuevamente...'
                                 this.snackbar.color = 'error'
                                 this.snackbar.active = true
+                                this.loading = false
                             })
                         })
                         .catch(error => {
                             this.snackbar.text = 'No se ha logrado vincular la cuenta. Intente nuevamente'
                             this.snackbar.color = 'error'
                             this.snackbar.active = true
+                            this.loading = false
                         })
 
                     })
@@ -209,6 +218,7 @@ export default {
                         this.snackbar.text = 'No se ha logrado vincular la cuenta. Intente nuevamente'
                         this.snackbar.color = 'error'
                         this.snackbar.active = true
+                        this.loading = false
                     })
                 
             }
@@ -220,6 +230,7 @@ export default {
                     this.activeButton = false
                     this.typeAlert = "info"
                     this.stateSelect = false,
+                    this.loading = false,
                     this.typeText = "La solicitud se encuentra en estado: En espera"
 
                 })
@@ -227,6 +238,7 @@ export default {
                     this.snackbar.text = 'No se encuentra un terapeuta con ese código. Intente nuevamente...'
                     this.snackbar.color = 'error'
                     this.snackbar.active = true
+                    this.loading = false
                 })
             }
         

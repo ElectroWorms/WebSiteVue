@@ -5,7 +5,7 @@
       >
         <template v-slot:prepend >
           <v-list-item
-            class="px-10 mt-7"
+            class="px-10 mt-7 text-wrap"
             lines="two"
             :prepend-avatar="profile.avatar"
             :title="profile.fullname"

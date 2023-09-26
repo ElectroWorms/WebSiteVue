@@ -32,8 +32,12 @@
 
             <v-container class="px-0">
                 <v-card-actions class="center">
-                    <v-btn color="success" prepend-icon="mdi-login" variant="tonal" @click="validate">
+                    <v-btn color="success" prepend-icon="mdi-login" variant="tonal" @click="validate" :loading="loading">
                         Iniciar Sesión
+                        <template v-slot:loader>
+                          <v-progress-circular indeterminate :size="20" :width="2"></v-progress-circular>
+                          <p style="margin-left: 5px; opacity: 0.5;">Cargando</p>
+                        </template>
                     </v-btn>    
                 </v-card-actions>
             </v-container>
@@ -67,7 +71,8 @@ export default {
     user:{
       username: null,
       password: null,
-    }
+    },
+    loading: false,
   }),
   computed: {
     
@@ -83,6 +88,7 @@ export default {
       this.$emit("changeDialogLogin", false);
     },
     save (){
+      this.loading = true;
       var url = `${config.PathAPI}user/login`
       axios.post(url, this.user)
       .then (response => {
@@ -93,18 +99,21 @@ export default {
             user: Usuario
           })
           this.$emit("changeDialogLogin", false);
+          this.loading = false;
           this.$router.push({path: '/Usuarios'})
         }
         else {
           this.snackbar.text = response.data.message
           this.snackbar.color = 'error'
           this.snackbar.active = true
+          this.loading = false
         }
       })
       .catch(error => {
           this.snackbar.text = 'Credenciales incorrectas'
           this.snackbar.color = 'error'
           this.snackbar.active = true
+          this.loading = false
       })
     }
 

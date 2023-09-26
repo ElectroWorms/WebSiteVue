@@ -1,5 +1,5 @@
 {
-    "PathAPI": "http://localhost:4000/",
+    "PathAPI": "https://api-express-koc81hvjw-electroworms.vercel.app/",
     "Themes": [
         {
             "BackgroundImage": "@/assets/juego.jpg"
