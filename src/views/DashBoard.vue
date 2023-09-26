@@ -7,7 +7,7 @@
   <MainDashBoardVue></MainDashBoardVue>
 </template>
 <script setup lang="ts">
-  import MainDashBoardVue from '@/components/DashBoard/MainDashBoard.vue'
+  import MainDashBoardVue from '@/components/Dashboard/MainDashboard.vue'
   import SidePanelUser from '@/components/SidePanel/SidePanelUser.vue'
 
 </script>
