@@ -164,11 +164,9 @@ async function activateRoutine() {
 onMounted(async () => {
 
     // get the activity data and save it in ref 'actividad'
-    activityData = await getActivity(ActividadId);
-    console.log(activityData);
-    activityData = activityData.item;
+    activityData = await getActivity(ActividadId.value);
+    activityData = activityData.item[0];
     actividad.value = activityData;
-    console.log("actividad:", actividad.value);
 
     // get the list of routines for the activity
     routineList = (await fetchRoutines(UserId.value, ActividadId.value)).item;
