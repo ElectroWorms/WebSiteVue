@@ -78,6 +78,10 @@ export default {
             game = 'vestirpersonaje'
             this.chartOptions.plugins.title.text = 'Tiempo total de juego por día en vestir al personaje'
         }
+        else if (this.juego == 'Ordenar secuencia'){
+                game = 'ordenarsecuencia'
+                this.chartOptions.plugins.title.text = 'Tiempo total de juego por día en ordenar secuencia'
+        }
         try {
             let data = await transformDataGraphic5(game)
             this.chartData.labels = data.map(x => x.date)

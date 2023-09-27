@@ -91,6 +91,10 @@ export default {
             game = 'vestirpersonaje'
             this.chartOptions.plugins.title.text = 'Tasa promedio de errores por día en vestir al personaje'
         }
+        else if (this.juego == 'Ordenar secuencia'){
+            game = 'ordenarsecuencia'
+            this.chartOptions.plugins.title.text = 'Tasa promedio de errores por día en ordenar secuencia'
+        }
 
         try {
             let data = await transformDataGraphic2(game)

@@ -7,11 +7,11 @@
       <v-row class="pt-2">
 
         <v-col cols="4">
-          <v-card color="rgba(54, 162, 235, 0.5)" theme="dark" class="py-6 rounded-lg" style="height: 180px;">
+          <v-card color="rgba(54, 162, 235, 0.5)" theme="dark" class="py-6 rounded-lg" style="height: 160px;">
             <v-row align="center" >
               <v-col cols = "8" class="text-center px-2 pt-0">
                 <v-card-title class="text-h5 text-wrap ">Tiempo total de juego(s)</v-card-title>
-                <v-card-title class="text-h2 text-wrap mt-2">
+                <v-card-title class="text-h2 text-wrap">
                   <v-progress-circular indeterminate :size="40" :width="2" class="px-10" v-if="!loaded"></v-progress-circular>
                   {{ totalTime }}
                 </v-card-title>
@@ -24,11 +24,11 @@
         </v-col>
 
         <v-col cols="4">
-          <v-card color="rgba(75, 192, 192, 0.5)" theme="dark" class="py-7 rounded-lg" style="height: 180px;">
+          <v-card color="rgba(75, 192, 192, 0.5)" theme="dark" class="py-7 rounded-lg" style="height: 160px;">
             <v-row align="center">
               <v-col cols = "8" class="text-center px-2 pt-0">
-                <v-card-title class="text-h5 text-wrap ">Intentos búsqueda del tesoro</v-card-title>
-                <v-card-title class="text-h2 text-wrap mt-2">
+                <v-card-title class="text-h5 text-wrap ">Partidas búsqueda del tesoro</v-card-title>
+                <v-card-title class="text-h2 text-wrap">
                   <v-progress-circular indeterminate :size="40" :width="2" class="px-10" v-if="!loaded"></v-progress-circular>
                   {{ partidasJugadasGame1 }}
                 </v-card-title>
@@ -42,17 +42,34 @@
 
         
         <v-col cols="4">
-          <v-card color="rgba(255, 205, 86, 0.5)" theme="dark" class="py-7 rounded-lg" style="height: 180px;">
+          <v-card color="rgba(255, 205, 86, 0.5)" theme="dark" class="py-7 rounded-lg" style="height: 160px;">
             <v-row align="center">
               <v-col cols = "8" class="text-center px-2 pt-0">
-                <v-card-title class="text-h5 text-wrap ">Intentos vestir al personaje</v-card-title>
-                <v-card-title class="text-h2 text-wrap mt-2">
+                <v-card-title class="text-h5 text-wrap ">Partidas vestir al personaje</v-card-title>
+                <v-card-title class="text-h2 text-wrap">
                   <v-progress-circular indeterminate :size="40" :width="2" class="px-10" v-if="!loaded"></v-progress-circular>
                   {{ partidasJugadasGame2 }}
                 </v-card-title>
               </v-col>
               <v-col cols = "4" class="pl-0">
                 <v-icon icon="mdi-tshirt-crew-outline" size="x-large" style="color: white; font-size: 80px;"></v-icon>
+              </v-col>
+            </v-row>
+          </v-card>
+        </v-col>
+
+        <v-col cols="4">
+          <v-card color="rgba(153, 102, 255, 0.5)" theme="dark" class="py-7 rounded-lg" style="height: 160px;">
+            <v-row align="center">
+              <v-col cols = "8" class="text-center px-2 pt-0">
+                <v-card-title class="text-h5 text-wrap ">Partidas ordenar secuencia</v-card-title>
+                <v-card-title class="text-h2 text-wrap">
+                  <v-progress-circular indeterminate :size="40" :width="2" class="px-10" v-if="!loaded"></v-progress-circular>
+                  {{ partidasJugadasGame3 }}
+                </v-card-title>
+              </v-col>
+              <v-col cols = "4" class="pl-0">
+                <v-icon icon="mdi-sort-numeric-ascending" size="x-large" style="color: white; font-size: 80px;"></v-icon>
               </v-col>
             </v-row>
           </v-card>
@@ -110,16 +127,16 @@
       juego: null,
       boolGrafico1: true, boolGrafico2: false, boolGrafico3: false, boolGrafico4: false, boolGrafico5:false,
       loaded: false,
-      totalTime: '', partidasJugadasGame1: '', partidasJugadasGame2:'',
+      totalTime: '', partidasJugadasGame1: '', partidasJugadasGame2:'', partidasJugadasGame3: '',
       itemsGrafico:
                 [
-                  'Cantidad de intentos por juego',
+                  'Promedio de intentos por juego',
                   'Tasa promedio de errores por día', 
                   'Tasa promedio de aciertos por día', 
                   'Tiempo promedio en completar el juego', 
                   'Tiempo total de juego por día'
                 ],
-      itemsJuegos: ['Búsqueda del tesoro', 'Vestir al personaje']
+      itemsJuegos: ['Búsqueda del tesoro', 'Vestir al personaje', 'Ordenar secuencia']
       
     }),
     computed: {
@@ -129,10 +146,10 @@
       
     },
     async mounted (){
-      let auxtotalTime, auxPartidas1, auxPartidas2;
-      auxtotalTime = await getTime(); auxPartidas1= await getTotalGames('busquedatesoro'); auxPartidas2= await getTotalGames('vestirpersonaje')
+      let auxtotalTime, auxPartidas1, auxPartidas2, auxPartidas3;
+      auxtotalTime = await getTime(); auxPartidas1= await getTotalGames('busquedatesoro'); auxPartidas2= await getTotalGames('vestirpersonaje'); auxPartidas3= await getTotalGames('ordenarsecuencia')
       this.loaded = true;
-      this.totalTime = auxtotalTime; this.partidasJugadasGame1 = auxPartidas1;  this.partidasJugadasGame2 = auxPartidas2; 
+      this.totalTime = auxtotalTime; this.partidasJugadasGame1 = auxPartidas1;  this.partidasJugadasGame2 = auxPartidas2; this.partidasJugadasGame3 = auxPartidas3;
     },
     watch: {
       inputSelectGrafico: function(val, oldVal) {
@@ -148,7 +165,7 @@
         
       },
       inputSelectJuego: async function(val, oldVal) {
-        if (val == this.itemsJuegos[0] || val == this.itemsJuegos[1]){
+        if (val == this.itemsJuegos[0] || val == this.itemsJuegos[1] || val == this.itemsJuegos[2]){
           this.juego = this.inputSelectJuego;
           if (this.inputSelectGrafico == this.itemsGrafico[1]){
             this.boolGrafico2 = false; this.boolGrafico1 = false; this.boolGrafico3 = false; this.boolGrafico4 = false; this.boolGrafico5 = false;

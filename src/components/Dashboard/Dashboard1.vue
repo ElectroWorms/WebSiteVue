@@ -72,19 +72,22 @@ export default {
         this.timeout = 100000;
         let urlBusquedaTesoro = `${config.PathAPI}metricas/busquedatesoro/list/${'650a1e7a3ec872301123fdd8'}`
         let urlVestirPersonaje = `${config.PathAPI}metricas/vestirpersonaje/list/${'650a1e7a3ec872301123fdd8'}`
+        let urlOrdenar = `${config.PathAPI}metricas/ordenarsecuencia/list/${'650a1e7a3ec872301123fdd8'}`
         try {
             const metricasBusqueda = (await axios.get(urlBusquedaTesoro)).data.item
             const metricasVestir = (await axios.get(urlVestirPersonaje)).data.item
+            const metricasOrdenar = (await axios.get(urlOrdenar)).data.item
             const promBusqueda = metricasBusqueda.length ? Math.round(((metricasBusqueda.map(metrica => metrica.cantidad_err + metrica.cantidad_obj)).reduce((accumulator, currentValue) => accumulator + currentValue, 0)) / metricasBusqueda.length) : 0
-            const promVestir = metricasBusqueda.length ? Math.round(((metricasVestir.map(metrica => metrica.cantidad_err + metrica.cantidad_obj)).reduce((accumulator, currentValue) => accumulator + currentValue, 0)) / metricasVestir.length) : 0
-            this.chartData.labels = ['Búqueda del tesoro', 'Vestir Personaje']
+            const promVestir = metricasVestir.length ? Math.round(((metricasVestir.map(metrica => metrica.cantidad_err + metrica.cantidad_obj)).reduce((accumulator, currentValue) => accumulator + currentValue, 0)) / metricasVestir.length) : 0
+            const promOrdenar = metricasOrdenar.length ? Math.round(((metricasOrdenar.map(metrica => metrica.cantidad_err + metrica.cantidad_obj)).reduce((accumulator, currentValue) => accumulator + currentValue, 0)) / metricasOrdenar.length) : 0
+            this.chartData.labels = ['Búqueda del tesoro', 'Vestir Personaje', 'Ordenar Secuencia']
             this.chartData.datasets = [
                 {
-                    label: ['Número de intentos'],
+                    label: ['Promedio de intentos'],
                     backgroundColor: ['rgba(54, 162, 235, 0.2)'],
                     borderColor: ['rgb(54, 162, 235)'],
                     borderWidth:1,
-                    data: [promVestir, promBusqueda]
+                    data: [promVestir, promBusqueda, promOrdenar]
                 }
         ]
         this.loaded = true
