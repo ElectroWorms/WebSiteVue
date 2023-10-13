@@ -48,10 +48,10 @@
     <DeleteResourceDialog v-model="showDialogDelete" @close="handleClose" 
         @deleted="handleDeleteResource" :resource="selectedResource"/>
 
-    <v-row class="mt-8 ml-4 mr-4 mb-16">
+    <v-row class="mt-5 mx-3 mb-16">
         <v-col v-for="(resource, index) in resources" :key="index" cols="12" sm="6" md="4" lg="3">
-            <v-card class="pt-0 mx-auto justify-center" max-width="310px">
-                <v-img class="border" :height="200" width="500" cover :src="resource.url"></v-img>
+            <v-card class="mx-auto" max-width="100%" height="400">
+                <v-img class="border" :height="270" width="500" cover :src="resource.url"></v-img>
                 <v-card-subtitle class=" my-6  text-wrap" style="font-size: 16px;"> {{ resource.title }}</v-card-subtitle>
                 <v-divider></v-divider>
                 <v-card-actions class="btn-actions pl-3 pr-3">

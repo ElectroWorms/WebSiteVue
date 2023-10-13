@@ -30,14 +30,14 @@
 <template>
     <v-app-bar :elevation="2"  class="changeAppBar"> 
         <v-row align="center" justify="center">
-            <v-col cols="4" class="pl-1 pl-lg-16">
+            <v-col cols="4" class="pl-2 pl-lg-16">
                 <v-app-bar-nav-icon variant="text" class="d-lg-none" @click="showDrawer()"></v-app-bar-nav-icon>
                 <v-text class="text-wrap"> Usuarios </v-text>
             </v-col>
             <v-col cols="5" class="">
                 <v-text-field v-model="search" class="fondoBlanco mt-5" placeholder="Buscar..." variant="outlined" prepend-icon="mdi-magnify" density="compact"></v-text-field>
             </v-col>
-            <v-col cols="3" class="text-center text-md-end text-lg-end">
+            <v-col cols="3" class="px-2  text-md-end text-lg-end">
                 <v-btn color="primary" variant="flat" @click="dialogCreateUser = true" v-if="isTutor" prepend-icon="mdi-plus" class="pl-7 px-sm-4  mr-md-4 mr-lg-4" > <v-text class="d-none d-sm-flex">Crear Cuenta</v-text> </v-btn>
             </v-col>
         </v-row>
@@ -50,7 +50,7 @@
             </v-row>
             <v-row>                    
                 <v-col cols="12" sm="6" md="4" lg="3" v-for="item in users" :key="item._id">      
-                    <v-card class="mx-auto" max-width="100%">
+                    <v-card class="mx-auto" max-width="100%" height="360">
                         <v-img :src="getCardImg(item.url,item.sexo)" class="mt-5 mb-5" height="150px" aspect-ratio="1/1"></v-img>
 
                         <v-card-title style="text-align: center;">
@@ -63,9 +63,9 @@
                             </v-chip>
                         </v-card-subtitle>
                         
-                        <v-card-actions class="actions-center mb-3">
+                        <v-card-actions class="actions-center mb-3 mx-1">
                             <v-row>
-                                <v-col cols="12" class="py-0  text-center my-3">
+                                <v-col cols="12" class="py-0 text-center my-3">
                                     <v-btn color="primary" variant="flat" prepend-icon="mdi-magnify"  @click="loadPerfil(item)" size="small">
                                         Ver Perfil
                                     </v-btn>

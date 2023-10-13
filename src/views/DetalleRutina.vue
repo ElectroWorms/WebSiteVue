@@ -33,7 +33,7 @@
     <v-app-bar :elevation="2" class="pl-0 p-sm-0 p-md-4 p-lg-4 changeAppBar">
         <v-app-bar-nav-icon variant="text" class="d-lg-none" @click="showDrawer()"></v-app-bar-nav-icon>
         <v-btn @click="back" icon="mdi-arrow-left" color="primary" class="ml-md-2 ml-lg-2"></v-btn>
-        <v-text class="px-2 text-center"> Detalle de la Rutina: {{ routine?.title }}</v-text>
+        <v-text class="px-1 text-center"> Detalle de la Rutina: {{ routine?.title }}</v-text>
         <v-spacer></v-spacer>
         <v-btn color="primary" variant="flat" @click="addRoutineStepBtn" prepend-icon="mdi-plus" class="pl-7 px-sm-4  mr-md-4 mr-lg-4" > <v-text class="d-none d-sm-flex">Agregar Paso</v-text> </v-btn>
     </v-app-bar>
@@ -49,10 +49,10 @@
         @update-step="handleUpdateStep" :routine="routine!" :user="userId" :routineStep="selectedRoutineStep"/>
 
 
-    <v-row class="mt-5 mx-auto justify-center" >
+    <v-row class="mt-5 mx-3 justify-center" >
         <v-col v-for="(routineStep, index) in routine?.steps" :key="index" cols="12" sm="6" md="4" lg="3" >
-            <v-card class="pt-0 mx-auto justify-center" max-width="310px">
-                <v-img class="border" :height="200" width="500" :src="routineStep.recursoItem.url" cover></v-img>
+            <v-card class="mx-auto" max-width="100%"  height="400">
+                <v-img class="border" :height="250" width="500" :src="routineStep.recursoItem.url" cover></v-img>
 
                 <v-card-subtitle class="pt-6"> Paso de Rutina {{ index + 1 }} </v-card-subtitle>
                 <v-card-text class="text-center">

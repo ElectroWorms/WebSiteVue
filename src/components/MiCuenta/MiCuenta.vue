@@ -14,7 +14,7 @@
                     <v-row>                                      
                         <v-col cols="12" sm="12" md="3" lg="3" class="mx-0">
                             <v-row rows="2" class="center">
-                                <v-img class=" bg-white" max-width="280px" :aspect-ratio="1" :src="getCardImg(user)" cover></v-img>
+                                <v-img class=" bg-white" max-width="200px" :aspect-ratio="1" :src="getCardImg(user)" cover></v-img>
                             </v-row>
                             <v-row class="center mt-6 mb-1">
                                 <p>Foto de Perfil</p>

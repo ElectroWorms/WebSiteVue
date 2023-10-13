@@ -18,9 +18,6 @@ export default createVuetify({
     VDataTable
   },
   theme: {
-    options: {
-      customProperties: true,
-    },
     themes: {
       light: {
         colors: {
@@ -28,10 +25,7 @@ export default createVuetify({
           secondary: 'rgb(200, 230, 252)',
         },
       },
-    },
-    buttons: {
-      textTransform: 'lowercase', // Esto hace que el texto del botón se muestre en mayúsculas
-    },
+    }
     
   },
   

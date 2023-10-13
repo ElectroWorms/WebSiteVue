@@ -12,7 +12,7 @@
   import MainDashBoardVue from '@/components/Dashboard/MainDashboard.vue'
   import SidePanelUser from '@/components/SidePanel/SidePanelUser.vue'
   import router from '@/router'
-  import {useUserStore} from "../store/app"
+  import {useUserStore} from "../store/app";
   const store = useUserStore()
   const back = () => {
         router.push({ name: 'Usuarios'});
