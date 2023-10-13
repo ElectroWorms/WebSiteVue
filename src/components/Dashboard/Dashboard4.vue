@@ -32,7 +32,7 @@ export default {
         },
         chartOptions: {
             responsive: true,
-            maintainAspectRatio: true,
+            maintainAspectRatio: false,
             plugins: {
                 legend: {
                     display: true,
@@ -69,9 +69,9 @@ export default {
         this.snackbar.color = 'info';
         this.snackbar.active = true;
         this.timeout = 100000;
-        let urlBusquedaTesoro = `${config.PathAPI}metricas/busquedatesoro/list/${'650a1e7a3ec872301123fdd8'}`
-        let urlVestirPersonaje = `${config.PathAPI}metricas/vestirpersonaje/list/${'650a1e7a3ec872301123fdd8'}`
-        let urlOrdenar = `${config.PathAPI}metricas/ordenarsecuencia/list/${'650a1e7a3ec872301123fdd8'}`
+        let urlBusquedaTesoro = `${config.PathAPI}metricas/busquedatesoro/list/${secondUserId}`
+        let urlVestirPersonaje = `${config.PathAPI}metricas/vestirpersonaje/list/${secondUserId}`
+        let urlOrdenar = `${config.PathAPI}metricas/ordenarsecuencia/list/${secondUserId}`
         try {
             const metricasBusqueda = (await axios.get(urlBusquedaTesoro)).data.item
             const metricasVestir = (await axios.get(urlVestirPersonaje)).data.item
@@ -86,7 +86,7 @@ export default {
                     backgroundColor: ['rgba(75, 192, 192, 0.2)'],
                     borderColor: ['rgb(75, 192, 192)'],
                     borderWidth:1,
-                    data: [promVestir, promBusqueda, promOrdenar]
+                    data: [promBusqueda, promVestir, promOrdenar]
                 }
             ]
             this.loaded = true;

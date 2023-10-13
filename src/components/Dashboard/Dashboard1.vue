@@ -32,7 +32,7 @@ export default {
         },
         chartOptions: {
             responsive: true,
-            maintainAspectRatio: true,
+            maintainAspectRatio: false,
             plugins: {
                 legend: {
                     display: true,
@@ -47,7 +47,7 @@ export default {
                 },
                 title: {
                     display: true,
-                    text: "Cantidad de intentos por juego",
+                    text: "Promedio de intentos por juego",
                     padding: {
                         bottom: 30
                     },
@@ -65,14 +65,15 @@ export default {
     async mounted () {
         const store = useUserStore();
         const secondUserId = store.secondUser._id;
+        console.log(secondUserId)
         this.loaded = false
         this.snackbar.text = 'Cargando gráfico';
         this.snackbar.color = 'info';
         this.snackbar.active = true;
         this.timeout = 100000;
-        let urlBusquedaTesoro = `${config.PathAPI}metricas/busquedatesoro/list/${'650a1e7a3ec872301123fdd8'}`
-        let urlVestirPersonaje = `${config.PathAPI}metricas/vestirpersonaje/list/${'650a1e7a3ec872301123fdd8'}`
-        let urlOrdenar = `${config.PathAPI}metricas/ordenarsecuencia/list/${'650a1e7a3ec872301123fdd8'}`
+        let urlBusquedaTesoro = `${config.PathAPI}metricas/busquedatesoro/list/${secondUserId}`
+        let urlVestirPersonaje = `${config.PathAPI}metricas/vestirpersonaje/list/${secondUserId}`
+        let urlOrdenar = `${config.PathAPI}metricas/ordenarsecuencia/list/${secondUserId}`
         try {
             const metricasBusqueda = (await axios.get(urlBusquedaTesoro)).data.item
             const metricasVestir = (await axios.get(urlVestirPersonaje)).data.item
@@ -87,7 +88,7 @@ export default {
                     backgroundColor: ['rgba(54, 162, 235, 0.2)'],
                     borderColor: ['rgb(54, 162, 235)'],
                     borderWidth:1,
-                    data: [promVestir, promBusqueda, promOrdenar]
+                    data: [promBusqueda, promVestir, promOrdenar]
                 }
         ]
         this.loaded = true

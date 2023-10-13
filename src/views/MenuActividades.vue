@@ -16,9 +16,10 @@
 </style>
 <template>
     <SidePanelUser/>
-    <v-app-bar :elevation="2" class="pl-4">
-        <v-btn @click="back" icon="mdi-arrow-left"></v-btn>
-        Menú de Actividades
+    <v-app-bar :elevation="2" class="changeAppBar">
+        <v-app-bar-nav-icon variant="text" class="d-md-none"></v-app-bar-nav-icon>
+        <v-btn @click="back" icon="mdi-arrow-left" color="blue" class="pl-md-5 pl-lg-5"></v-btn>
+        <v-text class="pl-md-5 pl-lg-5"> Menú de Actividades</v-text>
     </v-app-bar>
     <v-row class="mx-4 mt-2">
         <v-col v-for="(act,index) in Actividades" :key="index" xs="12" sm="6" md="4" lg="3"  justify="center" >
@@ -29,8 +30,8 @@
                 <v-card-subtitle class="pt-4 subtitulo"> {{act.title}}</v-card-subtitle>
     
                 <v-card-actions>                    
-                    <v-switch style="flex-direction: row-reverse !important"  v-model="act.active" label="Activo" color="success" @change="updateActivity(act._id,act.active,act.title)" hide-details></v-switch>    
-                    <v-btn color="success" variant="flat" @click="loadActivity(act._id,act.user)">Detalle</v-btn>
+                    <v-switch style="flex-direction: row-reverse !important"  v-model="act.active" label="Activo" color="primary" @change="updateActivity(act._id,act.active,act.title)" hide-details></v-switch>    
+                    <v-btn color="primary" variant="flat" @click="loadActivity(act._id,act.user)">Detalle</v-btn>
                 </v-card-actions>
             </v-card>
         </v-col>

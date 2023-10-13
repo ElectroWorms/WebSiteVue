@@ -44,26 +44,29 @@
         justify-content: center;
     }
 }
+
+
 </style>
 <template>
     
     <SidePanelUser/>
-    <v-app-bar :elevation="2" class="pl-4">
-        <v-btn @click="back" icon="mdi-arrow-left"></v-btn>
-        Detalle de la Actividad
+    <v-app-bar :elevation="2" class="changeAppBar">
+        <v-app-bar-nav-icon variant="text" class="d-md-none" color="primary"></v-app-bar-nav-icon>
+        <v-btn @click="back" icon="mdi-arrow-left" color="blue" class="pl-md-5 pl-lg-5"></v-btn>
+        <v-text class="pl-md-5 pl-lg-5"> Detalle de la Actividad</v-text>
     </v-app-bar>
 
     <CreateRoutineDialog v-model="showDialogNewRoutine" @close="handleClose" 
         @new-routine="handleNewRoutine" :activityId="ActividadId" :userId="UserId"/>
     
-    <v-row class="mt-8">
+    <v-row class="mt-5 mx-2">
         <v-col xs="12" sm="12" md="6" lg="6" class="rutina">
-            <v-card class="pt-2 card-rutina" min-height="550">
+            <v-card class="pa-2 card-rutina" min-height="550">
 
-                <v-img class="" :height="300" :src="actividad.url">
+                <v-img class="" :height="200" :src="actividad.url">
                 </v-img>
 
-                <v-card-subtitle class="pt-4"> Rutina </v-card-subtitle>
+                <v-card-subtitle class="pt-4 text-primary"> Rutina </v-card-subtitle>
                 <v-card-text>
                     <div>Potencia el crecimiento de tu hijo con rutinas diarias, brindándole confianza en cada paso de su camino.</div>
                 </v-card-text>
@@ -77,12 +80,12 @@
                         :return-object="true"
                         v-on:update:model-value="onChangeSelectedRoutine"
                     ></v-select>
-                    <v-btn @click="activateRoutine" :disabled="!selectedRoutine" color="green"> Activar </v-btn>
+                    <v-btn @click="activateRoutine" :disabled="!selectedRoutine" color="primary mb-3 mb-sm-3 mb-md-0 mb-lg-0" > Activar </v-btn>
                 </v-row>
 
                 <v-row class="ma-3">
-                    <v-btn class="create-routine-btn pl-4 pr-4" prepend-icon="$plus" variant="tonal" 
-                        @click="createRoutineBtn" color="green">
+                    <v-btn class="create-routine-btn pl-4 pr-4" prepend-icon="$plus" variant="tonal"  
+                        @click="createRoutineBtn" color="primary" >
                         Crear Rutina
                     </v-btn>
                 </v-row>
@@ -93,24 +96,24 @@
                 </v-card-text>
 
                 <v-card-actions class="btn-actions">
-                    <v-btn @click="loadRoutine" color="green"> Ver Rutina </v-btn>
+                    <v-btn @click="loadRoutine" color="primary" variant="outlined"  > Ver Rutina </v-btn>
                 </v-card-actions>
             </v-card>
         </v-col>
         <v-col xs="12" sm="12" md="6" lg="6" class="juegos">
             <v-card class="card-juegos pt-2" min-height="550">
-                <v-img class="" :height="300" src="@/assets/juego.jpg">
+                <v-img class="" :height="200" src="@/assets/juego.jpg">
                     <!-- <v-card-title>Top 10 Australian beaches</v-card-title> -->
                 </v-img>
 
                 <v-spacer></v-spacer>
-                <v-card-subtitle class="pt-4"> Juegos </v-card-subtitle>
+                <v-card-subtitle class="pt-4 text-primary"> Juegos </v-card-subtitle>
                 <v-card-text>
                     <div>Mediante juegos interactivos, estimula la creatividad y autonomía en las actividades diarias.</div>
                 </v-card-text>
                 
                 <v-card-actions class="btn-actions" style="margin-top: 80px">
-                    <v-btn @click="loadGames" color="orange"> Ver Juegos </v-btn>
+                    <v-btn @click="loadGames" color="primary" variant="outlined"> Ver Juegos </v-btn>
                 </v-card-actions>
             </v-card>
         </v-col>

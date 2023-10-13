@@ -17,35 +17,34 @@
     max-width: 400px;
     min-height: 500px;
 }
-
+/*
 .add-step-btn {
     position: fixed;
-    bottom: 20px;
+    top: 110px;
     right: 20px;
     z-index: 100;
 }
+*/
 
 </style>
 <template>
     
     <SidePanelUser/>
-    <v-app-bar :elevation="2" class="pl-4">
-        <v-btn @click="back" icon="mdi-arrow-left"></v-btn>
-        <span>Detalle de la Rutina</span>
+    <v-app-bar :elevation="2" class="pl-0 p-sm-0 p-md-4 p-lg-4 changeAppBar">
+        <v-app-bar-nav-icon variant="text" class="d-md-none" color="primary"></v-app-bar-nav-icon>
+        <v-btn @click="back" icon="mdi-arrow-left" color="blue" class="pl-md-5 pl-lg-5"></v-btn>
+        <v-text class="pl-md-5 pl-lg-5"> Detalle de la Rutina</v-text>
+        <v-spacer></v-spacer>
+        <p class="text-h6">{{ routine?.title }}</p>
+        <v-spacer></v-spacer>
+        <v-btn class=" pl-4 pr-4" prepend-icon="$plus" variant="flat" 
+            @click="addRoutineStepBtn" color="primary">
+            Agregar Paso 
+        </v-btn>
     </v-app-bar>
     
-    <v-row class="d-flex justify-space-between mt-8 ml-8 mr-8">
-        <p class="text-h5">{{ routine?.title }}</p>
-        <!-- <v-btn class="delete-routine-btn pl-4 pr-4" prepend-icon="$delete" variant="tonal" 
-            @click="deleteRoutine" color="red"> 
-            Eliminar Rutina 
-        </v-btn> -->
-    </v-row>
     
-    <v-btn class="add-step-btn pl-4 pr-4" prepend-icon="$plus" variant="tonal" 
-        @click="addRoutineStepBtn" color="green">
-        Agregar Paso 
-    </v-btn>
+    
 
     <!-- Dialogs -->
     <CreateRoutineStepDialog v-model="showDialogNew" @close="handleClose" 
@@ -54,24 +53,25 @@
     <UpdateRoutineStepDialog v-model="showDialogUpdate" @close="handleClose" 
         @update-step="handleUpdateStep" :routine="routine!" :user="userId" :routineStep="selectedRoutineStep"/>
 
-    <v-row class="mt-8 ml-4 mr-4">
 
-        <v-col v-for="(routineStep, index) in routine?.steps" :key="index" cols="3" justify="end">
-            <v-card class="pt-2 card-step">
-                <v-img class="" :height="200" :src="routineStep.recursoItem.url"></v-img>
+    <v-row class="mt-5 ml-4 mr-4">
+
+        <v-col v-for="(routineStep, index) in routine?.steps" :key="index" cols="12" sm="6" md="4" lg="3" justify="end">
+            <v-card class="pt-0  " max-width="310px">
+                <v-img class="border" :height="200" width="500" :src="routineStep.recursoItem.url" cover></v-img>
 
                 <v-card-subtitle class="pt-6"> Paso de Rutina {{ index + 1 }} </v-card-subtitle>
                 <v-card-text>
                     {{ routineStep.recursoItem.title }}
                 </v-card-text>
-
-                <v-card-actions class="btn-actions pl-3 pr-3">
-                    <v-btn prepend-icon="$edit" variant="tonal" class="pl-4 pr-4"
-                        @click="editRoutineStepBtn(routineStep)" color="orange"> 
+                <v-divider></v-divider>
+                <v-card-actions class="justify-center">
+                    <v-btn prepend-icon="$edit" variant="flat" class="pl-4 pr-4 mx-1" size="small"
+                        @click="editRoutineStepBtn(routineStep)" color="primary" > 
                         Editar 
                     </v-btn>
-                    <v-btn prepend-icon="$delete" variant="tonal" class="pl-4 pr-4"
-                        @click="deleteRoutineStepBtn(routineStep)" color="red"> 
+                    <v-btn prepend-icon="$delete" variant="text" class="pl-4 pr-4 mx-1" size="small"
+                        @click="deleteRoutineStepBtn(routineStep)" color="primary"> 
                         Eliminar 
                     </v-btn>
                 </v-card-actions>

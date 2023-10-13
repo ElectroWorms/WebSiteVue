@@ -1,0 +1,6 @@
+@media (min-width: 1280px) {
+    .changeAppBar {
+        width:100% !important;
+        margin-left: -55px;
+    }
+}

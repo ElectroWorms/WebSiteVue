@@ -5,92 +5,95 @@
 }
 </style>
 <template>
-    <div>
-        <v-container class="justify-center w-100 mx-2 elevation-0 center pb-1" >
-            <v-card class="w-50 px-5 pb-5">           
-                <v-card-title class="text-subtitle-1">Vincular Cuenta</v-card-title>
-                <v-form ref="form">
-                    <!-- <v-autocomplete v-model="userNameTerapeuta" :items="userNameTerapeutas" label="Ingrese el nombre de usuario de un terapeuta..." :disabled="!stateSelect" :rules="[v => !!v || 'El terapeuta ocupacional es requerido']"  required></v-autocomplete>-->
-                    <v-text-field label="Código de terapeuta" v-model="codigo" :rules="[v => !!v || 'Código es requerido']"  :readonly="!stateSelect"></v-text-field>
-                </v-form>
-                <v-row>
-                    <v-col cols="12" sm="12">
-                        <div class="d-flex flex-column">
-                            <v-btn color="success" class="mt-4" block  :disabled="!activeButton" @click="validate" :loading="loading">
-                                Vincular
-                                <template v-slot:loader>
-                                    <v-progress-circular indeterminate :size="20" :width="2"></v-progress-circular>
-                                    <p style="margin-left: 5px; opacity: 0.5;">Vinculando</p>
-                                </template>
-                            </v-btn>
-                        </div>
-                    </v-col>
-                    <v-col cols="12" sm="12" v-if="showChangeTo">
-                        <div class="d-flex flex-column">
-                            <v-btn color="info" class="mt-4" block @click="changeTo" >
-                                Cambiar Terapeuta Ocupacional
-                            </v-btn>
-                        </div>
-                    </v-col>
-                </v-row>
-
-                <v-card class=" mt-5" v-if="showCard">           
-                    <v-alert
-                        :type="typeAlert"
-                        :text="typeText"
-                        variant="outlined"
-                    ></v-alert>
-                </v-card>
-                
-            </v-card>
-        </v-container>
-    </div>
-
-    <div v-if="showDataTerapeuta">
-        
-        <v-container class=" d-flex justify-start fluid justify-center mb-5 " >
-            <v-card class="w-75 border">
-                <v-card-title class="text-subtitle-1 my-2 px-7 ">Información Terapeuta Ocupacional</v-card-title>
-                <v-card-text class="mt-6">
-                    <v-form>
-                        <v-row class="py-1">
-                            <v-col cols="4" md="4" class="">
-                                <v-row rows="2" class="center">
-                                    <v-img class="border bg-white" max-width="200px" :aspect-ratio="1" :src="getCardImg()" cover></v-img>
-                                </v-row>
-                                <v-row class="center mt-6">
-                                    <p>Foto de Perfil</p>
-                                </v-row>
+    <v-container class="mt-7">
+        <div>
+            <v-row class="justify-center" >
+                <v-col cols="12" sm="12" md="6" lg="6" class="pa-0">
+                    <v-card class=" w-100 px-5 py-5">           
+                        <v-card-title class="text-subtitle-1 text-wrap px-0">Vincular Cuenta</v-card-title>
+                        <v-form ref="form">
+                            <!-- <v-autocomplete v-model="userNameTerapeuta" :items="userNameTerapeutas" label="Ingrese el nombre de usuario de un terapeuta..." :disabled="!stateSelect" :rules="[v => !!v || 'El terapeuta ocupacional es requerido']"  required></v-autocomplete>-->
+                            <v-text-field variant="outlined" label="Código de terapeuta" v-model="codigo" :rules="[v => !!v || 'Código es requerido']"  :readonly="!stateSelect"></v-text-field>
+                        </v-form>
+                        <v-row>
+                            <v-col cols="12" sm="12">
+                                <div class="d-flex flex-column">
+                                    <v-btn color="primary" class="mt-4" block  :disabled="!activeButton" @click="validate" :loading="loading">
+                                        Vincular
+                                        <template v-slot:loader>
+                                            <v-progress-circular indeterminate :size="20" :width="2"></v-progress-circular>
+                                            <p style="margin-left: 5px; opacity: 0.5;">Vinculando</p>
+                                        </template>
+                                    </v-btn>
+                                </div>
                             </v-col>
-                            <v-col cols="8" md="8" class="px-5">
-                                <v-row>
-                                    <v-col cols="6" md="6">         
-                                        <v-text-field
-                                            v-model="terapeutaSolicitud.fullname"
-                                            label="Terapeuta Ocupacional"
-                                            readonly="true"
-                                            variant="plain"
-                                        ></v-text-field>
-                                    </v-col>
-
-                                    <v-col cols="6" md="6">
-                                        <v-text-field
-                                            label="Correo"
-                                            v-model="terapeutaSolicitud.email"
-                                            readonly="true"
-                                            variant="plain"
-                                        ></v-text-field>
-                                    </v-col>
-                                </v-row>
-                            </v-col>   
+                            <v-col cols="12" sm="12" v-if="showChangeTo">
+                                <div class="d-flex flex-column">
+                                    <v-btn color="info" class="mt-4" block @click="changeTo" >
+                                        Cambiar Terapeuta Ocupacional
+                                    </v-btn>
+                                </div>
+                            </v-col>
                         </v-row>
-                        
-                    </v-form>
-                </v-card-text>
-            </v-card>
-        </v-container> 
-    </div>
-        
+
+                        <v-card class=" mt-5" v-if="showCard">           
+                            <v-alert
+                                :type="typeAlert"
+                                :text="typeText"
+                                variant="outlined"
+                            ></v-alert>
+                        </v-card>
+                    
+                    </v-card>
+                </v-col>
+            </v-row>
+        </div>
+
+        <div v-if="showDataTerapeuta">
+            
+            <v-container class=" d-flex justify-start fluid justify-center mb-5 " >
+                <v-card class="w-75 border">
+                    <v-card-title class="text-subtitle-1 my-2 px-7 ">Información Terapeuta Ocupacional</v-card-title>
+                    <v-card-text class="mt-6">
+                        <v-form>
+                            <v-row class="py-1">
+                                <v-col cols="4" md="4" class="">
+                                    <v-row rows="2" class="center">
+                                        <v-img class="border bg-white" max-width="200px" :aspect-ratio="1" :src="getCardImg()" cover></v-img>
+                                    </v-row>
+                                    <v-row class="center mt-6">
+                                        <p>Foto de Perfil</p>
+                                    </v-row>
+                                </v-col>
+                                <v-col cols="8" md="8" class="px-5">
+                                    <v-row>
+                                        <v-col cols="6" md="6">         
+                                            <v-text-field
+                                                v-model="terapeutaSolicitud.fullname"
+                                                label="Terapeuta Ocupacional"
+                                                readonly="true"
+                                                variant="plain"
+                                            ></v-text-field>
+                                        </v-col>
+
+                                        <v-col cols="6" md="6">
+                                            <v-text-field
+                                                label="Correo"
+                                                v-model="terapeutaSolicitud.email"
+                                                readonly="true"
+                                                variant="plain"
+                                            ></v-text-field>
+                                        </v-col>
+                                    </v-row>
+                                </v-col>   
+                            </v-row>
+                            
+                        </v-form>
+                    </v-card-text>
+                </v-card>
+            </v-container> 
+        </div>
+    </v-container>
 
     <v-snackbar v-model="snackbar.active" :timeout="snackbar.timeout" :color="snackbar.color">
         {{ snackbar.text }}
@@ -137,9 +140,9 @@ export default {
 
     methods:{
         async validate () {
-            this.loading = true;
             const { valid } = await this.$refs.form.validate()
             if (valid) {
+                this.loading = true;
                 this.vincular()
             }
         },

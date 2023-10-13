@@ -34,7 +34,7 @@ export default {
         },
         chartOptions: {
             responsive: true,
-            maintainAspectRatio: true,
+            maintainAspectRatio: false,
             plugins: {
                 legend: {
                     display: true,
@@ -87,7 +87,7 @@ export default {
             this.chartData.labels = data.map(x => x.date)
             this.chartData.datasets = [
                 {
-                    label: ['Número de intentos'],
+                    label: ['Tiempo total de juego'],
                     backgroundColor: ['rgba(255, 99, 132, 0.2)'],
                     borderColor: ['rgb(255, 99, 132)'],
                     borderWidth:1,

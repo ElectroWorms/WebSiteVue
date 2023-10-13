@@ -29,15 +29,17 @@
 <template>
     
     <SidePanelUser/>
-    <v-app-bar :elevation="2" class="pl-4">
-        <v-btn @click="back" icon="mdi-arrow-left"></v-btn>
-        Mantenedor de imágenes
+    <v-app-bar :elevation="2" class="pl-0 p-sm-0 p-md-4 p-lg-4 changeAppBar">
+        <v-app-bar-nav-icon variant="text" class="d-md-none" color="primary"></v-app-bar-nav-icon>
+        <v-btn @click="back" icon="mdi-arrow-left" color="blue" class="pl-md-8 pl-lg-8"></v-btn>
+        <v-text class="pl-md-5 pl-lg-5"> Mis imágenes</v-text>
+        <v-spacer></v-spacer>
+        <v-btn class=" pl-4 pr-4" prepend-icon="$plus" variant="flat" size="small"
+            @click="addResourceBtn" color="primary">
+            Agregar Recurso  
+        </v-btn>
     </v-app-bar>
     
-    <v-btn class="add-step-btn pl-4 pr-4" prepend-icon="$plus" 
-        @click="addResourceBtn" color="green">
-        Agregar Recurso 
-    </v-btn>
 
     <!-- Dialogs -->
     <CreateResourceDialog v-model="showDialogNew" @close="handleClose" 
@@ -51,23 +53,19 @@
 
     <v-row class="mt-8 ml-4 mr-4 mb-16">
 
-        <v-col v-for="(resource, index) in resources" :key="index" cols="3" justify="end">
-            <v-card class="pt-2 card-step">
-                <v-img class="" :height="200" :src="resource.url"></v-img>
-
-                <v-card-subtitle class="pt-6"> </v-card-subtitle>
-                <v-card-text>
-                    {{ resource.title }}
-                </v-card-text>
-
+        <v-col v-for="(resource, index) in resources" :key="index" cols="12" sm="6" md="4" lg="3" justify="end">
+            <v-card class="pt-0   text-center" max-width="310px">
+                <v-img class="border" :height="200" width="500" cover :src="resource.url"></v-img>
+                <v-card-subtitle class=" my-6  text-wrap" style="font-size: 16px;"> {{ resource.title }}</v-card-subtitle>
+                <v-divider></v-divider>
                 <v-card-actions class="btn-actions pl-3 pr-3">
-                    <v-btn prepend-icon="$edit" variant="tonal" class="pl-4 pr-4"
-                        @click="editResourceBtn(resource)" color="orange"> 
-                        Editar 
-                    </v-btn>
-                    <v-btn prepend-icon="$delete" variant="tonal" class="pl-4 pr-4"
-                        @click="deleteResourceBtn(resource)" color="red"> 
+                    <v-btn prepend-icon="$delete" variant="text" class="pl-4 pr-4 mx-1" size="small"
+                        @click="deleteResourceBtn(resource)" color="primary"> 
                         Eliminar 
+                    </v-btn>
+                    <v-btn prepend-icon="$edit" variant="flat" class="pl-4 pr-4 mx-1" size="small"
+                        @click="editResourceBtn(resource)" color="primary"> 
+                        Editar 
                     </v-btn>
                 </v-card-actions>
             </v-card>

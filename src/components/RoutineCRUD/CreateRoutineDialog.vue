@@ -6,13 +6,12 @@
 
         <!-- Form Title -->
         <v-card-title class="mt-2">
-          <span class="text-h5">Crear una nueva rutina</span>
+          <span class="text-h5 text-wrap mx-5">Crear una nueva rutina</span>
         </v-card-title>
 
         <!-- Form Inputs -->
         <v-card-text>
-          <v-container>
-          
+          <v-container class="pa-0">
             <v-row class="">
               <v-col cols="12" sm="12">
 
@@ -39,17 +38,17 @@
         </v-card-text>
 
         <!-- Form Actions -->
-        <v-card-actions>
+        <v-card-actions class="ma-4">
           <v-spacer></v-spacer>
           <v-btn
-            color="blue-darken-1"
+            color="primary"
             variant="text"
             @click="closeDialog">
               Cerrar
           </v-btn>
           <v-btn
-            color="blue-darken-1"
-            variant="text"
+            color="primary"
+            variant="flat"
             @click="submitForm">
               Guardar
           </v-btn>

@@ -2,35 +2,33 @@
 
 </style>
 <template>
-    <v-navigation-drawer permanent location="left">
-      <template v-slot:prepend >
-        <v-list-item class="px-10 mt-7" lines="two" :prepend-avatar="profile.avatar" :title="profile.fullname" :subtitle="profile.rol" ></v-list-item>
-      </template>
-      <v-container class="px-0" style="margin-top: 10px">
-        <v-container fluid class="px-0"> 
-          <v-list density="compact" class=" border mx-0" nav >
-              <v-list-item  prepend-icon="mdi-home" title="Home"  :to="{ name: 'Home' }"></v-list-item>
-              <v-divider inset></v-divider>
-              <v-list-item  prepend-icon="mdi-account" title="Mi cuenta"  :to="{ path: '/User/MiCuenta'}"></v-list-item>
-              <v-divider inset></v-divider>
-              <v-list-item  prepend-icon="mdi-account-box-multiple-outline" title="Vincular cuenta"  :to="{ path: '/Vincular' }"></v-list-item>
-              <v-divider inset></v-divider>
-              <v-list-item  prepend-icon="mdi-apps" title="Actividades"  :to="{ name: 'MenuActividades', params: { UserId: userId }}"></v-list-item>
-              <v-divider inset></v-divider>
-              <v-list-item  prepend-icon="mdi-image" title="Mis imágenes" :to="{ path: '/User/Imagenes/' + userId}"></v-list-item>
-              <v-divider inset></v-divider>
-              <v-list-item c prepend-icon="mdi-chart-line" title="Dashboards" :to="{ path: '/User/Dashboard' }"></v-list-item> 
-              <v-divider inset></v-divider>
-              <v-list-item c prepend-icon="mdi-logout" title="Cerrar Sesión" value="/" @click="logout"></v-list-item> 
-          </v-list>
-        </v-container>
-      </v-container> 
-    </v-navigation-drawer>
-    
+
+  <v-navigation-drawer expand-on-hover rail color="primary" style="margin-top: 65px;" class="d-none d-md-flex">
+    <v-list>
+      <v-list-item
+        class="text-wrap"
+        lines="two"
+        :prepend-avatar="profile.avatar"
+        :title="profile.fullname"
+        subtitle="Terapeuta Ocupacional"
+        ></v-list-item>
+      </v-list>
+
+    <v-divider></v-divider>
+    <v-list density="compact" nav>
+      <v-list-item  prepend-icon="mdi-home" title="Home"  :to="{ path: '/Usuarios' }"></v-list-item>
+      <v-list-item  prepend-icon="mdi-account" title="Mi cuenta"  :to="{ path: '/User/MiCuenta'}"></v-list-item>
+      <v-list-item  prepend-icon="mdi-account-box-multiple-outline" title="Vincular cuenta"  :to="{ path: '/Vincular' }"></v-list-item>
+      <v-list-item  prepend-icon="mdi-apps" title="Actividades"  :to="{ name: 'MenuActividades', params: { UserId: userId }}"></v-list-item>
+      <v-list-item  prepend-icon="mdi-image" title="Mis imágenes" :to="{ path: '/User/Imagenes/' + userId}"></v-list-item>
+      <v-list-item c prepend-icon="mdi-chart-line" title="Dashboards" :to="{ path: '/User/Dashboard' }"></v-list-item> 
+      <v-list-item c prepend-icon="mdi-logout" title="Cerrar Sesión" value="/" @click="logout"></v-list-item> 
+    </v-list>
+  </v-navigation-drawer>    
     <!-- dialog de logout -->
     <v-dialog v-model="dialogLogout" max-width="500px">
       <v-card>
-        <v-card-title class="text-h5 text-center">¿Está seguro de cerrar sesión?</v-card-title>
+        <v-card-title class="text-h5 text-center text-wrap">¿Está seguro de cerrar sesión?</v-card-title>
         <v-card-text class="text-center">
           <v-icon size="75" class="mr-2" max-widht="300px" elevation="2"
             fab
@@ -40,8 +38,8 @@
         </v-card-text>
         <v-card-actions class="my-3">
           <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" text @click="logoutConfirm">Aceptar</v-btn>
-          <v-btn color="red darken-1" text @click="logoutCancel">Cancelar</v-btn>
+          <v-btn color="primary" variant="flat" @click="logoutConfirm">Aceptar</v-btn>
+          <v-btn color="primary" text @click="logoutCancel">Cancelar</v-btn>
           <v-spacer></v-spacer>
         </v-card-actions>
       </v-card>
@@ -59,6 +57,7 @@ export default {
     data: () =>({
       model: true,
       userId: store.secondUser._id,
+      dialogLogout: false,
       profile: {
         avatar: getCardImg(store.user.url,store.user.sexo),
         fullname: store.user.fullname || "Usuario",

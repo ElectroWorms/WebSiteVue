@@ -1,76 +1,79 @@
 <template>
-  <v-dialog width="40%">
-    
-    <v-form @submit.prevent ref="form">
-      <v-card class="card">
+  <v-dialog >
+    <v-row class="justify-center">
+      <v-col cols="12" xs="12" sm="12" md="5" lg="5">
+        <v-form @submit.prevent ref="form">
+          <v-card class="card">
 
-        <!-- Form Title -->
-        <v-card-title class="mt-2">
-          <span class="text-h6">Editar recurso: {{ actualResource.title }}</span>
-        </v-card-title>
+            <!-- Form Title -->
+            <v-card-title class="mt-2 text-center text-wrap">
+              <span class="text-h6 text-wrap">Editar recurso: {{ actualResource.title }}</span>
+            </v-card-title>
 
-        <!-- Form Inputs -->
-        <v-card-text>
-          <v-container>
+            <!-- Form Inputs -->
+            <v-card-text>
+              <v-container>
 
-            <p>¿Está seguro de que desea actualizar este recurso?<br>
-            Actualmente se está utilizando en {{ routinesReached }} rutina(s). <br><br>
-            Si lo modifica acá, también se modificará en todas las rutinas que lo usan.</p><br>
-          
-            <v-row class="">
-              <v-col cols="12" sm="12">
+                <p>¿Está seguro de que desea actualizar este recurso?<br>
+                Actualmente se está utilizando en {{ routinesReached }} rutina(s). <br><br>
+                Si lo modifica acá, también se modificará en todas las rutinas que lo usan.</p><br>
+              
+                <v-row class="">
+                  <v-col cols="12" sm="12">
 
-                <!-- Input new image -->
-                <v-file-input
-                  outlined
-                  :rules="newImageRules"
-                  v-model="newImage"
-                  accept="image/png, image/jpeg"
-                  prepend-icon="mdi-camera"
-                  label="Seleccione una nueva imagen"
-                  required>
-                </v-file-input>
+                    <!-- Input new image -->
+                    <v-file-input
+                      outlined
+                      :rules="newImageRules"
+                      v-model="newImage"
+                      accept="image/png, image/jpeg"
+                      prepend-icon="mdi-camera"
+                      label="Seleccione una nueva imagen"
+                      required>
+                    </v-file-input>
 
-                <!-- Input resource name -->
-                <v-text-field
-                  v-model="resourceName"
-                  :rules="resourceNameRules"
-                  label="Nombre del recurso"
-                  placeholder="Ingrese un nombre para el recurso"
-                  required>
-                </v-text-field>
+                    <!-- Input resource name -->
+                    <v-text-field
+                      v-model="resourceName"
+                      :rules="resourceNameRules"
+                      label="Nombre del recurso"
+                      placeholder="Ingrese un nombre para el recurso"
+                      required>
+                    </v-text-field>
 
-              </v-col>
-            </v-row>
+                  </v-col>
+                </v-row>
 
-            <v-row class="">
-              <v-col cols="12" sm="12">
-                
-              </v-col>
-            </v-row>
+                <v-row class="">
+                  <v-col cols="12" sm="12">
+                    
+                  </v-col>
+                </v-row>
 
-          </v-container>
-        </v-card-text>
+              </v-container>
+            </v-card-text>
 
-        <!-- Form Actions -->
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn
-            color="blue-darken-1"
-            variant="text"
-            @click="closeDialog">
-              Cerrar
-          </v-btn>
-          <v-btn
-            color="blue-darken-1"
-            variant="text"
-            @click="submitForm">
-              Guardar
-          </v-btn>
-        </v-card-actions>
+            <!-- Form Actions -->
+            <v-card-actions class="ma-5">
+              <v-spacer></v-spacer>
+              <v-btn
+                color="primary"
+                variant="text"
+                @click="closeDialog">
+                  Cerrar
+              </v-btn>
+              <v-btn
+                color="primary"
+                variant="flat"
+                @click="submitForm">
+                  Guardar
+              </v-btn>
+            </v-card-actions>
 
-      </v-card>
-    </v-form>
+          </v-card>
+        </v-form>
+      </v-col>
+    </v-row>
   </v-dialog>
 </template>
 

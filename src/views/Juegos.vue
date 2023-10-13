@@ -23,7 +23,7 @@
         Listado de Juegos
     </v-app-bar>
     <v-row class="mx-4 mt-2">
-        <v-col v-for="(juego,index) in Juegos" :key="index" xs="12" sm="6" md="4" lg="3" justify="center" aspect-ratio="4/3">
+        <v-col v-for="(juego,index) in Juegos" :key="index" cols="12" sm="6" md="4" lg="3" justify="center" aspect-ratio="4/3">
             <v-card class="card-content" height="400">
                 <v-img class="align-center mt-5 text-white mx-auto" height="250" :src="juego.url" aspect-ratio="1" >             
                 </v-img>
@@ -31,7 +31,7 @@
                 <v-card-subtitle class="pt-4 subtitulo"> {{juego.title}}</v-card-subtitle>
     
                 <v-card-actions>
-                    <v-switch v-model="juego.active" @change="updateGame(juego._id,juego.active,juego.title)" label="Activo" color="success"  hide-details></v-switch>       
+                    <v-switch v-model="juego.active" @change="updateGame(juego._id,juego.active,juego.title)" label="Activo" color="primary"  hide-details></v-switch>       
                 </v-card-actions>
             </v-card>
         </v-col>

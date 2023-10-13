@@ -14,15 +14,34 @@
 .fondoBlanco {
     background-color: white;
 }
+.overflow-dialog-content {
+  max-height: 700px; /* Establece la altura máxima antes de que aparezca la barra de desplazamiento vertical */
+  overflow-y: auto; /* Agrega una barra de desplazamiento vertical si es necesario */
+}
+
+@media (min-width: 1280px) {
+    .changeAppBar {
+        width:100% !important;
+        margin-left: -55px;
+    }
+}
+
 </style>
 <template>
-    <v-app-bar :elevation="2" class="pl-4">        
-		Mis Usuarios
-        <v-spacer></v-spacer>
-        <v-text-field v-model="search" class="fondoBlanco" placeholder="Buscar..." variant="underlined" prepend-icon="mdi-magnify"></v-text-field>
-        <v-spacer></v-spacer>
-        <v-btn color="primary" class="mt-2" @click="dialogCreateUser = true" v-if="isTutor">Crear Cuenta</v-btn>
-	</v-app-bar>
+    <v-app-bar :elevation="2"  class="changeAppBar"> 
+        <v-row align="center" justify="center">
+            <v-col cols="2" >
+                <v-app-bar-nav-icon variant="text" class="d-md-none"></v-app-bar-nav-icon>
+		        <v-text class="pl-md-14 pl-lg-14"> Mis Usuarios </v-text>
+            </v-col>
+            <v-col cols="8" >
+                <v-text-field v-model="search" class="fondoBlanco mt-5" placeholder="Buscar..." variant="outlined" prepend-icon="mdi-magnify" density="compact"></v-text-field>
+            </v-col>
+            <v-col cols="2" class="text-end">
+                <v-btn color="primary" variant="flat" @click="dialogCreateUser = true" v-if="isTutor" class="mr-md-4 mr-lg-4">Crear Cuenta</v-btn>
+            </v-col>
+        </v-row>
+    </v-app-bar>
     <div class="mx-6">  
         <div v-if="users.length" class="w-100 h-100 mx-2 mt-4">
             
@@ -31,7 +50,7 @@
             </v-row>
             <v-row>                    
                 <v-col xs="12" sm="6" md="4" lg="3" v-for="item in users" :key="item._id">      
-                    <v-card class="mx-auto" max-width="100%" style="height: 380px;">
+                    <v-card class="mx-auto" max-width="100%">
                         <v-img :src="getCardImg(item.url,item.sexo)" class="mt-5 mb-5" height="150px" aspect-ratio="1/1"></v-img>
 
                         <v-card-title style="text-align: center;">
@@ -44,15 +63,13 @@
                             </v-chip>
                         </v-card-subtitle>
                         
-                        <v-card-actions class="actions-center">
+                        <v-card-actions class="actions-center mb-3">
                             <v-row>
-                                <v-col cols="12" class="py-0  text-center">
-                                    <v-btn color="orange-lighten-2" variant="text" @click="loadPerfil(item)">
+                                <v-col cols="12" class="py-0  text-center my-3">
+                                    <v-btn color="primary" variant="flat" @click="loadPerfil(item)" size="small">
                                         Ver Perfil
                                     </v-btn>
-                                </v-col>
-                                <v-col cols="12" class="py-0  text-center" v-if="showDelete">
-                                    <v-btn color="red-lighten-2" variant="text" @click="deleteAccount(item)">
+                                    <v-btn color="primary" variant="text"  @click="deleteAccount(item)" size="small">
                                         Eliminar Perfil
                                     </v-btn>
                                 </v-col>
@@ -78,68 +95,73 @@
         </v-row> 
     </div>
     <!-- Dialog para crear usuario -->
-    <v-dialog v-model="dialogCreateUser">
-            <v-card class="w-50 mx-auto px-6 py-5">
-                <v-card-title class="center">
-                    <span class="">Registrar Cuenta</span>
-                </v-card-title>
-                <v-card-text class="mt-6">
-                    <v-form ref="form">
-                        <v-row>
-                            <v-col cols="4" md="4" >
-                                <v-text-field v-model="user.nombre" :rules="[v => !!v || 'Nombre es requerido']" :counter="10" label="Nombre" required variant="underlined"></v-text-field>
-                            </v-col>
-                            <v-col cols="4" md="4">
-                                <v-text-field v-model="user.apellidoPaterno" :rules="[v => !!v || 'Apellido Paterno es requerido']" :counter="10" label="Apellido Paterno" required variant="underlined"></v-text-field>
-                            </v-col>
-                            <v-col cols="4" md="4">
-                                <v-text-field v-model="user.apellidoMaterno" :rules="[v => !!v || 'Apellido Materno es requerido']" :counter="10" label="Apellido Materno" required variant="underlined"></v-text-field>
-                            </v-col>
-                            <v-col cols="4" md="4" >
-                                <v-text-field label="Nombre de usuario" v-model="user.userName" :rules="[v => !!v || 'Nombre de usuario es requerido']" variant="underlined" required></v-text-field>
-                            </v-col> 
-                            <v-col cols="4" md="4" >
-                                <v-text-field label="Correo" v-model="user.email" type="email" :rules="[v => !!v || 'Correo es requerido']" variant="underlined"></v-text-field>
-                            </v-col> 
-                            <v-col cols="4" md="4">
-                                <v-text-field label="Contraseña" v-model="user.password" type="password" :rules="[v => !!v || 'Contraseña es requerido', v => (user.password == user.passwordConfirm) ? true: 'Las Contraseñas no coinciden.']" variant="underlined"></v-text-field>
-                            </v-col>
-                            <v-col cols="4" md="4">
-                                <v-text-field label="Confirmar Contraseña" v-model="user.passwordConfirm" type="password" :rules="[v => !!v || 'Contraseña es requerido', v => (user.password == user.passwordConfirm) ? true: 'Las Contraseñas no coinciden.']" variant="underlined"></v-text-field>
-                            </v-col>
-                            <v-col cols="4" md="4">
-                                <v-text-field label="Edad" v-model="user.edad" variant="underlined" :rules="[v => !!v || 'Campo requerido']"></v-text-field>
-                            </v-col>
-                            <v-col cols="4" md="4">
-                                <v-select label="Nivel de Apoyo" :items= "['Nivel de Apoyo 1','Nivel de Apoyo 2','Nivel de Apoyo 3']" v-model="user.nivelTea" variant="underlined" :rules="[v => !!v || 'Campo requerido']" required></v-select>
-                            </v-col>
-                            <v-col cols="4" md="4">
-                                <v-select label="Sexo" :items="['Masculino','Femenino']" v-model="user.sexo" variant="underlined" :rules="[v => !!v || 'Campo requerido']"></v-select>
-                            </v-col>
-                            <v-col cols="4" md="4" >
-                                <v-text-field label="Rol" :readonly="true" v-model="user.typeAccount" variant="underlined" :rules="[v => !!v || 'Campo requerido']"></v-text-field>
-                            </v-col>
-                        </v-row>
-                    </v-form>
-                </v-card-text>
-                <v-card-text class="px-1">
-                    <v-alert type="info" v-model = "alertError" variant="outlined" text="Se recomienda utilizar el mismo correo y contraseña para todas las cuentas"  ></v-alert>
-                </v-card-text>
-                <v-container class="px-0">
-                    <v-card-actions class="justify-center">
-                        <v-btn color="blue darken-1" variant="tonal" @click="validate" :loading="loading" class="px-5">
-                            Registrar
-                            <template v-slot:loader>
-                                <v-progress-circular indeterminate :size="20" :width="2"></v-progress-circular>
-                                <p style="margin-left: 5px; opacity: 0.5;" >Enviando</p>
-                            </template>
-                        </v-btn>                    
-                        <v-btn color="red darken-1" text variant="tonal" @click="dialogCreateUser = false" class="px-5">
-                            Cancelar
-                        </v-btn>
-                    </v-card-actions>                    
-                </v-container>
-            </v-card>
+    <v-dialog v-model="dialogCreateUser" >
+            <v-row class="justify-center">
+                <v-col cols="12" xs="12" sm="12" md="6" lg="6">
+                    <v-card class=" px-6 py-5 overflow-dialog-content" >
+                        <v-card-title class="center">
+                            <span class="">Registrar Cuenta</span>
+                        </v-card-title>
+                        <v-card-text class="">
+                            <v-form ref="form">
+                                <v-row>
+                                    <v-col cols="12" xs="12" sm="6" md="6" lg="4" >
+                                        <v-text-field v-model="user.nombre" :rules="[v => !!v || 'Nombre es requerido']" :counter="10" label="Nombre" required variant="underlined"></v-text-field>
+                                    </v-col>
+                                    <v-col cols="12" xs="12" sm="6" md="6" lg="4" >
+                                        <v-text-field v-model="user.apellidoPaterno" :rules="[v => !!v || 'Apellido Paterno es requerido']" :counter="10" label="Apellido Paterno" required variant="underlined"></v-text-field>
+                                    </v-col>
+                                    <v-col  cols="12" xs="12" sm="6" md="6" lg="4" >
+                                        <v-text-field v-model="user.apellidoMaterno" :rules="[v => !!v || 'Apellido Materno es requerido']" :counter="10" label="Apellido Materno" required variant="underlined"></v-text-field>
+                                    </v-col>
+                                    <v-col cols="12" xs="12" sm="6" md="6" lg="4" >
+                                        <v-text-field label="Nombre de usuario" v-model="user.userName" :rules="[v => !!v || 'Nombre de usuario es requerido']" variant="underlined" required></v-text-field>
+                                    </v-col> 
+                                    <v-col cols="12" xs="12"  sm="6" md="6" lg="4"  >
+                                        <v-text-field label="Correo" v-model="user.email" type="email" :rules="[v => !!v || 'Correo es requerido']" variant="underlined"></v-text-field>
+                                    </v-col> 
+                                    <v-col cols="12" xs="12"  sm="6" md="6" lg="4" >
+                                        <v-text-field label="Contraseña" v-model="user.password" type="password" :rules="[v => !!v || 'Contraseña es requerido', v => (user.password == user.passwordConfirm) ? true: 'Las Contraseñas no coinciden.']" variant="underlined"></v-text-field>
+                                    </v-col>
+                                    <v-col cols="12" xs="12" sm="6" md="6" lg="4" >
+                                        <v-text-field label="Confirmar Contraseña" v-model="user.passwordConfirm" type="password" :rules="[v => !!v || 'Contraseña es requerido', v => (user.password == user.passwordConfirm) ? true: 'Las Contraseñas no coinciden.']" variant="underlined"></v-text-field>
+                                    </v-col>
+                                    <v-col cols="12" xs="12" sm="6" md="6" lg="4" >
+                                        <v-text-field label="Edad" v-model="user.edad" variant="underlined" :rules="[v => !!v || 'Campo requerido']"></v-text-field>
+                                    </v-col>
+                                    <v-col cols="12" xs="12" sm="6" md="6" lg="4" >
+                                        <v-select label="Nivel de Apoyo" :items= "['Nivel de Apoyo 1','Nivel de Apoyo 2','Nivel de Apoyo 3']" v-model="user.nivelTea" variant="underlined" :rules="[v => !!v || 'Campo requerido']" required></v-select>
+                                    </v-col>
+                                    <v-col cols="12" xs="12" sm="6" md="6" lg="4" >
+                                        <v-select label="Sexo" :items="['Masculino','Femenino']" v-model="user.sexo" variant="underlined" :rules="[v => !!v || 'Campo requerido']"></v-select>
+                                    </v-col>
+                                    <v-col cols="12" xs="12" sm="6" md="6" lg="4"  >
+                                        <v-text-field label="Rol" :readonly="true" v-model="user.typeAccount" variant="underlined" :rules="[v => !!v || 'Campo requerido']"></v-text-field>
+                                    </v-col>
+                                </v-row>
+                            </v-form>
+                        </v-card-text>
+                        <v-card-text class="px-1">
+                            <v-alert type="info" v-model = "alertError" variant="outlined" text="Se recomienda utilizar el mismo correo y contraseña para todas las cuentas"  ></v-alert>
+                        </v-card-text>
+                        <v-container class="px-0">
+                            <v-card-actions class="justify-end">
+                                                  
+                                <v-btn color="primary"  variant="text" @click="dialogCreateUser = false" class="px-5">
+                                    Cancelar
+                                </v-btn>
+                                <v-btn color="primary" variant="flat" @click="validate" :loading="loading" class="px-5">
+                                    Registrar
+                                    <template v-slot:loader>
+                                        <v-progress-circular indeterminate :size="20" :width="2"></v-progress-circular>
+                                        <p style="margin-left: 5px; opacity: 0.5;" >Enviando</p>
+                                    </template>
+                                </v-btn>  
+                            </v-card-actions>                    
+                        </v-container>
+                    </v-card>
+                </v-col>
+            </v-row>
     </v-dialog>    
     <!-- Snackbar notificaciones -->
     <v-snackbar v-model="snackbar.active" :timeout="timeout" :color="snackbar.color">
@@ -154,11 +176,10 @@
     <!-- Estas seguro de eliminar la cuenta -->
     <v-dialog v-model="dialogDelete" max-width="500px">
       <v-card>
-        <v-card-title class="text-h5 text-center">¿Está seguro de eliminar la cuenta?</v-card-title>
+        <v-card-title class="text-h5 text-center text-wrap">¿Está seguro de eliminar la cuenta?</v-card-title>
         <v-card-text class="text-center">
           <v-icon size="75" class="mr-2" max-widht="300px" elevation="2"
             fab
-            color="error"
             >
             mdi-delete
           </v-icon>

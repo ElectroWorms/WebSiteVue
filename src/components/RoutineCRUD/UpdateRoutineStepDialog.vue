@@ -5,8 +5,8 @@
       <v-card>
 
         <!-- Form Title -->
-        <v-card-title class="mt-2">
-          <span class="text-h5">Actualizar el paso en la posición {{ routineStep.posicion }}</span>
+        <v-card-title class="mt-2 text-center">
+          <span class="text-h5 text-wrap ma-5">Actualizar el paso en la posición {{ routineStep.posicion }}</span>
         </v-card-title>
 
         <!-- Form Inputs -->
@@ -81,17 +81,17 @@
         </v-card-text>
 
         <!-- Form Actions -->
-        <v-card-actions>
+        <v-card-actions class="ma-4">
           <v-spacer></v-spacer>
           <v-btn
-            color="blue-darken-1"
+            color="primary"
             variant="text"
             @click="closeDialog">
               Cerrar
           </v-btn>
           <v-btn
-            color="blue-darken-1"
-            variant="text"
+            color="primary"
+            variant="flat"
             @click="submitForm">
               Guardar
           </v-btn>

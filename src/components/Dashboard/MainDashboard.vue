@@ -1,109 +1,60 @@
+<style >
+
+</style>
 <template>
-  <v-container class="bg-white ma-8 px-10 rounded-lg" >
-      <v-card-title class="px-0">
+  <v-container class="pa-0">
+
+  <v-card class="bg-white ma-7 pa-2 pa-sm-2 pa-md-8 pa-lg-8 rounded-lg ">
+      <v-card-title class="px-0 pt-0">
                 <span class="text-h6">Información General</span>
       </v-card-title>
 
       <v-row class="pt-2">
-
-        <v-col cols="4">
-          <v-card color="rgba(54, 162, 235, 0.5)" theme="dark" class="py-6 rounded-lg" style="height: 160px;">
+        <v-col v-for="(game,index) in games" :key="index" cols="12" sm="12" md="6" lg="4">
+          <v-card :color="game.color" theme="dark" class="py-6 rounded-lg" height="200px">
             <v-row align="center" >
-              <v-col cols = "8" class="text-center px-2 pt-0">
-                <v-card-title class="text-h5 text-wrap ">Tiempo total de juego(s)</v-card-title>
+              <v-col cols = "8" class="text-center ">
+                <v-card-title class="text-h5 text-wrap "> {{game.title}} </v-card-title>
                 <v-card-title class="text-h2 text-wrap">
                   <v-progress-circular indeterminate :size="40" :width="2" class="px-10" v-if="!loaded"></v-progress-circular>
-                  {{ totalTime }}
+                  {{ game.numero }}
                 </v-card-title>
               </v-col>
               <v-col cols = "4" class="pl-0">
-                <v-icon icon="mdi-clock-outline" size="x-large" style="color: white; font-size: 80px;"></v-icon>
+                <v-icon :icon="game.icon" size="x-large" style="color: white; font-size: 80px;"></v-icon>
               </v-col>
             </v-row>
           </v-card>
         </v-col>
-
-        <v-col cols="4">
-          <v-card color="rgba(75, 192, 192, 0.5)" theme="dark" class="py-7 rounded-lg" style="height: 160px;">
-            <v-row align="center">
-              <v-col cols = "8" class="text-center px-2 pt-0">
-                <v-card-title class="text-h5 text-wrap ">Partidas búsqueda del tesoro</v-card-title>
-                <v-card-title class="text-h2 text-wrap">
-                  <v-progress-circular indeterminate :size="40" :width="2" class="px-10" v-if="!loaded"></v-progress-circular>
-                  {{ partidasJugadasGame1 }}
-                </v-card-title>
-              </v-col>
-              <v-col cols = "4" class="pl-0">
-                <v-icon icon="mdi-treasure-chest" size="x-large" style="color: white; font-size: 80px;"></v-icon>
-              </v-col>
-            </v-row>
-          </v-card>
-        </v-col>
-
-        
-        <v-col cols="4">
-          <v-card color="rgba(255, 205, 86, 0.5)" theme="dark" class="py-7 rounded-lg" style="height: 160px;">
-            <v-row align="center">
-              <v-col cols = "8" class="text-center px-2 pt-0">
-                <v-card-title class="text-h5 text-wrap ">Partidas vestir al personaje</v-card-title>
-                <v-card-title class="text-h2 text-wrap">
-                  <v-progress-circular indeterminate :size="40" :width="2" class="px-10" v-if="!loaded"></v-progress-circular>
-                  {{ partidasJugadasGame2 }}
-                </v-card-title>
-              </v-col>
-              <v-col cols = "4" class="pl-0">
-                <v-icon icon="mdi-tshirt-crew-outline" size="x-large" style="color: white; font-size: 80px;"></v-icon>
-              </v-col>
-            </v-row>
-          </v-card>
-        </v-col>
-
-        <v-col cols="4">
-          <v-card color="rgba(153, 102, 255, 0.5)" theme="dark" class="py-7 rounded-lg" style="height: 160px;">
-            <v-row align="center">
-              <v-col cols = "8" class="text-center px-2 pt-0">
-                <v-card-title class="text-h5 text-wrap ">Partidas ordenar secuencia</v-card-title>
-                <v-card-title class="text-h2 text-wrap">
-                  <v-progress-circular indeterminate :size="40" :width="2" class="px-10" v-if="!loaded"></v-progress-circular>
-                  {{ partidasJugadasGame3 }}
-                </v-card-title>
-              </v-col>
-              <v-col cols = "4" class="pl-0">
-                <v-icon icon="mdi-sort-numeric-ascending" size="x-large" style="color: white; font-size: 80px;"></v-icon>
-              </v-col>
-            </v-row>
-          </v-card>
-        </v-col>
-        
       </v-row>
-  </v-container>
+  </v-card>
 
-  <v-container class="bg-white ma-8 px-10 rounded-lg" >
+  <v-card class="bg-white ma-7 pa-4 pa-sm-4 pa-md-8 pa-lg-8 rounded-lg " >
     <v-form>
       <v-card-title class="px-0">
                 <span class="text-h6">Filtros Gráficos</span>
       </v-card-title>
       <v-row class="pt-2">
-        <v-col cols="5">
-          <v-autocomplete label="Gráfico" v-model="inputSelectGrafico" :items="itemsGrafico"
+        <v-col cols="12" sm="12" md="5" lg="5" class="pb-0 pb-sm-0 pb-md-1 pb-lg-1">
+          <v-autocomplete label="Gráfico" v-model="inputSelectGrafico" :items="itemsGrafico" variant="outlined"
           ></v-autocomplete>
         </v-col>
-        <v-col cols="5" v-if="activeAutocompleteJuego">
-          <v-autocomplete label="Juego" v-model="inputSelectJuego" :items="itemsJuegos"
+        <v-col cols="12" sm="12" md="5" lg="5" v-if="activeAutocompleteJuego" class="pt-0 pt-sm-0 pt-md-3 pt-lg-3">
+          <v-autocomplete label="Juego" v-model="inputSelectJuego" :items="itemsJuegos" variant="outlined"
           ></v-autocomplete>
         </v-col>
       </v-row>
     </v-form>
-  </v-container>
+  </v-card>
 
-  <v-container class="bg-white ma-8 py-7 rounded-lg d-flex justify-center"  style="height: 500px;">
+  <v-card class="bg-white ma-7 pa-2 pa-sm-2 pa-md-1 pa-lg-1 rounded-lg d-flex justify-center " height="540px">
     <Dashboard1 v-if="boolGrafico1"></Dashboard1>
     <Dashboard2 v-if="boolGrafico2" :juego="juego"></Dashboard2>
     <Dashboard3 v-if="boolGrafico3" :juego="juego"></Dashboard3>
     <Dashboard4 v-if="boolGrafico4"></Dashboard4>
     <Dashboard5 v-if="boolGrafico5" :juego="juego"></Dashboard5>
-  </v-container>
-
+  </v-card>
+</v-container>
 </template>
 <script>
   import axios from 'axios'
@@ -121,12 +72,18 @@
     },
     data: () => ({
       activeAutocompleteJuego: false,
-      inputSelectGrafico: 'Cantidad de intentos en cada juego',
+      inputSelectGrafico: 'Promedio de intentos en cada juego',
       inputSelectJuego: null,
       boolGrafio1: false,
       juego: null,
       boolGrafico1: true, boolGrafico2: false, boolGrafico3: false, boolGrafico4: false, boolGrafico5:false,
       loaded: false,
+      games: [
+        {title:'Tiempo total de juego(s)',numero:'', color:'rgba(54, 162, 235, 0.5)', icon: 'mdi-clock-outline'},
+        {title:'Partidas búsqueda del tesoro',numero:'', color:'rgba(75, 192, 192, 0.5)', icon: 'mdi-treasure-chest'},
+        {title:'Partidas vestir al personaje',numero:'', color:'rgba(255, 205, 86, 0.5)', icon: 'mdi-tshirt-crew-outline'},
+        {title:'Partidas ordenar secuencia',numero:'', color:'rgba(153, 102, 255, 0.5)', icon: 'mdi-sort-numeric-ascending'},
+      ],
       totalTime: '', partidasJugadasGame1: '', partidasJugadasGame2:'', partidasJugadasGame3: '',
       itemsGrafico:
                 [
@@ -149,7 +106,7 @@
       let auxtotalTime, auxPartidas1, auxPartidas2, auxPartidas3;
       auxtotalTime = await getTime(); auxPartidas1= await getTotalGames('busquedatesoro'); auxPartidas2= await getTotalGames('vestirpersonaje'); auxPartidas3= await getTotalGames('ordenarsecuencia')
       this.loaded = true;
-      this.totalTime = auxtotalTime; this.partidasJugadasGame1 = auxPartidas1;  this.partidasJugadasGame2 = auxPartidas2; this.partidasJugadasGame3 = auxPartidas3;
+      this.games[0].numero = auxtotalTime; this.games[1].numero = auxPartidas1;  this.games[2].numero = auxPartidas2; this.games[3].numero = auxPartidas3;
     },
     watch: {
       inputSelectGrafico: function(val, oldVal) {

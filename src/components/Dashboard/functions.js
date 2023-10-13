@@ -5,7 +5,7 @@ async function transformDataGraphic2(game){
     const store = useUserStore();
     const secondUserId = store.secondUser._id;
     let data = [], visited =[]
-    const metrics = (await axios.get(`${config.PathAPI}metricas/${game}/list/${'650a1e7a3ec872301123fdd8'}`)).data.item
+    const metrics = (await axios.get(`${config.PathAPI}metricas/${game}/list/${secondUserId}`)).data.item
     
     // Estructurar la data en fecha(Dia/Mes/Año), tasa de errores
     const metricsDate = metrics.length > 0 ? metrics.map(metrica =>{
@@ -43,7 +43,7 @@ async function transformDataGraphic3(game){
     const store = useUserStore();
     const secondUserId = store.secondUser._id;
     let data = [], visited =[]
-    const metrics = (await axios.get(`${config.PathAPI}metricas/${game}/list/${'650a1e7a3ec872301123fdd8'}`)).data.item
+    const metrics = (await axios.get(`${config.PathAPI}metricas/${game}/list/${secondUserId}`)).data.item
 
     // Estructurar la data fecha(Dia/Mes/Año),tasa de aciertos
     const metricsDate = metrics.length > 0 ? metrics.map(metrica =>{
@@ -81,7 +81,7 @@ async function transformDataGraphic5(game){
     const store = useUserStore();
     const secondUserId = store.secondUser._id;
     let data = [], visited =[]
-    const metrics = (await axios.get(`${config.PathAPI}metricas/${game}/list/${'650a1e7a3ec872301123fdd8'}`)).data.item
+    const metrics = (await axios.get(`${config.PathAPI}metricas/${game}/list/${secondUserId}`)).data.item
 
     // Estructurar la data en fecha(Dia/Mes/Año), tiempojugado
     const metricsDate = metrics.length > 0 ? metrics.map(metrica =>{
@@ -115,8 +115,10 @@ async function transformDataGraphic5(game){
 }
 
 async function getTime(){
-    let urlBusquedaTesoro = `${config.PathAPI}metricas/busquedatesoro/list/${'650a1e7a3ec872301123fdd8'}`
-    let urlVestirPersonaje = `${config.PathAPI}metricas/vestirpersonaje/list/${'650a1e7a3ec872301123fdd8'}`
+    const store = useUserStore();
+    const secondUserId = store.secondUser._id;
+    let urlBusquedaTesoro = `${config.PathAPI}metricas/busquedatesoro/list/${secondUserId}`
+    let urlVestirPersonaje = `${config.PathAPI}metricas/vestirpersonaje/list/${secondUserId}`
     let metricasBusqueda = (await axios.get(urlBusquedaTesoro)).data.item
     let metricasVestir = (await axios.get(urlVestirPersonaje)).data.item
     let sumBusqueda = metricasBusqueda.length > 0 ? (metricasBusqueda.map(metrica => metrica.tiempo_jugado)).reduce((accumulator, currentValue) => accumulator + currentValue, 0) : 0
@@ -126,7 +128,9 @@ async function getTime(){
 }
 
 async function getTotalGames(game){
-    let urlGame = `${config.PathAPI}metricas/${game}/list/${'650a1e7a3ec872301123fdd8'}`
+    const store = useUserStore();
+    const secondUserId = store.secondUser._id;
+    let urlGame = `${config.PathAPI}metricas/${game}/list/${secondUserId}`
     let metrica = (await axios.get(urlGame)).data.item
     return metrica.length
 }

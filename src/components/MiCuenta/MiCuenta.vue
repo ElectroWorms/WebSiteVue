@@ -3,19 +3,20 @@
     display: flex;
     justify-content: center;
 }
+
 </style>
 <template>
-    <div class="mx-5 mt-5 mb-5">
-        <v-card class="w-100 px-5">                
-            <v-card-title class="mt-5">Información de la Cuenta</v-card-title>
+    <div class="mt-5 mb-5">
+        <v-card class="px-5 ">                
+            <v-card-title class="mt-5 text-wrap">Información de la Cuenta</v-card-title>
             <v-card-text class="mt-6">
                 <v-form ref="form">
                     <v-row>                                      
-                        <v-col cols="3" md="3">
+                        <v-col cols="12" sm="12" md="3" lg="3" class="mx-0">
                             <v-row rows="2" class="center">
-                                <v-img class="border bg-white" max-width="200px" :aspect-ratio="1" :src="getCardImg(user)" cover></v-img>
+                                <v-img class=" bg-white" max-width="280px" :aspect-ratio="1" :src="getCardImg(user)" cover></v-img>
                             </v-row>
-                            <v-row class="center mt-6">
+                            <v-row class="center mt-6 mb-1">
                                 <p>Foto de Perfil</p>
                             </v-row>
                             <v-row v-if="editing">
@@ -26,36 +27,36 @@
                                 </v-col>
                             </v-row>
                         </v-col>                  
-                        <v-col cols="9" md="9">
+                        <v-col cols="12" sm="12" md="9" lg="9" class="pa-0">
                             <v-row>
-                                <v-col cols="4" md="4">
+                                <v-col cols="12" sm="4" md="4" lg="4" class="pa-1">
                                     <v-text-field v-model="user.nombre" label="Nombre" :readonly="!editing" :variant="variant"></v-text-field>
                                 </v-col>
-                                <v-col cols="4" md="4">
+                                <v-col cols="12" sm="4" md="4" lg="4" class="pa-1">
                                     <v-text-field v-model="user.apellidoPaterno" label="Apellido Paterno" :readonly="!editing" :variant="variant"></v-text-field>
                                 </v-col>                                    
-                                <v-col cols="4" md="4">
+                                <v-col cols="12" sm="4" md="4" lg="4" class="pa-1">
                                     <v-text-field v-model="user.apellidoMaterno" label="Apellido Materno" :readonly="!editing" :variant="variant"></v-text-field>
                                 </v-col>
-                                <v-col cols="4" md="4">
+                                <v-col cols="12" sm="4" md="4" lg="4" class="pa-1">
                                     <v-text-field label="Nombre de usuario" v-model="user.userName" :readonly="!editing" :variant="variant"></v-text-field>
                                 </v-col>
-                                <v-col cols="4" md="4">
+                                <v-col cols="12" sm="4" md="4" lg="4" class="pa-1">
                                     <v-text-field label="Correo" v-model="user.email" :readonly="!editing" :variant="variant"></v-text-field>
                                 </v-col>
-                                <v-col cols="4" md="4">
+                                <v-col cols="12" sm="4" md="4" lg="4" class="pa-1">
                                         <v-text-field label="Edad" v-model="user.edad" :readonly="!editing" :variant="variant" required></v-text-field>
                                 </v-col>
-                                <v-col cols="4" md="4">
+                                <v-col cols="12" sm="4" md="4" lg="4" class="pa-1">
                                     <v-select label="Sexo" :items="items" v-model="user.sexo" :readonly="!editing" :variant="variant" required></v-select>
                                 </v-col>   
-                                <v-col cols="4" md="4">
+                                <v-col cols="12" sm="4" md="4" lg="4" class="pa-1">
                                     <v-select label="Nivel de Apoyo" :items= "nivelTea" v-model="user.nivelTea" :readonly="!editing" :variant="variant" required></v-select>
                                 </v-col>
-                                <v-col cols="4" md="4">
+                                <v-col cols="12" sm="4" md="4" lg="4" class="pa-1">
                                     <v-text-field label="Tutor" :items="items" v-model="user.tutor" readonly :variant="variant" required></v-text-field>
                                 </v-col>
-                                <v-col cols="4" md="4">
+                                <v-col cols="12" sm="4" md="4" lg="4" class="pa-1">
                                     <v-text-field label="Terapeuta Ocupacional" v-model="user.terapeutaOcupacional" readonly :variant="variant" required></v-text-field>
                                 </v-col>                                 
                             </v-row>
@@ -65,20 +66,20 @@
             </v-card-text>
             <v-card-actions class="mt-5 mb-5" v-if="!hideButtons">
                 <v-spacer></v-spacer>
-                <v-btn color="blue" prepend-icon="mdi-content-save" class="px-10" text variant="tonal" v-if="editing" @click="validateCuenta()" :loading="loading">
+                <v-btn color="primary" prepend-icon="mdi-content-save" class="px-5" text variant="flat" v-if="editing" @click="validateCuenta()" :loading="loading">
                     Enviar
                     <template v-slot:loader>
                         <v-progress-circular indeterminate :size="20" :width="2" ></v-progress-circular>
                         <p style="margin-left: 3px; opacity: 0.5;">Enviando</p>
                     </template>
                 </v-btn>
-                <v-btn color="red" prepend-icon="$delete" variant="tonal" text v-if="editing" @click="actualizar()">
+                <v-btn color="primary" prepend-icon="$delete" variant="text" text v-if="editing" @click="actualizar()">
                     Cancelar
                 </v-btn>                
-                <v-btn color="warning" prepend-icon="$edit" variant="tonal" text v-if="!editing" @click="actualizar()">
+                <v-btn color="primary" prepend-icon="$edit" variant="flat" text v-if="!editing" @click="actualizar()">
                     Editar
                 </v-btn>
-                <v-btn color="red" prepend-icon="$delete" variant="tonal" text v-if="!editing" @click="deleteAccount(user)">
+                <v-btn color="primary" prepend-icon="$delete" variant="text" text v-if="!editing" @click="deleteAccount(user)">
                     Eliminar
                 </v-btn>
             </v-card-actions>   
@@ -96,11 +97,11 @@
 
     <v-dialog v-model="dialogDelete" max-width="500px">
       <v-card>
-        <v-card-title class="text-h5 text-center">¿Está seguro de eliminar la cuenta?</v-card-title>
-        <v-card-text class="text-center">
+        <v-card-title class="text-h5 text-center text-wrap">¿Está seguro de eliminar la cuenta?</v-card-title>
+        <v-card-text class="text-center text-wrap">
           <v-icon size="75" class="mr-2" max-widht="300px" elevation="2"
             fab
-            color="error"
+            
             >
             mdi-delete
           </v-icon>
@@ -155,7 +156,7 @@ export default {
         loading: false,
         editing: false,
         hideButtons: false,
-        variant: "plain",
+        variant: "outlined",
         items: ['Masculino', 'Femenino'],
         nivelTea: ['Nivel de Apoyo 1', 'Nivel de Apoyo 2', 'Nivel de Apoyo 3'],
         user : {
@@ -195,7 +196,7 @@ export default {
             else return (item.sexo == 'Masculino') ? '/img/nino_1.png' : '/img/nina_1.png';
         },
         actualizar() {            
-            this.variant = (this.variant == "plain") ? "outlined" : "plain";
+            this.variant = (this.variant == "outlined") ? "underlined" : "outlined";
             this.editing = !this.editing;
         },
         async validateCuenta () {

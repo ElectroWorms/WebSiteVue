@@ -5,7 +5,7 @@
     <v-card>
 
         <!-- Form Title -->
-        <v-card-title class="mt-2">
+        <v-card-title class="mt-2 text-center">
         <span class="text-h5">Eliminar recurso</span>
         </v-card-title>
 
@@ -27,17 +27,17 @@
         </v-card-text>
 
         <!-- Form Actions -->
-        <v-card-actions>
+        <v-card-actions class="ma-5">
         <v-spacer></v-spacer>
         <v-btn
-            color="blue-darken-1"
+            color="primary"
             variant="text"
             @click="closeDialog">
             Cerrar
         </v-btn>
         <v-btn
-            color="blue-darken-1"
-            variant="text"
+            color="primary"
+            variant="flat"
             @click="submitForm">
             Eliminar
         </v-btn>
