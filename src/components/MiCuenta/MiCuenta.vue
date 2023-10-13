@@ -29,34 +29,34 @@
                         </v-col>                  
                         <v-col cols="12" sm="12" md="9" lg="9" class="pa-0">
                             <v-row>
-                                <v-col cols="12" sm="4" md="4" lg="4" class="pa-1">
+                                <v-col cols="12" sm="4" md="4" lg="4" class="px-4 pa-1">
                                     <v-text-field v-model="user.nombre" label="Nombre" :readonly="!editing" :variant="variant"></v-text-field>
                                 </v-col>
-                                <v-col cols="12" sm="4" md="4" lg="4" class="pa-1">
+                                <v-col cols="12" sm="4" md="4" lg="4" class="px-4 pa-1">
                                     <v-text-field v-model="user.apellidoPaterno" label="Apellido Paterno" :readonly="!editing" :variant="variant"></v-text-field>
                                 </v-col>                                    
-                                <v-col cols="12" sm="4" md="4" lg="4" class="pa-1">
+                                <v-col cols="12" sm="4" md="4" lg="4" class="px-4 pa-1">
                                     <v-text-field v-model="user.apellidoMaterno" label="Apellido Materno" :readonly="!editing" :variant="variant"></v-text-field>
                                 </v-col>
-                                <v-col cols="12" sm="4" md="4" lg="4" class="pa-1">
+                                <v-col cols="12" sm="4" md="4" lg="4" class="px-4 pa-1">
                                     <v-text-field label="Nombre de usuario" v-model="user.userName" :readonly="!editing" :variant="variant"></v-text-field>
                                 </v-col>
-                                <v-col cols="12" sm="4" md="4" lg="4" class="pa-1">
+                                <v-col cols="12" sm="4" md="4" lg="4" class="px-4 pa-1">
                                     <v-text-field label="Correo" v-model="user.email" :readonly="!editing" :variant="variant"></v-text-field>
                                 </v-col>
-                                <v-col cols="12" sm="4" md="4" lg="4" class="pa-1">
+                                <v-col cols="12" sm="4" md="4" lg="4" class="px-4 pa-1">
                                         <v-text-field label="Edad" v-model="user.edad" :readonly="!editing" :variant="variant" required></v-text-field>
                                 </v-col>
-                                <v-col cols="12" sm="4" md="4" lg="4" class="pa-1">
+                                <v-col cols="12" sm="4" md="4" lg="4" class="px-4 pa-1">
                                     <v-select label="Sexo" :items="items" v-model="user.sexo" :readonly="!editing" :variant="variant" required></v-select>
                                 </v-col>   
-                                <v-col cols="12" sm="4" md="4" lg="4" class="pa-1">
+                                <v-col cols="12" sm="4" md="4" lg="4" class="px-4 pa-1">
                                     <v-select label="Nivel de Apoyo" :items= "nivelTea" v-model="user.nivelTea" :readonly="!editing" :variant="variant" required></v-select>
                                 </v-col>
-                                <v-col cols="12" sm="4" md="4" lg="4" class="pa-1">
+                                <v-col cols="12" sm="4" md="4" lg="4" class="px-4 pa-1">
                                     <v-text-field label="Tutor" :items="items" v-model="user.tutor" readonly :variant="variant" required></v-text-field>
                                 </v-col>
-                                <v-col cols="12" sm="4" md="4" lg="4" class="pa-1">
+                                <v-col cols="12" sm="4" md="4" lg="4" class="px-4 pa-1">
                                     <v-text-field label="Terapeuta Ocupacional" v-model="user.terapeutaOcupacional" readonly :variant="variant" required></v-text-field>
                                 </v-col>                                 
                             </v-row>

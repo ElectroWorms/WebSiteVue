@@ -3,11 +3,11 @@
 </style>
 <template>
 
+  <!-- lg divices-->
   <v-navigation-drawer expand-on-hover rail color="primary" style="margin-top: 65px;" class="d-none d-md-flex">
     <v-list>
       <v-list-item
         class="text-wrap"
-        lines="two"
         :prepend-avatar="profile.avatar"
         :title="profile.fullname"
         subtitle="Terapeuta Ocupacional"
@@ -24,7 +24,36 @@
       <v-list-item c prepend-icon="mdi-chart-line" title="Dashboards" :to="{ path: '/User/Dashboard' }"></v-list-item> 
       <v-list-item c prepend-icon="mdi-logout" title="Cerrar Sesión" value="/" @click="logout"></v-list-item> 
     </v-list>
-  </v-navigation-drawer>    
+  </v-navigation-drawer> 
+
+  <!-- xs, ms, md divices-->
+  <v-navigation-drawer
+      v-model="drawer"
+      class="d-flex d-lg-none"
+      color="primary"
+      temporary
+    >
+    <v-list>
+      <v-list-item
+        class="text-wrap"
+        :prepend-avatar="profile.avatar"
+        :title="profile.fullname"
+        subtitle="Terapeuta Ocupacional"
+        ></v-list-item>
+      </v-list>
+
+    <v-divider></v-divider>
+    <v-list density="compact" nav>
+      <v-list-item  prepend-icon="mdi-home" title="Home"  :to="{ path: '/Usuarios' }"></v-list-item>
+      <v-list-item  prepend-icon="mdi-account" title="Mi cuenta"  :to="{ path: '/User/MiCuenta'}"></v-list-item>
+      <v-list-item  prepend-icon="mdi-account-box-multiple-outline" title="Vincular cuenta"  :to="{ path: '/Vincular' }"></v-list-item>
+      <v-list-item  prepend-icon="mdi-apps" title="Actividades"  :to="{ name: 'MenuActividades', params: { UserId: userId }}"></v-list-item>
+      <v-list-item  prepend-icon="mdi-image" title="Mis imágenes" :to="{ path: '/User/Imagenes/' + userId}"></v-list-item>
+      <v-list-item c prepend-icon="mdi-chart-line" title="Dashboards" :to="{ path: '/User/Dashboard' }"></v-list-item> 
+      <v-list-item c prepend-icon="mdi-logout" title="Cerrar Sesión" value="/" @click="logout"></v-list-item> 
+    </v-list>
+  </v-navigation-drawer>
+
     <!-- dialog de logout -->
     <v-dialog v-model="dialogLogout" max-width="500px">
       <v-card>
@@ -58,6 +87,7 @@ export default {
       model: true,
       userId: store.secondUser._id,
       dialogLogout: false,
+      drawer:false,
       profile: {
         avatar: getCardImg(store.user.url,store.user.sexo),
         fullname: store.user.fullname || "Usuario",
@@ -74,6 +104,14 @@ export default {
       logoutCancel(){
         this.dialogLogout = false
       }
+    },
+    mounted(){
+      store.$subscribe((mutation, state) => {
+        let changeBar = mutation.payload.navbarMobile ? true : false
+        if (changeBar){
+          this.drawer = true
+        }
+      })
     }
 }
 </script>

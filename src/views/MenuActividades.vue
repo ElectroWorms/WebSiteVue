@@ -17,12 +17,12 @@
 <template>
     <SidePanelUser/>
     <v-app-bar :elevation="2" class="changeAppBar">
-        <v-app-bar-nav-icon variant="text" class="d-md-none"></v-app-bar-nav-icon>
-        <v-btn @click="back" icon="mdi-arrow-left" color="blue" class="pl-md-5 pl-lg-5"></v-btn>
-        <v-text class="pl-md-5 pl-lg-5"> Menú de Actividades</v-text>
+        <v-app-bar-nav-icon variant="text" class="d-lg-none" @click="showDrawer()"></v-app-bar-nav-icon>
+        <v-btn @click="back" icon="mdi-arrow-left" color="primary" class="ml-md-2 ml-lg-2"></v-btn>
+        <v-text class="pl-md-2 pl-lg-2"> Menú de Actividades</v-text>
     </v-app-bar>
     <v-row class="mx-4 mt-2">
-        <v-col v-for="(act,index) in Actividades" :key="index" xs="12" sm="6" md="4" lg="3"  justify="center" >
+        <v-col v-for="(act,index) in Actividades" :key="index" cols="12" sm="6" md="4" lg="3"  justify="center" >
             <v-card class="card-content pt-5 pb-5 px-5" height="400">
                 <v-img class="align-end text-white mx-auto" height="250" :src="act.url" aspect-ratio="1">             
                 </v-img>
@@ -31,7 +31,7 @@
     
                 <v-card-actions>                    
                     <v-switch style="flex-direction: row-reverse !important"  v-model="act.active" label="Activo" color="primary" @change="updateActivity(act._id,act.active,act.title)" hide-details></v-switch>    
-                    <v-btn color="primary" variant="flat" @click="loadActivity(act._id,act.user)">Detalle</v-btn>
+                    <v-btn color="primary" variant="flat" prepend-icon="mdi-file-search-outline " @click="loadActivity(act._id,act.user)" >Detalle</v-btn>
                 </v-card-actions>
             </v-card>
         </v-col>
@@ -52,6 +52,8 @@ import axios from 'axios';
 import { ref, toRefs,onMounted } from 'vue';
 import config from '../../config.json';
 import router from '@/router';
+import {useUserStore} from '@/store/app'
+const store = useUserStore()
 /*
     Route Params
 */
@@ -67,6 +69,11 @@ const timeout = ref(1000);
 /*
     Funciones
 */
+const showDrawer = () =>{
+    store.$patch({
+            navbarMobile: {active:true}
+    })
+}
 async function updateActivity(actividadId: string, active: boolean ,title: string){
     try {
         await axios.post(config.PathAPI+'actividad/update/',{ ActividadId: actividadId, active: active});

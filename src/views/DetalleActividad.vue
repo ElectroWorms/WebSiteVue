@@ -51,8 +51,8 @@
     
     <SidePanelUser/>
     <v-app-bar :elevation="2" class="changeAppBar">
-        <v-app-bar-nav-icon variant="text" class="d-md-none" color="primary"></v-app-bar-nav-icon>
-        <v-btn @click="back" icon="mdi-arrow-left" color="blue" class="pl-md-5 pl-lg-5"></v-btn>
+        <v-app-bar-nav-icon variant="text" class="d-lg-none" @click="showDrawer()"></v-app-bar-nav-icon>
+        <v-btn @click="back" icon="mdi-arrow-left" color="primary" class="ml-md-8 ml-lg-8"></v-btn>
         <v-text class="pl-md-5 pl-lg-5"> Detalle de la Actividad</v-text>
     </v-app-bar>
 
@@ -132,7 +132,8 @@ import {getActivity, fetchRoutines} from '../functions/activityDetailFunctions'
 import { Routine } from '@/interfaces/Routine';
 import { changeRoutineStatus } from '@/functions/routineFunctions';
 import CreateRoutineDialog from '@/components/RoutineCRUD/CreateRoutineDialog.vue';
-
+import {useUserStore} from '@/store/app'
+const store = useUserStore()
 
 // Route Params
 
@@ -153,6 +154,11 @@ let selectedRoutine = ref<Routine>();
 
 function onChangeSelectedRoutine() {
     console.log("Selected routine:", selectedRoutine.value?._id);
+}
+const showDrawer = () =>{
+    store.$patch({
+            navbarMobile: {active:true}
+    })
 }
 
 async function activateRoutine() {

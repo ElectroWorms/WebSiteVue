@@ -1,10 +1,10 @@
 <template>
-  
+
+    <!-- lg divices-->
     <v-navigation-drawer expand-on-hover rail color="primary" style="margin-top: 65px;" class="d-none d-md-flex">
         <v-list>
           <v-list-item
               class="text-wrap"
-              lines="two"
               :prepend-avatar="profile.avatar"
               :title="profile.fullname"
               subtitle="Tutor"
@@ -18,7 +18,30 @@
           <v-list-item c prepend-icon="mdi-logout" title="Cerrar Sesión" value="/" @click="logout"></v-list-item>  
         </v-list>
     </v-navigation-drawer>
-    <!-- dialog de logout -->
+    
+    <!-- xs, ms, md divices-->
+    <v-navigation-drawer
+        v-model="drawer"
+        class="d-flex d-lg-none"
+        color="primary"
+        temporary
+      >
+      <v-list>
+        <v-list-item
+            class="text-wrap"
+            :prepend-avatar="profile.avatar"
+            :title="profile.fullname"
+            subtitle="Tutor"
+          ></v-list-item>
+        </v-list>
+
+      <v-divider></v-divider>
+      <v-list density="compact" nav>
+        <v-list-item  prepend-icon="mdi-home" title="Home" ></v-list-item>
+        <v-list-item  prepend-icon="mdi-account" title="Mis usuarios"  :to="{ path: '/Usuarios' }"></v-list-item>
+        <v-list-item c prepend-icon="mdi-logout" title="Cerrar Sesión" value="/" @click="logout"></v-list-item>  
+      </v-list>
+    </v-navigation-drawer>
 
     <v-dialog v-model="dialogLogout" max-width="500px">
       <v-card>
@@ -52,6 +75,8 @@ export default {
       userId: store.user._id,
       dialogLogout: false,
       breakpoint:false,
+      drawer:false,
+      myVariable:null,
       profile: {
         avatar: getCardImg(store.user.url,store.user.sexo),
         fullname: store.user.fullname || "Usuario",
@@ -68,6 +93,14 @@ export default {
       logoutCancel(){
         this.dialogLogout = false
       }
+    },
+    mounted(){
+      store.$subscribe((mutation, state) => {
+        let changeBar = mutation.payload.navbarMobile ? true : false
+        if (changeBar){
+          this.drawer = true
+        }
+      })
     }
 }
 </script>

@@ -30,14 +30,11 @@
     
     <SidePanelUser/>
     <v-app-bar :elevation="2" class="pl-0 p-sm-0 p-md-4 p-lg-4 changeAppBar">
-        <v-app-bar-nav-icon variant="text" class="d-md-none" color="primary"></v-app-bar-nav-icon>
-        <v-btn @click="back" icon="mdi-arrow-left" color="blue" class="pl-md-8 pl-lg-8"></v-btn>
-        <v-text class="pl-md-5 pl-lg-5"> Mis imágenes</v-text>
+        <v-app-bar-nav-icon variant="text" class="d-lg-none" @click="showDrawer()"></v-app-bar-nav-icon>
+        <v-btn @click="back" icon="mdi-arrow-left" color="primary" class="ml-md-2 ml-lg-2"></v-btn>
+        <v-text class="pl-md-2 pl-lg-2"> Mis imágenes</v-text>
         <v-spacer></v-spacer>
-        <v-btn class=" pl-4 pr-4" prepend-icon="$plus" variant="flat" size="small"
-            @click="addResourceBtn" color="primary">
-            Agregar Recurso  
-        </v-btn>
+        <v-btn color="primary" variant="flat" @click="addResourceBtn" prepend-icon="mdi-plus" class="pl-7 mr-8 mr-md-0 px-sm-4  mr-md-4 mr-lg-4" > <v-text class="d-none d-sm-flex">Agregar Paso</v-text> </v-btn>
     </v-app-bar>
     
 
@@ -52,9 +49,8 @@
         @deleted="handleDeleteResource" :resource="selectedResource"/>
 
     <v-row class="mt-8 ml-4 mr-4 mb-16">
-
-        <v-col v-for="(resource, index) in resources" :key="index" cols="12" sm="6" md="4" lg="3" justify="end">
-            <v-card class="pt-0   text-center" max-width="310px">
+        <v-col v-for="(resource, index) in resources" :key="index" cols="12" sm="6" md="4" lg="3">
+            <v-card class="pt-0 mx-auto justify-center" max-width="310px">
                 <v-img class="border" :height="200" width="500" cover :src="resource.url"></v-img>
                 <v-card-subtitle class=" my-6  text-wrap" style="font-size: 16px;"> {{ resource.title }}</v-card-subtitle>
                 <v-divider></v-divider>
@@ -83,6 +79,7 @@ import { Resource } from '@/interfaces/Resource';
 import CreateResourceDialog from '@/components/MantenedorImagenes/CreateResourceDialog.vue';
 import UpdateResourceDialog from '@/components/MantenedorImagenes/UpdateResourceDialog.vue';
 import DeleteResourceDialog from '@/components/MantenedorImagenes/DeleteResourceDialog.vue';
+import {useUserStore} from '@/store/app'
 import {
     getAllResources,
     uploadImage,
@@ -94,6 +91,7 @@ import router from '@/router';
 
 const props = defineProps(["userId"]);
 const {userId}: any = toRefs(props);
+const store = useUserStore()
 
 // Variables 
 let resources = ref<Resource[]>();
@@ -117,7 +115,11 @@ onMounted(async () => {
     
     await getUpdatedResources();
 });
-
+const showDrawer = () =>{
+    store.$patch({
+            navbarMobile: {active:true}
+    })
+}
 // function that called to delete a resource
 async function deleteResourceBtn(resource: Resource) {
 

@@ -4,21 +4,25 @@ import { ref, computed, watch } from 'vue'
 import axios from 'axios'
 import config from '../../config.json'
 export const useUserStore = defineStore("app", () => {
-  const user = ref({
-    userName: null,
-    nombre: null,
-    apellidoPaterno: null,
-    apellidoMaterno: null,
-    fechaNacimiento: null,
-    url: null,
-    password: null,
-    confirmPassword: null,
-    email: null,
-    nivelTea: null,
-    edad: null,
-    sexo: null,
-    typeAccount: null,
-}) 
+    const navbarMobile = ref({
+      active:false,
+    })
+
+    const user = ref({
+      userName: null,
+      nombre: null,
+      apellidoPaterno: null,
+      apellidoMaterno: null,
+      fechaNacimiento: null,
+      url: null,
+      password: null,
+      confirmPassword: null,
+      email: null,
+      nivelTea: null,
+      edad: null,
+      sexo: null,
+      typeAccount: null,
+  }) 
 
   const secondUser = ref({
     _id: null,
@@ -37,71 +41,72 @@ export const useUserStore = defineStore("app", () => {
     typeAccount: "Niño",
   }) 
 
-  const vinculacion = ref({
-    estado: null,
-    terapeuta: null,
-    tutor: null,
-    _id: null,
+    const vinculacion = ref({
+      estado: null,
+      terapeuta: null,
+      tutor: null,
+      _id: null,
+    })
+
+    if (localStorage.getItem("user")){
+      user.value = JSON.parse(localStorage.getItem("user"))
+    }
+
+    if (localStorage.getItem("secondUser")){
+      secondUser.value = JSON.parse(localStorage.getItem("secondUser"))
+    }
+
+    const getVinculacion =  async (id) => {
+      var url = `${config.PathAPI}solicitudes/listSolicitud/${id}`
+      await axios.get(url)
+      .then(response => {
+        console.log(response)
+          var _solicitud = response.data.length ? response.data[0] : null
+          vinculacion.value = _solicitud 
+          console.log("valor solicitud", _solicitud)
+      })
+      .catch(error => {
+          console.log(error)
+      })
+    }
+
+    const getTerapeuta = () => {
+      var url = `${config.PathAPI}solicitudes/listSolicitud/${user.value._id}`
+      axios.get(url)
+      .then(response => {
+          var _solicitud = response.data ? response.data[0] : null
+          vinculacion.value = _solicitud 
+          console.log("valor solicitud", vinculacion)
+      })
+      .catch(error => {
+          console.log(error)
+      })
+    } 
+
+    watch(
+      user,
+      (userVal) =>{
+        localStorage.setItem("user", JSON.stringify(userVal))
+      },
+      {deep: true}
+    )
+
+    watch(
+      secondUser,
+      (userVal) =>{
+        localStorage.setItem("secondUser", JSON.stringify(userVal))
+      },
+      {deep: true}
+    )
+    
+    return{
+      user,
+      secondUser,
+      vinculacion,
+      getVinculacion,
+      navbarMobile
+    }
   })
-
-  if (localStorage.getItem("user")){
-    user.value = JSON.parse(localStorage.getItem("user"))
-  }
-
-  if (localStorage.getItem("secondUser")){
-    secondUser.value = JSON.parse(localStorage.getItem("secondUser"))
-  }
-
-  const getVinculacion =  async (id) => {
-    var url = `${config.PathAPI}solicitudes/listSolicitud/${id}`
-    await axios.get(url)
-    .then(response => {
-      console.log(response)
-        var _solicitud = response.data.length ? response.data[0] : null
-        vinculacion.value = _solicitud 
-        console.log("valor solicitud", _solicitud)
-    })
-    .catch(error => {
-        console.log(error)
-    })
-  }
-
-  const getTerapeuta = () => {
-    var url = `${config.PathAPI}solicitudes/listSolicitud/${user.value._id}`
-    axios.get(url)
-    .then(response => {
-        var _solicitud = response.data ? response.data[0] : null
-        vinculacion.value = _solicitud 
-        console.log("valor solicitud", vinculacion)
-    })
-    .catch(error => {
-        console.log(error)
-    })
-  } 
-
-  watch(
-    user,
-    (userVal) =>{
-      localStorage.setItem("user", JSON.stringify(userVal))
-    },
-    {deep: true}
-  )
-
-  watch(
-    secondUser,
-    (userVal) =>{
-      localStorage.setItem("secondUser", JSON.stringify(userVal))
-    },
-    {deep: true}
-  )
-
-  return{
-    user,
-    secondUser,
-    vinculacion,
-    getVinculacion
-  }
-})
 
 /*
 export const useUserStore = defineStore('app', {

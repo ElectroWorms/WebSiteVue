@@ -17,10 +17,10 @@
 </style>
 <template>
     <SidePanelUser />
-    <v-app-bar :elevation="2" class="pl-4">
-        <v-btn @click="showSidebarUser" class="" icon="mdi-menu"></v-btn>
-        <v-btn @click="back" icon="mdi-arrow-left"></v-btn>
-        Listado de Juegos
+    <v-app-bar :elevation="2" class="changeAppBar" >
+        <v-app-bar-nav-icon variant="text" class="d-lg-none" @click="showDrawer()"></v-app-bar-nav-icon>
+        <v-btn @click="back" icon="mdi-arrow-left" color="primary" class="ml-md-2 ml-lg-2"></v-btn>
+        <v-text class="pl-md-2 pl-lg-2"> Listado de Juegos</v-text>
     </v-app-bar>
     <v-row class="mx-4 mt-2">
         <v-col v-for="(juego,index) in Juegos" :key="index" cols="12" sm="6" md="4" lg="3" justify="center" aspect-ratio="4/3">
@@ -52,6 +52,8 @@ import axios from 'axios';
 import { ref, toRefs,onMounted, reactive } from 'vue'
 import config from '../../config.json'
 import router from '@/router'
+import {useUserStore} from '@/store/app'
+const store = useUserStore()
 /*
     Route Params
 */
@@ -104,6 +106,11 @@ async function getGames(){
 function showSidebarUser() {
     console.log("show sidebar user")
     sidebarExpandido.value = !sidebarExpandido.value;
+}
+const showDrawer = () =>{
+    store.$patch({
+            navbarMobile: {active:true}
+    })
 }
 const Juegos:any = ref([]);
 onMounted(async () => {

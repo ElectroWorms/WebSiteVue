@@ -12,8 +12,8 @@
 <template>
     <v-container class="fill-height">
         <v-responsive class="mt-12 fill-height">
-        <v-card class="w-50  mx-auto px-6 py-5 form" style="height:500px;">
-            <v-card-title class="justify-center mt-2">
+        <v-card class="mx-auto px-6 py-5 form" style="height:500px;">
+            <v-card-title class="justify-center mt-2 text-center">
                 <span class="text-h5">Iniciar Sesión</span>
             </v-card-title>
             <v-card-text class="mt-6">

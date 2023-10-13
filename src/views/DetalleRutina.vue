@@ -31,16 +31,11 @@
     
     <SidePanelUser/>
     <v-app-bar :elevation="2" class="pl-0 p-sm-0 p-md-4 p-lg-4 changeAppBar">
-        <v-app-bar-nav-icon variant="text" class="d-md-none" color="primary"></v-app-bar-nav-icon>
-        <v-btn @click="back" icon="mdi-arrow-left" color="blue" class="pl-md-5 pl-lg-5"></v-btn>
-        <v-text class="pl-md-5 pl-lg-5"> Detalle de la Rutina</v-text>
+        <v-app-bar-nav-icon variant="text" class="d-lg-none" @click="showDrawer()"></v-app-bar-nav-icon>
+        <v-btn @click="back" icon="mdi-arrow-left" color="primary" class="ml-md-2 ml-lg-2"></v-btn>
+        <v-text class="px-2 text-center"> Detalle de la Rutina: {{ routine?.title }}</v-text>
         <v-spacer></v-spacer>
-        <p class="text-h6">{{ routine?.title }}</p>
-        <v-spacer></v-spacer>
-        <v-btn class=" pl-4 pr-4" prepend-icon="$plus" variant="flat" 
-            @click="addRoutineStepBtn" color="primary">
-            Agregar Paso 
-        </v-btn>
+        <v-btn color="primary" variant="flat" @click="addRoutineStepBtn" prepend-icon="mdi-plus" class="pl-7 px-sm-4  mr-md-4 mr-lg-4" > <v-text class="d-none d-sm-flex">Agregar Paso</v-text> </v-btn>
     </v-app-bar>
     
     
@@ -54,14 +49,13 @@
         @update-step="handleUpdateStep" :routine="routine!" :user="userId" :routineStep="selectedRoutineStep"/>
 
 
-    <v-row class="mt-5 ml-4 mr-4">
-
-        <v-col v-for="(routineStep, index) in routine?.steps" :key="index" cols="12" sm="6" md="4" lg="3" justify="end">
-            <v-card class="pt-0  " max-width="310px">
+    <v-row class="mt-5 mx-auto justify-center" >
+        <v-col v-for="(routineStep, index) in routine?.steps" :key="index" cols="12" sm="6" md="4" lg="3" >
+            <v-card class="pt-0 mx-auto justify-center" max-width="310px">
                 <v-img class="border" :height="200" width="500" :src="routineStep.recursoItem.url" cover></v-img>
 
                 <v-card-subtitle class="pt-6"> Paso de Rutina {{ index + 1 }} </v-card-subtitle>
-                <v-card-text>
+                <v-card-text class="text-center">
                     {{ routineStep.recursoItem.title }}
                 </v-card-text>
                 <v-divider></v-divider>
@@ -93,7 +87,8 @@ import router from '@/router'
 import { Routine, Step } from '../interfaces/Routine';
 import { getRoutineByActivityId } from '../functions/routineFunctions';
 import { deleteRoutineStep, updateRoutineStep } from '@/functions/routineStepFunctions';
-
+import {useUserStore} from '@/store/app'
+const store = useUserStore()
 
 // Route Params
 
@@ -113,6 +108,12 @@ async function getUpdatedRoutine() {
     let routineResp = await getRoutineByActivityId(activityId.value);
     routineResp = routineResp.item[0];
     routine.value = routineResp;
+}
+
+const showDrawer = () =>{
+    store.$patch({
+            navbarMobile: {active:true}
+    })
 }
 
 onMounted(async () => {
