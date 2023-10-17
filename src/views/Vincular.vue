@@ -12,8 +12,15 @@
   
   <v-app-bar :elevation="2" class="changeAppBar">
     <v-app-bar-nav-icon variant="text" class="d-lg-none" @click="showDrawer()"></v-app-bar-nav-icon>
-    <v-btn @click="back" icon="mdi-arrow-left" color="primary" class="ml-md-2 ml-lg-2"></v-btn>
-		<v-text class="pl-md-2 pl-lg-2"> Vincular Cuenta</v-text>
+    <v-btn @click="back" icon="mdi-arrow-left" color="primary" class="ml-md-9"></v-btn>
+		<span  class="d-none d-md-flex"  style="width: 95px; padding-left: 0px; margin-left: -15px;">
+            <v-img
+                class="d-none d-md-flex pl-0"
+                src="../../../public/img/Logo-Oficial 1.png"
+                width="auto"     
+            />
+        </span>
+        <v-text class="mb-md-1"> Vincular Cuenta</v-text>
   </v-app-bar>
   
   <FormVincular/>

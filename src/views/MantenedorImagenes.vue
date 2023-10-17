@@ -31,10 +31,17 @@
     <SidePanelUser/>
     <v-app-bar :elevation="2" class="pl-0 p-sm-0 p-md-4 p-lg-4 changeAppBar">
         <v-app-bar-nav-icon variant="text" class="d-lg-none" @click="showDrawer()"></v-app-bar-nav-icon>
-        <v-btn @click="back" icon="mdi-arrow-left" color="primary" class="ml-md-2 ml-lg-2"></v-btn>
-        <v-text class="pl-md-2 pl-lg-2"> Mis imágenes</v-text>
+        <v-btn @click="back" icon="mdi-arrow-left" color="primary" class="ml-md-9"></v-btn>
+		<span  class="d-none d-md-flex"  style="width: 95px; padding-left: 0px; margin-left: -15px;">
+            <v-img
+                class="d-none d-md-flex pl-0"
+                src="../../../public/img/Logo-Oficial 1.png"
+                width="auto"     
+            />
+        </span>
+        <v-text class="mb-md-1"> Mis imágenes</v-text>
         <v-spacer></v-spacer>
-        <v-btn color="primary" variant="flat" @click="addResourceBtn" prepend-icon="mdi-plus" class="pl-7 mr-8 mr-md-0 px-sm-4  mr-md-4 mr-lg-4" > <v-text class="d-none d-sm-flex">Agregar Paso</v-text> </v-btn>
+        <v-btn color="primary" variant="flat" @click="addResourceBtn" prepend-icon="mdi-plus" class="pl-7 mr-8 mr-md-0 px-sm-4  mr-md-4 mr-lg-4" > <v-text class="d-none d-sm-flex">Agregar Imágen</v-text> </v-btn>
     </v-app-bar>
     
 
@@ -48,20 +55,20 @@
     <DeleteResourceDialog v-model="showDialogDelete" @close="handleClose" 
         @deleted="handleDeleteResource" :resource="selectedResource"/>
 
-    <v-row class="mt-5 mx-3 mb-16">
+    <v-row class="mt-5 mx-2 mx-md-5 mb-16">
         <v-col v-for="(resource, index) in resources" :key="index" cols="12" sm="6" md="4" lg="3">
             <v-card class="mx-auto" max-width="100%" height="400">
                 <v-img class="border" :height="270" width="500" cover :src="resource.url"></v-img>
                 <v-card-subtitle class=" my-6  text-wrap" style="font-size: 16px;"> {{ resource.title }}</v-card-subtitle>
                 <v-divider></v-divider>
-                <v-card-actions class="btn-actions pl-3 pr-3">
-                    <v-btn prepend-icon="$delete" variant="text" class="pl-4 pr-4 mx-1" size="small"
-                        @click="deleteResourceBtn(resource)" color="primary"> 
-                        Eliminar 
-                    </v-btn>
+                <v-card-actions class="justify-center">
                     <v-btn prepend-icon="$edit" variant="flat" class="pl-4 pr-4 mx-1" size="small"
                         @click="editResourceBtn(resource)" color="primary"> 
                         Editar 
+                    </v-btn>
+                    <v-btn prepend-icon="$delete" variant="outlined" class="pl-4 pr-4 mx-1" size="small"
+                        @click="deleteResourceBtn(resource)" color="primary"> 
+                        Eliminar 
                     </v-btn>
                 </v-card-actions>
             </v-card>

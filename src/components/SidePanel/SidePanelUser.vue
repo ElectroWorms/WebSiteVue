@@ -68,7 +68,7 @@
         <v-card-actions class="my-3">
           <v-spacer></v-spacer>
           <v-btn color="primary" variant="flat" @click="logoutConfirm">Aceptar</v-btn>
-          <v-btn color="primary" text @click="logoutCancel">Cancelar</v-btn>
+          <v-btn color="primary" variant="outlined" @click="logoutCancel">Cancelar</v-btn>
           <v-spacer></v-spacer>
         </v-card-actions>
       </v-card>

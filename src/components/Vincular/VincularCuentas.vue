@@ -8,7 +8,7 @@
     <v-container class="mt-7">
         <div>
             <v-row class="justify-center mx-1" >
-                <v-col cols="12" sm="12" md="6" lg="6" class="pa-0">
+                <v-col cols="12" sm="12" md="" lg="5" class="pa-0">
                     <v-card class=" w-100 px-5 py-5">           
                         <v-card-title class="text-subtitle-1 text-wrap px-0">Vincular Cuenta</v-card-title>
                         <v-form ref="form">

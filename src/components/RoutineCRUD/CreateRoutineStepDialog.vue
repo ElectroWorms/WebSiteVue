@@ -84,7 +84,7 @@
           <v-spacer></v-spacer>
           <v-btn
             color="primary"
-            variant="text"
+            variant="outlined"
             @click="closeDialog">
               Cerrar
           </v-btn>

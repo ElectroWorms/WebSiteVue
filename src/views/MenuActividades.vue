@@ -18,10 +18,17 @@
     <SidePanelUser/>
     <v-app-bar :elevation="2" class="changeAppBar">
         <v-app-bar-nav-icon variant="text" class="d-lg-none" @click="showDrawer()"></v-app-bar-nav-icon>
-        <v-btn @click="back" icon="mdi-arrow-left" color="primary" class="ml-md-2 ml-lg-2"></v-btn>
-        <v-text class="pl-md-2 pl-lg-2"> Menú de Actividades</v-text>
+        <v-btn @click="back" icon="mdi-arrow-left" color="primary" class="ml-md-9"></v-btn>
+		<span class="d-none d-md-flex"  style="width: 95px; padding-left: 0px; margin-left: -15px;">
+            <v-img
+                src="../../../public/img/Logo-Oficial 1.png"
+                width="auto"     
+            />
+        </span>
+        <v-text class="mb-md-1"> Menú de Actividades</v-text>
+        
     </v-app-bar>
-    <v-row class="mx-4 mt-2">
+    <v-row class="mx-2 mx-md-3 mt-2">
         <v-col v-for="(act,index) in Actividades" :key="index" cols="12" sm="6" md="4" lg="3"  justify="center" >
             <v-card class="card-content pt-5 pb-5 px-5" height="400">
                 <v-img class="align-end text-white mx-auto" height="250" :src="act.url" aspect-ratio="1">             

@@ -2,58 +2,67 @@
 
 </style>
 <template>
-  <v-container class="pa-0">
+  <v-container class="pa-0" >
+  <v-row class="justify-center">
+      <v-col cols="12" sm="12" md="10" lg="12">
+        <v-card class="bg-white mx-7 mt-5 pa-2 pa-sm-2 pa-md-8 pa-lg-8 rounded-lg ">
+          <v-card-title class="px-0 pt-0">
+                    <span class="text-h6">Información General</span>
+          </v-card-title>
+          <v-row class="pt-2">
+            <v-col v-for="(game,index) in games" :key="index" cols="12" sm="12" md="6" lg="4">
+              <v-card :color="game.color" theme="dark" class="py-6 rounded-lg" height="200px">
+                <v-row align="center" >
+                  <v-col cols = "8" class="text-center ">
+                    <v-card-title class="text-h5 text-wrap "> {{game.title}} </v-card-title>
+                    <v-card-title class="text-h2 text-wrap">
+                      <v-progress-circular indeterminate :size="40" :width="2" class="px-10" v-if="!loaded"></v-progress-circular>
+                      {{ game.numero }}
+                    </v-card-title>
+                  </v-col>
+                  <v-col cols = "4" class="pl-0">
+                    <v-icon :icon="game.icon" size="x-large" style="color: white; font-size: 80px;"></v-icon>
+                  </v-col>
+                </v-row>
+              </v-card>
+            </v-col>
+          </v-row>
+      </v-card>
+    </v-col>
+    </v-row>
 
-  <v-card class="bg-white ma-7 pa-2 pa-sm-2 pa-md-8 pa-lg-8 rounded-lg ">
-      <v-card-title class="px-0 pt-0">
-                <span class="text-h6">Información General</span>
-      </v-card-title>
-
-      <v-row class="pt-2">
-        <v-col v-for="(game,index) in games" :key="index" cols="12" sm="12" md="6" lg="4">
-          <v-card :color="game.color" theme="dark" class="py-6 rounded-lg" height="200px">
-            <v-row align="center" >
-              <v-col cols = "8" class="text-center ">
-                <v-card-title class="text-h5 text-wrap "> {{game.title}} </v-card-title>
-                <v-card-title class="text-h2 text-wrap">
-                  <v-progress-circular indeterminate :size="40" :width="2" class="px-10" v-if="!loaded"></v-progress-circular>
-                  {{ game.numero }}
-                </v-card-title>
-              </v-col>
-              <v-col cols = "4" class="pl-0">
-                <v-icon :icon="game.icon" size="x-large" style="color: white; font-size: 80px;"></v-icon>
-              </v-col>
-            </v-row>
-          </v-card>
-        </v-col>
-      </v-row>
-  </v-card>
-
-  <v-card class="bg-white ma-7 pa-4 pa-sm-4 pa-md-8 pa-lg-8 rounded-lg " >
-    <v-form>
-      <v-card-title class="px-0">
-                <span class="text-h6">Filtros Gráficos</span>
-      </v-card-title>
-      <v-row class="pt-2">
-        <v-col cols="12" sm="12" md="5" lg="5" class="pb-0 pb-sm-0 pb-md-1 pb-lg-1">
-          <v-autocomplete label="Gráfico" v-model="inputSelectGrafico" :items="itemsGrafico" variant="outlined"
-          ></v-autocomplete>
-        </v-col>
-        <v-col cols="12" sm="12" md="5" lg="5" v-if="activeAutocompleteJuego" class="pt-0 pt-sm-0 pt-md-3 pt-lg-3">
-          <v-autocomplete label="Juego" v-model="inputSelectJuego" :items="itemsJuegos" variant="outlined"
-          ></v-autocomplete>
-        </v-col>
-      </v-row>
-    </v-form>
-  </v-card>
-
-  <v-card class="bg-white ma-7 pa-2 pa-sm-2 pa-md-1 pa-lg-1 rounded-lg d-flex justify-center " height="540px">
-    <Dashboard1 v-if="boolGrafico1"></Dashboard1>
-    <Dashboard2 v-if="boolGrafico2" :juego="juego"></Dashboard2>
-    <Dashboard3 v-if="boolGrafico3" :juego="juego"></Dashboard3>
-    <Dashboard4 v-if="boolGrafico4"></Dashboard4>
-    <Dashboard5 v-if="boolGrafico5" :juego="juego"></Dashboard5>
-  </v-card>
+    <v-row class="justify-center">
+    <v-col cols="12" sm="12" md="12" lg="12">
+      <v-card class="bg-white mx-7  pa-4 pa-sm-4 pa-md-8 pa-lg-8 rounded-lg " >
+        <v-form>
+          <v-card-title class="px-0">
+                    <span class="text-h6">Filtros Gráficos</span>
+          </v-card-title>
+          <v-row class="pt-2">
+            <v-col cols="12" sm="12" md="5" lg="5" class="pb-0 pb-sm-0 pb-md-1 pb-lg-1">
+              <v-autocomplete label="Gráfico" v-model="inputSelectGrafico" :items="itemsGrafico" variant="outlined"
+              ></v-autocomplete>
+            </v-col>
+            <v-col cols="12" sm="12" md="5" lg="5" v-if="activeAutocompleteJuego" class="pt-0 pt-sm-0 pt-md-3 pt-lg-3">
+              <v-autocomplete label="Juego" v-model="inputSelectJuego" :items="itemsJuegos" variant="outlined"
+              ></v-autocomplete>
+            </v-col>
+          </v-row>
+        </v-form>
+      </v-card>
+    </v-col>
+  </v-row>
+  <v-row class="justify-center">
+    <v-col cols="12" sm="12" md="12" lg="12">
+      <v-card class="bg-white mx-7  pa-2 pa-sm-2 pa-md-1 pa-lg-1 rounded-lg d-flex justify-center " height="540px">
+        <Dashboard1 v-if="boolGrafico1"></Dashboard1>
+        <Dashboard2 v-if="boolGrafico2" :juego="juego"></Dashboard2>
+        <Dashboard3 v-if="boolGrafico3" :juego="juego"></Dashboard3>
+        <Dashboard4 v-if="boolGrafico4"></Dashboard4>
+        <Dashboard5 v-if="boolGrafico5" :juego="juego"></Dashboard5>
+      </v-card>
+    </v-col>
+  </v-row>
 </v-container>
 </template>
 <script>

@@ -32,8 +32,14 @@
     <SidePanelUser/>
     <v-app-bar :elevation="2" class="pl-0 p-sm-0 p-md-4 p-lg-4 changeAppBar">
         <v-app-bar-nav-icon variant="text" class="d-lg-none" @click="showDrawer()"></v-app-bar-nav-icon>
-        <v-btn @click="back" icon="mdi-arrow-left" color="primary" class="ml-md-2 ml-lg-2"></v-btn>
-        <v-text class="px-1 text-center"> Detalle de la Rutina: {{ routine?.title }}</v-text>
+        <v-btn @click="back" icon="mdi-arrow-left" color="primary" class="ml-md-9"></v-btn>
+		<span class="d-none d-md-flex"  style="width: 95px; padding-left: 0px; margin-left: -15px;">
+            <v-img
+                src="../../../public/img/Logo-Oficial 1.png"
+                width="auto"     
+            />
+        </span>
+        <v-text class="px-2 "> Detalle de la Rutina: {{ routine?.title }}</v-text>
         <v-spacer></v-spacer>
         <v-btn color="primary" variant="flat" @click="addRoutineStepBtn" prepend-icon="mdi-plus" class="pl-7 px-sm-4  mr-md-4 mr-lg-4" > <v-text class="d-none d-sm-flex">Agregar Paso</v-text> </v-btn>
     </v-app-bar>
@@ -49,7 +55,7 @@
         @update-step="handleUpdateStep" :routine="routine!" :user="userId" :routineStep="selectedRoutineStep"/>
 
 
-    <v-row class="mt-5 mx-3 justify-center" >
+    <v-row class="mt-5 mx-2 mx-md-3 justify-center" >
         <v-col v-for="(routineStep, index) in routine?.steps" :key="index" cols="12" sm="6" md="4" lg="3" >
             <v-card class="mx-auto" max-width="100%"  height="400">
                 <v-img class="border" :height="250" width="500" :src="routineStep.recursoItem.url" cover></v-img>
@@ -64,7 +70,7 @@
                         @click="editRoutineStepBtn(routineStep)" color="primary" > 
                         Editar 
                     </v-btn>
-                    <v-btn prepend-icon="$delete" variant="text" class="pl-4 pr-4 mx-1" size="small"
+                    <v-btn prepend-icon="$delete" variant="outlined" class="pl-4 pr-4 mx-1" size="small"
                         @click="deleteRoutineStepBtn(routineStep)" color="primary"> 
                         Eliminar 
                     </v-btn>

@@ -7,83 +7,87 @@
 </style>
 <template>
     <div class="mt-5 mb-5">
-        <v-card class="px-5 ">                
-            <v-card-title class="mt-5 text-wrap">Información de la Cuenta</v-card-title>
-            <v-card-text class="mt-6">
-                <v-form ref="form">
-                    <v-row>                                      
-                        <v-col cols="12" sm="12" md="3" lg="3" class="mx-0">
-                            <v-row rows="2" class="center">
-                                <v-img class=" bg-white" max-width="200px" :aspect-ratio="1" :src="getCardImg(user)" cover></v-img>
-                            </v-row>
-                            <v-row class="center mt-6 mb-1">
-                                <p>Foto de Perfil</p>
-                            </v-row>
-                            <v-row v-if="editing">
-                                <v-col align-self="center">
-                                    <v-sheet class="pa-2 ma-2">
-                                        <v-file-input v-model="file" :rules="rules" accept="image/png, image/jpeg, image/jpg" label="Cambiar foto de perfil" prepend-icon="mdi-camera" :readonly="!editing" :variant="variant"></v-file-input>
-                                    </v-sheet>
-                                </v-col>
-                            </v-row>
-                        </v-col>                  
-                        <v-col cols="12" sm="12" md="9" lg="9" class="pa-0">
-                            <v-row>
-                                <v-col cols="12" sm="4" md="4" lg="4" class="px-4 pa-1">
-                                    <v-text-field v-model="user.nombre" label="Nombre" :readonly="!editing" :variant="variant"></v-text-field>
-                                </v-col>
-                                <v-col cols="12" sm="4" md="4" lg="4" class="px-4 pa-1">
-                                    <v-text-field v-model="user.apellidoPaterno" label="Apellido Paterno" :readonly="!editing" :variant="variant"></v-text-field>
-                                </v-col>                                    
-                                <v-col cols="12" sm="4" md="4" lg="4" class="px-4 pa-1">
-                                    <v-text-field v-model="user.apellidoMaterno" label="Apellido Materno" :readonly="!editing" :variant="variant"></v-text-field>
-                                </v-col>
-                                <v-col cols="12" sm="4" md="4" lg="4" class="px-4 pa-1">
-                                    <v-text-field label="Nombre de usuario" v-model="user.userName" :readonly="!editing" :variant="variant"></v-text-field>
-                                </v-col>
-                                <v-col cols="12" sm="4" md="4" lg="4" class="px-4 pa-1">
-                                    <v-text-field label="Correo" v-model="user.email" :readonly="!editing" :variant="variant"></v-text-field>
-                                </v-col>
-                                <v-col cols="12" sm="4" md="4" lg="4" class="px-4 pa-1">
-                                        <v-text-field label="Edad" v-model="user.edad" :readonly="!editing" :variant="variant" required></v-text-field>
-                                </v-col>
-                                <v-col cols="12" sm="4" md="4" lg="4" class="px-4 pa-1">
-                                    <v-select label="Sexo" :items="items" v-model="user.sexo" :readonly="!editing" :variant="variant" required></v-select>
-                                </v-col>   
-                                <v-col cols="12" sm="4" md="4" lg="4" class="px-4 pa-1">
-                                    <v-select label="Nivel de Apoyo" :items= "nivelTea" v-model="user.nivelTea" :readonly="!editing" :variant="variant" required></v-select>
-                                </v-col>
-                                <v-col cols="12" sm="4" md="4" lg="4" class="px-4 pa-1">
-                                    <v-text-field label="Tutor" :items="items" v-model="user.tutor" readonly :variant="variant" required></v-text-field>
-                                </v-col>
-                                <v-col cols="12" sm="4" md="4" lg="4" class="px-4 pa-1">
-                                    <v-text-field label="Terapeuta Ocupacional" v-model="user.terapeutaOcupacional" readonly :variant="variant" required></v-text-field>
-                                </v-col>                                 
-                            </v-row>
-                        </v-col>
-                    </v-row>          
-                </v-form>
-            </v-card-text>
-            <v-card-actions class="mt-5 mb-5" v-if="!hideButtons">
-                <v-spacer></v-spacer>
-                <v-btn color="primary" prepend-icon="mdi-content-save" class="px-5" text variant="flat" v-if="editing" @click="validateCuenta()" :loading="loading">
-                    Enviar
-                    <template v-slot:loader>
-                        <v-progress-circular indeterminate :size="20" :width="2" ></v-progress-circular>
-                        <p style="margin-left: 3px; opacity: 0.5;">Enviando</p>
-                    </template>
-                </v-btn>
-                <v-btn color="primary" prepend-icon="$delete" variant="text" text v-if="editing" @click="actualizar()">
-                    Cancelar
-                </v-btn>                
-                <v-btn color="primary" prepend-icon="$edit" variant="flat" text v-if="!editing" @click="actualizar()">
-                    Editar
-                </v-btn>
-                <v-btn color="primary" prepend-icon="$delete" variant="text" text v-if="!editing" @click="deleteAccount(user)">
-                    Eliminar
-                </v-btn>
-            </v-card-actions>   
-        </v-card>
+        <v-row class="justify-center mx-1" >
+                <v-col cols="12" sm="12" md="10" lg="11" class="pa-0">
+                    <v-card class="px-5">                
+                        <v-card-title class="mt-5 text-wrap">Información de la Cuenta</v-card-title>
+                        <v-card-text class="mt-6">
+                            <v-form ref="form">
+                                <v-row>                                      
+                                    <v-col cols="12" sm="12" md="3" lg="3" class="mx-0">
+                                        <v-row rows="2" class="center">
+                                            <v-img class=" bg-white" max-width="200px" :aspect-ratio="1" :src="getCardImg(user)" cover></v-img>
+                                        </v-row>
+                                        <v-row class="center mt-6 mb-1">
+                                            <p>Foto de Perfil</p>
+                                        </v-row>
+                                        <v-row v-if="editing">
+                                            <v-col align-self="center">
+                                                <v-sheet class="pa-2 ma-2">
+                                                    <v-file-input v-model="file" :rules="rules" accept="image/png, image/jpeg, image/jpg" label="Cambiar foto de perfil" prepend-icon="mdi-camera" :readonly="!editing" :variant="variant"></v-file-input>
+                                                </v-sheet>
+                                            </v-col>
+                                        </v-row>
+                                    </v-col>                  
+                                    <v-col cols="12" sm="12" md="8" lg="9" class="pa-0">
+                                        <v-row>
+                                            <v-col cols="12" sm="4" md="4" lg="4" class="px-4 pa-1">
+                                                <v-text-field v-model="user.nombre" label="Nombre" :readonly="!editing" :variant="variant"></v-text-field>
+                                            </v-col>
+                                            <v-col cols="12" sm="4" md="4" lg="4" class="px-4 pa-1">
+                                                <v-text-field v-model="user.apellidoPaterno" label="Apellido Paterno" :readonly="!editing" :variant="variant"></v-text-field>
+                                            </v-col>                                    
+                                            <v-col cols="12" sm="4" md="4" lg="4" class="px-4 pa-1">
+                                                <v-text-field v-model="user.apellidoMaterno" label="Apellido Materno" :readonly="!editing" :variant="variant"></v-text-field>
+                                            </v-col>
+                                            <v-col cols="12" sm="4" md="4" lg="4" class="px-4 pa-1">
+                                                <v-text-field label="Nombre de usuario" v-model="user.userName" :readonly="!editing" :variant="variant"></v-text-field>
+                                            </v-col>
+                                            <v-col cols="12" sm="4" md="4" lg="4" class="px-4 pa-1">
+                                                <v-text-field label="Correo" v-model="user.email" :readonly="!editing" :variant="variant"></v-text-field>
+                                            </v-col>
+                                            <v-col cols="12" sm="4" md="4" lg="4" class="px-4 pa-1">
+                                                    <v-text-field label="Edad" v-model="user.edad" :readonly="!editing" :variant="variant" required></v-text-field>
+                                            </v-col>
+                                            <v-col cols="12" sm="4" md="4" lg="4" class="px-4 pa-1">
+                                                <v-select label="Sexo" :items="items" v-model="user.sexo" :readonly="!editing" :variant="variant" required></v-select>
+                                            </v-col>   
+                                            <v-col cols="12" sm="4" md="4" lg="4" class="px-4 pa-1">
+                                                <v-select label="Nivel de Apoyo" :items= "nivelTea" v-model="user.nivelTea" :readonly="!editing" :variant="variant" required></v-select>
+                                            </v-col>
+                                            <v-col cols="12" sm="4" md="4" lg="4" class="px-4 pa-1">
+                                                <v-text-field label="Tutor" :items="items" v-model="user.tutor" readonly :variant="variant" required></v-text-field>
+                                            </v-col>
+                                            <v-col cols="12" sm="4" md="4" lg="4" class="px-4 pa-1">
+                                                <v-text-field label="Terapeuta Ocupacional" v-model="user.terapeutaOcupacional" readonly :variant="variant" required></v-text-field>
+                                            </v-col>                                 
+                                        </v-row>
+                                    </v-col>
+                                </v-row>          
+                            </v-form>
+                        </v-card-text>
+                        <v-card-actions class="mt-5 mb-5" v-if="!hideButtons">
+                            <v-spacer></v-spacer>
+                            <v-btn color="primary" prepend-icon="mdi-content-save" class="px-5" variant="flat" v-if="editing" @click="validateCuenta()" :loading="loading">
+                                Enviar
+                                <template v-slot:loader>
+                                    <v-progress-circular indeterminate :size="20" :width="2" ></v-progress-circular>
+                                    <p style="margin-left: 3px; opacity: 0.5;">Enviando</p>
+                                </template>
+                            </v-btn>
+                            <v-btn color="primary" prepend-icon="$delete" variant="outlined"  v-if="editing" @click="actualizar()">
+                                Cancelar
+                            </v-btn>                
+                            <v-btn color="primary" prepend-icon="$edit" variant="flat"  v-if="!editing" @click="actualizar()">
+                                Editar
+                            </v-btn>
+                            <v-btn color="primary" prepend-icon="$delete" variant="outlined"  v-if="!editing" @click="deleteAccount(user)">
+                                Eliminar
+                            </v-btn>
+                        </v-card-actions>   
+                    </v-card>
+                </v-col>
+        </v-row>
     </div>
 
     <v-snackbar v-model="snackbar.active" :timeout="timeout" :color="snackbar.color">

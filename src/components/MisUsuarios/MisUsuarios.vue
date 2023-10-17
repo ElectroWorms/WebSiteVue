@@ -31,8 +31,24 @@
     <v-app-bar :elevation="2"  class="changeAppBar"> 
         <v-row align="center" justify="center">
             <v-col cols="4" class="pl-2 pl-lg-16">
-                <v-app-bar-nav-icon variant="text" class="d-lg-none" @click="showDrawer()"></v-app-bar-nav-icon>
-                <v-text class="text-wrap"> Usuarios </v-text>
+                <v-row align="center">
+                    <v-col cols="2" class="d-lg-none pl-10" >
+                        <v-app-bar-nav-icon variant="text" class="d-lg-none" @click="showDrawer()"></v-app-bar-nav-icon>
+                    </v-col>
+                    <v-col cols="2" class="d-none d-md-flex ml-5">
+                        <span  class="d-none d-md-flex"  style="width: 95px; padding-left: 0px; margin-left: -19px;">
+                            <v-img
+                                class="d-none d-md-flex pl-0"
+                                src="../../../public/img/Logo-Oficial 1.png"
+                                width="auto"     
+                            />
+                        </span>
+                    </v-col>
+                    <v-col cols="6" class="ml-0 pb-md-4 pl-sm-6 pl-md-6 pl-lg-3">
+                        <v-text class=""> Usuarios</v-text>
+                    </v-col>
+                </v-row>
+                
             </v-col>
             <v-col cols="5" class="">
                 <v-text-field v-model="search" class="fondoBlanco mt-5" placeholder="Buscar..." variant="outlined" prepend-icon="mdi-magnify" density="compact"></v-text-field>
@@ -43,15 +59,15 @@
         </v-row>
     </v-app-bar>
     <div class="mx-6">  
-        <div v-if="users.length" class="w-100 h-100 mx-md-2 mt-4">
+        <div v-if="users.length" class="w-100 h-100 mx-0 mx-md-2 mt-4">
             
             <v-row class="mt-2">
                 
             </v-row>
             <v-row>                    
                 <v-col cols="12" sm="6" md="4" lg="3" v-for="item in users" :key="item._id">      
-                    <v-card class="mx-auto" max-width="100%" height="360">
-                        <v-img :src="getCardImg(item.url,item.sexo)" class="mt-5 mb-5" height="150px" aspect-ratio="1/1"></v-img>
+                    <v-card class="mx-auto" max-width="100%" height="400">
+                        <v-img :src="getCardImg(item.url,item.sexo)" class="mt-5 mb-5" height="180px" aspect-ratio="1/1"></v-img>
 
                         <v-card-title style="text-align: center;">
                          {{item.fullname }}
@@ -63,13 +79,13 @@
                             </v-chip>
                         </v-card-subtitle>
                         
-                        <v-card-actions class="actions-center mb-3 mx-1">
+                        <v-card-actions class="actions-center">
                             <v-row>
                                 <v-col cols="12" class="py-0 text-center my-3">
                                     <v-btn color="primary" variant="flat" prepend-icon="mdi-magnify"  @click="loadPerfil(item)" size="small">
                                         Ver Perfil
                                     </v-btn>
-                                    <v-btn color="primary" variant="text" prepend-icon="mdi-delete"  @click="deleteAccount(item)" size="small">
+                                    <v-btn color="primary" variant="outlined" prepend-icon="mdi-delete"  @click="deleteAccount(item)" size="small">
                                         Eliminar Perfil
                                     </v-btn>
                                 </v-col>

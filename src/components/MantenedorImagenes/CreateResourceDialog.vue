@@ -1,7 +1,7 @@
 <template>
   <v-dialog>
     <v-row class="justify-center">
-      <v-col cols="12" xs="12" sm="12" md="5" lg="5">
+      <v-col cols="12" xs="12" sm="12" md="4" lg="4">
         <v-form @submit.prevent ref="form">
           <v-card class="card">
 
@@ -54,7 +54,7 @@
               <v-spacer></v-spacer>
               <v-btn
                 color="primary"
-                variant="text"
+                variant="outlined"
                 @click="closeDialog">
                   Cerrar
               </v-btn>
