@@ -51,13 +51,16 @@ export async function createRoutineStep(routineId: string, position: number, res
 
 // función que actualiza un paso de rutina llamando el endpoint /pasoRutina/update/:idPasoRutina
 // y entregandole los parámetros: rutina, posicion, recurso
-export async function updateRoutineStep(routineStepId: string, routineId: string, position: number, resource: string) {
+export async function updateRoutineStep(routineStepId: string, routineId: string, position: number, resource: string, duration?:number, hasAudio?:boolean,audioUrl?:string) {
     
     try {
         const response = await axios.put(config.PathAPI + 'pasoRutina/update/' + routineStepId, {
             rutina: routineId,
             posicion: position,
-            recurso: resource
+            recurso: resource,
+            duration: duration || 6,
+            hasAudio: hasAudio || null,
+            audioUrl: audioUrl || null,
         });
 
         const routineStep = response.data;

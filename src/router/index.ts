@@ -48,6 +48,12 @@ const routes = [
     component: () => import('@/views/DetalleActividad.vue'),
   },
   {
+    name: 'VideoConfig',
+    path: '/Actividad/Detalle/VideoConfig/:routineId/:activityId/:userId',
+    props: true,
+    component: () => import('@/views/VideoConfig.vue'),
+  },
+  {
     name: 'Juegos',
     path: '/Juegos/List/:ActividadId/:UserId',
     props: true,

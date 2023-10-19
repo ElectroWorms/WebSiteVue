@@ -135,7 +135,7 @@ let newResource = ref(false);
 let selectedResource = ref<Resource>();
 const resourceRules = [
   (value: Resource) => {
-    if (!value && !newResource) return "Es necesario seleccionar un recurso";
+    if (!value && !newResource.value) return "Es necesario seleccionar un recurso";
     return true;
   }
 ]
@@ -143,7 +143,7 @@ const resourceRules = [
 let resourceName = ref("");
 const resourceNameRules = [
   (value: string) => {
-    if (value && newResource) return true;
+    if (value && newResource.value) return true;
     return "Es necesario ingresar un nombre para el recurso";
   }
 ]
@@ -204,7 +204,7 @@ async function updateWithNewResource() {
   let imageUrl = (await uploadImage(newImage.value[0])).item.url;
 
   // get the last part of the url, which is the filename
-  let filename = imageUrl.split("/").pop();
+  //let filename = imageUrl.split("/").pop();
 
   // create the resource
   let resourceData = {
