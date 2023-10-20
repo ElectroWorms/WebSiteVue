@@ -102,7 +102,8 @@
                 </v-card-text>
 
                 <v-card-actions class="btn-actions">
-                    <v-btn @click="loadRoutine" color="primary" variant="outlined"  > Ver Rutina </v-btn>
+                    <v-btn @click="loadRoutine" color="primary" variant="outlined"> Ver Rutina </v-btn>
+                    <v-btn @click="loadVideoConfig" color="primary" variant="outlined"> Configuar Video </v-btn>
                 </v-card-actions>
             </v-card>
         </v-col>
@@ -185,7 +186,6 @@ onMounted(async () => {
 
     // get the list of routines for the activity
     routineList = (await fetchRoutines(UserId.value, ActividadId.value)).item;
-
     // select the routine that is active
     selectedRoutine.value = routineList.filter((routine) => routine.active)[0];
     routineId = selectedRoutine.value._id;
@@ -217,6 +217,9 @@ async function handleNewRoutine() {
     await getUpdatedRoutines();
 }
 
+function loadVideoConfig() {
+    router.push({name: 'VideoConfig', params: {routineId: selectedRoutine.value?._id, activityId: ActividadId.value, userId: UserId.value}});
+}
 // Routes
 
 function loadRoutine() {

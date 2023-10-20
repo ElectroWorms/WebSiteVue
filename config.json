@@ -4,5 +4,6 @@
         {
             "BackgroundImage": "@/assets/juego.jpg"
         }
-    ]
+    ],
+    "AIServiceToken": "eyJhbGciOiJFUzI1NiIsImtpZCI6ImtleTEiLCJ0eXAiOiJKV1QifQ.eyJyZWdpb24iOiJlYXN0dXMiLCJzdWJzY3JpcHRpb24taWQiOiI2NDdmNGEyZWIwZjE0NjI5OGI0NjM1YWM4ZDBmYzA5MyIsInByb2R1Y3QtaWQiOiJTcGVlY2hTZXJ2aWNlcy5GMCIsImNvZ25pdGl2ZS1zZXJ2aWNlcy1lbmRwb2ludCI6Imh0dHBzOi8vYXBpLmNvZ25pdGl2ZS5taWNyb3NvZnQuY29tL2ludGVybmFsL3YxLjAvIiwiYXp1cmUtcmVzb3VyY2UtaWQiOiIvc3Vic2NyaXB0aW9ucy82NDFhZjYyYy0yOGMyLTQ2MDEtYjFhMC1kMzgwZDlmODg1NDAvcmVzb3VyY2VHcm91cHMvcmFwbmlzYWFzYW4vcHJvdmlkZXJzL01pY3Jvc29mdC5Db2duaXRpdmVTZXJ2aWNlcy9hY2NvdW50cy9yYXBuaWF1ZGlvcyIsInNjb3BlIjoic3BlZWNoc2VydmljZXMiLCJhdWQiOiJ1cm46bXMuc3BlZWNoc2VydmljZXMuZWFzdHVzIiwiZXhwIjoxNjk3NjgwNDY1LCJpc3MiOiJ1cm46bXMuY29nbml0aXZlc2VydmljZXMifQ.aXnv1r5pyCBhWotLHXBZdPuPkyHbwqqCRuNvZrN-9LlOQncglBTYpEMntLYiLe305G7_yd0jIrVh24C3J19mZw"
 }
