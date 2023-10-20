@@ -37,7 +37,7 @@
         <v-form validate-on="submit lazy" style="margin: 20px;">
             <div class="form-content">
                 <div class="form-title">Agregar música de fondo (opcional)</div>
-                <v-checkbox v-model="hasMusic" label="¿Quieres agregar música de fondo al video?" required></v-checkbox>
+                <v-checkbox v-model="hasMusic" label="¿Quieres agregar música de fondo al video?" :disabled="disabled"></v-checkbox>
                 <v-select v-model="select" :items="items" label="Música de fondo" v-if="hasMusic" style="max-width: 300px;"></v-select>
                 <audio controls id="audio" class="hide">
                     <source :src="theme" type="audio/mpeg">
@@ -61,11 +61,11 @@
                             </td>
                             <td style="padding: 15px;">{{routineStep.recursoItem.title}}</td>
                             <td >
-                                <v-text-field v-model="routineStep.duration" type="number" label="Duración en segundos" required style="margin: 0;" :rules="[v => v ? '' : 'Campo requerido (*)']"></v-text-field>                        
+                                <v-text-field v-model="routineStep.duration" :disabled="disabled" type="number" label="Duración en segundos" required style="margin: 0;" :rules="[v => v ? '' : 'Campo requerido (*)']"></v-text-field>                        
                             </td>
                             <td>
                                 <div style="display: flex;align-items: center;justify-content: center;flex-direction: column;">
-                                    <v-checkbox v-model="routineStep.hasAudio" label="¿Incluir dialogo?"></v-checkbox>
+                                    <v-checkbox v-model="routineStep.hasAudio" label="¿Incluir dialogo?" :disabled="disabled"></v-checkbox>
                                     <audio controls id="audio" v-if="routineStep.audioUrl && routineStep.hasAudio">
                                         <source :src="routineStep.audioUrl" type="audio/mpeg">
                                     </audio>
