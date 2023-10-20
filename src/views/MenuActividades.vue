@@ -21,7 +21,7 @@
         <v-btn @click="back" icon="mdi-arrow-left" color="primary" class="ml-md-9"></v-btn>
 		<span class="d-none d-md-flex"  style="width: 95px; padding-left: 0px; margin-left: -15px;">
             <v-img
-                src="../../../public/img/Logo-Oficial 1.png"
+                src="/img/Logo-Oficial.png"
                 width="auto"     
             />
         </span>

@@ -14,13 +14,13 @@
     <v-app-bar-nav-icon variant="text" class="d-lg-none" @click="showDrawer()"></v-app-bar-nav-icon>
     <v-btn @click="back" icon="mdi-arrow-left" color="primary" class="ml-md-9"></v-btn>
 		<span  class="d-none d-md-flex"  style="width: 95px; padding-left: 0px; margin-left: -15px;">
-            <v-img
-                class="d-none d-md-flex pl-0"
-                src="../../../public/img/Logo-Oficial 1.png"
-                width="auto"     
-            />
-        </span>
-        <v-text class="mb-md-1"> Vincular Cuenta</v-text>
+      <v-img
+          class="d-none d-md-flex pl-0"
+          src='/img/Logo-Oficial.png'
+          width="auto"     
+      />
+    </span>
+    <v-text class="mb-md-1"> Vincular Cuenta</v-text>
   </v-app-bar>
   
   <FormVincular/>

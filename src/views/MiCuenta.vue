@@ -9,7 +9,7 @@
         <span class="d-none d-md-flex" style="width: 95px; padding-left: 0px; margin-left: -15px;">
             <v-img
                 class="d-none d-md-flex pl-0"
-                src="../../../public/img/Logo-Oficial 1.png"
+                src="/img/Logo-Oficial.png"
                 width="auto"     
             />
         </span>
