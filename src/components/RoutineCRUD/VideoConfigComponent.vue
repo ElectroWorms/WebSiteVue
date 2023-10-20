@@ -180,6 +180,7 @@ async function send(metadata:any):Promise<boolean> {
             audios.forEach(a => {
                 a.load();
             });
+            routineClone = JSON.parse(JSON.stringify(routine.value));
         }
         let responses = await Promise.all(requests);
         console.log('responses',responses)
