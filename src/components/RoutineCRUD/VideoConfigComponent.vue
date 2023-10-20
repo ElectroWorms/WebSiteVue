@@ -2,6 +2,7 @@
 .form-content {
     padding: 10px;
     table {        
+        border-collapse: collapse;
         width: 100% !important;
         th {
             border: 1px solid #eeeeee;
@@ -33,52 +34,56 @@
 }
 </style>
 <template>
-    <v-card :title="title" subtitle="A continuación, podrás configurar los tiempos y sonidos para reproducir la rutina como un video" style="margin: 40px">
+    <v-card :title="title" subtitle="A continuación, podrás configurar los tiempos y sonidos para reproducir la rutina como un video" class="ma-3 ma-md-8 text-wrap">
         <v-form validate-on="submit lazy" style="margin: 20px;">
-            <div class="form-content">
+            <div class="form-content" >
                 <div class="form-title">Agregar música de fondo (opcional)</div>
                 <v-checkbox v-model="hasMusic" label="¿Quieres agregar música de fondo al video?" :disabled="disabled"></v-checkbox>
                 <v-select v-model="select" :items="items" label="Música de fondo" v-if="hasMusic" style="max-width: 300px;"></v-select>
                 <audio controls id="audio" class="hide">
                     <source :src="theme" type="audio/mpeg">
                 </audio>
-                <div class="form-title">Configurar pasos de la rutina</div>            
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Posición</th>
-                            <th>Pictograma</th>
-                            <th>Paso</th>
-                            <th>Duración [s]</th>
-                            <th>Usar voz</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tbody">
-                        <tr v-for="(routineStep, index) in routine?.steps" :key="index">
-                            <td style="text-align: center;">{{ index + 1 }}</td>
-                            <td style="text-align: center; width: 150px;">
-                                <img :src="routineStep.recursoItem.url" style="max-height: 80px; max-width: 80px;"/>
-                            </td>
-                            <td style="padding: 15px;">{{routineStep.recursoItem.title}}</td>
-                            <td >
-                                <v-text-field v-model="routineStep.duration" :disabled="disabled" type="number" label="Duración en segundos" required style="margin: 0;" :rules="[v => v ? '' : 'Campo requerido (*)']"></v-text-field>                        
-                            </td>
-                            <td>
-                                <div style="display: flex;align-items: center;justify-content: center;flex-direction: column;">
-                                    <v-checkbox v-model="routineStep.hasAudio" label="¿Incluir dialogo?" :disabled="disabled"></v-checkbox>
-                                    <audio controls id="audio" v-if="routineStep.audioUrl && routineStep.hasAudio">
-                                        <source :src="routineStep.audioUrl" type="audio/mpeg">
-                                    </audio>
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                <div class="form-title">Configurar pasos de la rutina</div>
+                <div style="overflow: auto;">           
+                    <div style=" width: 1300px;">
+                        <table >
+                            <thead>
+                                <tr>
+                                    <th>Posición</th>
+                                    <th>Pictograma</th>
+                                    <th>Paso</th>
+                                    <th>Duración [s]</th>
+                                    <th>Usar voz</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbody">
+                                <tr v-for="(routineStep, index) in routine?.steps" :key="index" >
+                                    <td style="text-align: center;">{{ index + 1 }}</td>
+                                    <td style="text-align: center; width: 150px;">
+                                        <img :src="routineStep.recursoItem.url" style="max-height: 80px; max-width: 80px;"/>
+                                    </td>
+                                    <td style="padding: 15px;">{{routineStep.recursoItem.title}}</td>
+                                    <td >
+                                        <v-text-field v-model="routineStep.duration" :disabled="disabled" type="number" label="Duración en segundos" required style="margin: 0;" :rules="[v => v ? '' : 'Campo requerido (*)']"></v-text-field>                        
+                                    </td>
+                                    <td>
+                                        <div style="display: flex">
+                                            <v-checkbox v-model="routineStep.hasAudio" label="¿Incluir dialogo?" :disabled="disabled"></v-checkbox>
+                                            <audio controls id="audio" v-if="routineStep.audioUrl && routineStep.hasAudio">
+                                                <source :src="routineStep.audioUrl" type="audio/mpeg">
+                                            </audio>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div> 
                 <p class="text-message form-title">Los cambios realizados se verán reflejados es la aplicación móvil de RAPNI.</p>
             </div>
             <v-card-actions style="flex-direction: row-reverse; gap: 10px">
-                <v-btn color="primary" type="submit" variant="flat" @click="save()" :disabled="disabled">Guardar Cambios</v-btn>
                 <v-btn color="red" variant="flat" @click="cancel()" :disabled="disabled">Cancelar</v-btn>
+                <v-btn color="primary" type="submit" variant="flat" @click="save()" :disabled="disabled">Guardar</v-btn>
             </v-card-actions>            
         </v-form>
     </v-card>

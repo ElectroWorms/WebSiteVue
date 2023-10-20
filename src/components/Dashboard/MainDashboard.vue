@@ -2,9 +2,9 @@
 
 </style>
 <template>
-  <v-container class="pa-0" >
-  <v-row class="justify-center">
-      <v-col cols="12" sm="12" md="10" lg="12">
+  <v-container class="px-0 pt-0" >
+    <v-row class="justify-center">
+      <v-col cols="12" sm="12" md="12" lg="12">
         <v-card class="bg-white mx-7 mt-5 pa-2 pa-sm-2 pa-md-8 pa-lg-8 rounded-lg ">
           <v-card-title class="px-0 pt-0">
                     <span class="text-h6">Información General</span>
@@ -32,26 +32,26 @@
     </v-row>
 
     <v-row class="justify-center">
-    <v-col cols="12" sm="12" md="12" lg="12">
-      <v-card class="bg-white mx-7  pa-4 pa-sm-4 pa-md-8 pa-lg-8 rounded-lg " >
-        <v-form>
-          <v-card-title class="px-0">
-                    <span class="text-h6">Filtros Gráficos</span>
-          </v-card-title>
-          <v-row class="pt-2">
-            <v-col cols="12" sm="12" md="5" lg="5" class="pb-0 pb-sm-0 pb-md-1 pb-lg-1">
-              <v-autocomplete label="Gráfico" v-model="inputSelectGrafico" :items="itemsGrafico" variant="outlined"
-              ></v-autocomplete>
-            </v-col>
-            <v-col cols="12" sm="12" md="5" lg="5" v-if="activeAutocompleteJuego" class="pt-0 pt-sm-0 pt-md-3 pt-lg-3">
-              <v-autocomplete label="Juego" v-model="inputSelectJuego" :items="itemsJuegos" variant="outlined"
-              ></v-autocomplete>
-            </v-col>
-          </v-row>
-        </v-form>
-      </v-card>
-    </v-col>
-  </v-row>
+      <v-col cols="12" sm="12" md="12" lg="12">
+        <v-card class="bg-white mx-7  pa-4 pa-sm-4 pa-md-8 pa-lg-8 rounded-lg " >
+          <v-form>
+            <v-card-title class="px-0">
+                      <span class="text-h6">Filtros Gráficos</span>
+            </v-card-title>
+            <v-row class="pt-2">
+              <v-col cols="12" sm="12" md="5" lg="5" class="pb-0 pb-sm-0 pb-md-1 pb-lg-1">
+                <v-autocomplete label="Gráfico" v-model="inputSelectGrafico" :items="itemsGrafico" variant="outlined"
+                ></v-autocomplete>
+              </v-col>
+              <v-col cols="12" sm="12" md="5" lg="5" v-if="activeAutocompleteJuego" class="pt-0 pt-sm-0 pt-md-3 pt-lg-3">
+                <v-autocomplete label="Juego" v-model="inputSelectJuego" :items="itemsJuegos" variant="outlined"
+                ></v-autocomplete>
+              </v-col>
+            </v-row>
+          </v-form>
+        </v-card>
+      </v-col>
+    </v-row>
   <v-row class="justify-center">
     <v-col cols="12" sm="12" md="12" lg="12">
       <v-card class="bg-white mx-7  pa-2 pa-sm-2 pa-md-1 pa-lg-1 rounded-lg d-flex justify-center " height="540px">

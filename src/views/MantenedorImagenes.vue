@@ -55,7 +55,7 @@
     <DeleteResourceDialog v-model="showDialogDelete" @close="handleClose" 
         @deleted="handleDeleteResource" :resource="selectedResource"/>
 
-    <v-row class="mt-5 mx-2 mx-md-5 mb-16">
+    <v-row class="mt-0 mt-md-3 mx-0 mx-md-5 mb-16">
         <v-col v-for="(resource, index) in resources" :key="index" cols="12" sm="6" md="4" lg="3">
             <v-card class="mx-auto" max-width="100%" height="400">
                 <v-img class="border" :height="270" width="500" cover :src="resource.url"></v-img>

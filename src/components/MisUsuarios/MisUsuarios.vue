@@ -58,8 +58,8 @@
             </v-col>
         </v-row>
     </v-app-bar>
-    <div class="mx-6">  
-        <div v-if="users.length" class="w-100 h-100 mx-0 mx-md-2 mt-4">
+    <div class="mx-md-6 mx-3">  
+        <div v-if="users.length" class="w-100 h-100 mx-0 mx-md-2 mt-0">
             
             <v-row class="mt-2">
                 

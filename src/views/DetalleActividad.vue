@@ -65,7 +65,7 @@
     <CreateRoutineDialog v-model="showDialogNewRoutine" @close="handleClose" 
         @new-routine="handleNewRoutine" :activityId="ActividadId" :userId="UserId"/>
     
-    <v-row class="mt-5 mx-2">
+    <v-row class="mt-md-5 mt-1 mx-0">
         <v-col xs="12" sm="12" md="6" lg="6" class="rutina">
             <v-card class="pa-2 card-rutina" min-height="550">
 
@@ -102,8 +102,12 @@
                 </v-card-text>
 
                 <v-card-actions class="btn-actions">
-                    <v-btn @click="loadRoutine" color="primary" variant="outlined"> Ver Rutina </v-btn>
-                    <v-btn @click="loadVideoConfig" color="primary" variant="outlined"> Configuar Video </v-btn>
+                    <v-row>
+                        <v-col cols="12" class="py-0 text-center my-3">
+                            <v-btn @click="loadRoutine" color="primary" variant="flat"> Ver Rutina </v-btn>
+                            <v-btn @click="loadVideoConfig" color="primary" variant="outlined"> Configuar Video </v-btn>
+                        </v-col>
+                    </v-row>
                 </v-card-actions>
             </v-card>
         </v-col>

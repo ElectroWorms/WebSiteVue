@@ -6,7 +6,7 @@
 
 </style>
 <template>
-    <div class="mt-5 mb-5">
+    <div class="mt-2 mb-5 mt-md-7">
         <v-row class="justify-center mx-1" >
                 <v-col cols="12" sm="12" md="10" lg="11" class="pa-0">
                     <v-card class="px-5">                

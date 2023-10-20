@@ -55,7 +55,7 @@
         @update-step="handleUpdateStep" :routine="routine!" :user="userId" :routineStep="selectedRoutineStep"/>
 
 
-    <v-row class="mt-5 mx-2 mx-md-3 justify-center" >
+    <v-row class="mt-1 mt-md-3 mx-0 mx-md-3 justify-center" >
         <v-col v-for="(routineStep, index) in routine?.steps" :key="index" cols="12" sm="6" md="4" lg="3" >
             <v-card class="mx-auto" max-width="100%"  height="400">
                 <v-img class="border" :height="250" width="500" :src="routineStep.recursoItem.url" cover></v-img>
