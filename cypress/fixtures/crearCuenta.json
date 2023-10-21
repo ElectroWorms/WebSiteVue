@@ -1,0 +1,14 @@
+[
+    {
+        "nombre": "test27092",
+        "apellidoPaterno": "test27092",
+        "apellidoMaterno": "test27092",
+        "nombreUsuario": "test27092",
+        "correo": "matiasVargas1@hotmail.es",
+        "password": "12345",
+        "passwordConfirm": "12345",
+        "edad": "5",
+        "nivel": "Nivel de Apoyo 1",
+        "sexo": "Masculino"
+    }
+]

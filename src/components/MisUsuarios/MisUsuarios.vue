@@ -261,9 +261,9 @@ export default {
     }),
     methods:{
         async validate () {
-            this.loading = true;
             const { valid } = await this.$refs.form.validate()
             if (valid) {
+                this.loading = true;
                 this.registerAccount();
             }
         },
