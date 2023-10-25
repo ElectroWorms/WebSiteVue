@@ -89,11 +89,11 @@
             @click="closeDialog">
               Cerrar
           </v-btn>
-          <v-btn
-            color="primary"
-            variant="flat"
-            @click="submitForm">
+          <v-btn color="primary" variant="flat" @click="submitForm" :loading="loading">
               Guardar
+              <template v-slot:loader>
+                <v-progress-circular indeterminate :size="20" :width="2"></v-progress-circular>
+              </template>
           </v-btn>
         </v-card-actions>
 
@@ -121,6 +121,7 @@ const emit = defineEmits(["close", "updateStep"]);
 const form = ref();
 
 let resources: Resource[] = [];
+let loading = ref(false);
 
 let position = ref(0);
 const positionRules = [
@@ -151,7 +152,7 @@ const resourceNameRules = [
 let newImage = ref<File[]>([]);
 const newImageRules = [
   (value: any) => (!!value && newResource) || "La imagen es requerida",
-  (value: any) => (value && value[0].size < 2000000000) || "Imagen debe ser menor a 2 MB!",
+  (value: any) => (value && ((value.length > 0 ? value[0].size : 0) < 2000000000)) || "Imagen debe ser menor a 2 MB!",
 ]
 
 // Functions
@@ -276,7 +277,7 @@ async function submitForm() {
 
   // validate the form
   if (!(await submitValidations())) return;
-
+  loading.value = true;
   // update the position of the next steps in the database
   await updatePositions();
 
@@ -288,6 +289,7 @@ async function submitForm() {
 
   // send the new step to the parent component to update the list
   emitUpdateStep();
+  loading.value = false;
 }
 
 function emitUpdateStep() {

@@ -35,12 +35,14 @@
             @click="closeDialog">
             Cerrar
         </v-btn>
-        <v-btn
-            color="primary"
-            variant="flat"
-            @click="submitForm">
+        <v-btn color="primary" variant="flat" @click="submitForm" :loading="loading">
             Eliminar
-        </v-btn>
+            <template v-slot:loader>
+            <v-progress-circular indeterminate :size="20" :width="2"></v-progress-circular>
+            </template>
+        </v-btn>  
+
+       
         </v-card-actions>
 
     </v-card>
@@ -63,6 +65,7 @@ const emit = defineEmits(["close", "deleted"]);
 
 // Form
 const form = ref();
+let loading = ref (false);
 
 let isValidDelete = ref(false);
 let routinesReached = ref(0);
@@ -93,7 +96,7 @@ async function submitForm() {
 
     // if not valid, do not delete
     if (!isValidDelete.value) return;
-
+    loading.value = true
     // delete the resource
     await deleteResource(resource!.value._id);
 
@@ -103,6 +106,7 @@ async function submitForm() {
 
     emitDeletedResource();
     closeDialog();
+    loading.value = false
 }
 
 function emitDeletedResource() {

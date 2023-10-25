@@ -107,7 +107,8 @@ export default {
     },
     mounted(){
       store.$subscribe((mutation, state) => {
-        let changeBar = mutation.payload.navbarMobile ? true : false
+        
+        let changeBar = mutation.payload ? (mutation.payload.navbarMobile ? true : false)  : false
         if (changeBar){
           this.drawer = true
         }
