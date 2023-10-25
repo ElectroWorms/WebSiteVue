@@ -63,8 +63,9 @@
                                         <img :src="routineStep.recursoItem.url" style="max-height: 80px; max-width: 80px;"/>
                                     </td>
                                     <td style="padding: 15px;">{{routineStep.recursoItem.title}}</td>
-                                    <td >
-                                        <v-text-field v-model="routineStep.duration" :disabled="disabled" type="number" label="Duración en segundos" required style="margin: 0;" :rules="[v => v ? '' : 'Campo requerido (*)']"></v-text-field>                        
+                                    <td>
+                                        <v-text-field v-model="routineStep.duration" :disabled="disabled" type="number" label="Duración en segundos" required style="margin: 0;"></v-text-field>                        
+                                        <div v-if="!routineStep.duration" style="color: red; font-size: 12px;">Campo requerido (*)</div>
                                     </td>
                                     <td>
                                         <div style="display: flex">
