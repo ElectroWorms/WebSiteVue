@@ -82,12 +82,25 @@ export default {
                 game = 'ordenarsecuencia'
                 this.chartOptions.plugins.title.text = 'Tiempo total de juego por día en ordenar secuencia'
         }
+        else if (this.juego == 'Memorice'){
+            game = 'memorize'
+            this.chartOptions.plugins.title.text = 'Tasa promedio de errores por día en memorice'
+        }
+        else if (this.juego == 'Rompecabezas'){
+            game = 'rompecabezas'
+            this.chartOptions.plugins.title.text = 'Tasa promedio de errores por día en rompecabezas'
+        }
+        else if (this.juego == 'Buscar Diferencias'){
+            game = 'buscardiferencias'
+            this.chartOptions.plugins.title.text = 'Tasa promedio de errores por día en buscar diferencias'
+        }
+
         try {
             let data = await transformDataGraphic5(game)
             this.chartData.labels = data.map(x => x.date)
             this.chartData.datasets = [
                 {
-                    label: ['Tiempo total de juego'],
+                    label: ['Tiempo total de juego(min)'],
                     backgroundColor: ['rgba(255, 99, 132, 0.2)'],
                     borderColor: ['rgb(255, 99, 132)'],
                     borderWidth:1,

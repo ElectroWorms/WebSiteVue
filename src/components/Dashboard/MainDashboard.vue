@@ -85,13 +85,17 @@
       inputSelectJuego: null,
       boolGrafio1: false,
       juego: null,
-      boolGrafico1: true, boolGrafico2: false, boolGrafico3: false, boolGrafico4: false, boolGrafico5:false,
+      boolGrafico1: true, boolGrafico2: false, boolGrafico3: false, boolGrafico4: false, boolGrafico5:false, 
       loaded: false,
       games: [
-        {title:'Tiempo total de juego(s)',numero:'', color:'rgba(54, 162, 235, 0.5)', icon: 'mdi-clock-outline'},
+        {title:'Tiempo total de juego(min)',numero:'', color:'rgba(54, 162, 235, 0.5)', icon: 'mdi-clock-outline'},
         {title:'Partidas búsqueda del tesoro',numero:'', color:'rgba(75, 192, 192, 0.5)', icon: 'mdi-treasure-chest'},
         {title:'Partidas vestir al personaje',numero:'', color:'rgba(255, 205, 86, 0.5)', icon: 'mdi-tshirt-crew-outline'},
         {title:'Partidas ordenar secuencia',numero:'', color:'rgba(153, 102, 255, 0.5)', icon: 'mdi-sort-numeric-ascending'},
+
+        {title:'Partidas memorice',numero:'', color:'rgba(246,178,107, 0.5)', icon: 'mdi-help-rhombus-outline '},
+        {title:'Partidas rompecabezas',numero:'', color:'rgba(201, 203, 207, 0.5)', icon: 'mdi-puzzle'},
+        {title:'Partidas buscar diferencias',numero:'', color:'rgba(255, 99, 132, 0.5)', icon: 'mdi-image-search'},
       ],
       totalTime: '', partidasJugadasGame1: '', partidasJugadasGame2:'', partidasJugadasGame3: '',
       itemsGrafico:
@@ -102,7 +106,7 @@
                   'Tiempo promedio en completar el juego', 
                   'Tiempo total de juego por día'
                 ],
-      itemsJuegos: ['Búsqueda del tesoro', 'Vestir al personaje', 'Ordenar secuencia']
+      itemsJuegos: ['Búsqueda del tesoro', 'Vestir al personaje', 'Ordenar secuencia', 'Memorice', 'Rompecabezas', 'Buscar Diferencias']
       
     }),
     computed: {
@@ -112,10 +116,12 @@
       
     },
     async mounted (){
-      let auxtotalTime, auxPartidas1, auxPartidas2, auxPartidas3;
-      auxtotalTime = await getTime(); auxPartidas1= await getTotalGames('busquedatesoro'); auxPartidas2= await getTotalGames('vestirpersonaje'); auxPartidas3= await getTotalGames('ordenarsecuencia')
+      let auxtotalTime, auxPartidas1, auxPartidas2, auxPartidas3, auxPartidas4, auxPartidas5, auxPartidas6;
+      auxtotalTime = await getTime(); auxPartidas1= await getTotalGames('busquedatesoro'); auxPartidas2= await getTotalGames('vestirpersonaje'); auxPartidas3= await getTotalGames('ordenarsecuencia'); 
+      auxPartidas4= await getTotalGames('memorize'); auxPartidas5= await getTotalGames('rompecabezas'); auxPartidas6 = await getTotalGames('buscardiferencias')
       this.loaded = true;
       this.games[0].numero = auxtotalTime; this.games[1].numero = auxPartidas1;  this.games[2].numero = auxPartidas2; this.games[3].numero = auxPartidas3;
+      this.games[4].numero = auxPartidas4; this.games[5].numero = auxPartidas5;  this.games[6].numero = auxPartidas6;
     },
     watch: {
       inputSelectGrafico: function(val, oldVal) {
@@ -131,7 +137,7 @@
         
       },
       inputSelectJuego: async function(val, oldVal) {
-        if (val == this.itemsJuegos[0] || val == this.itemsJuegos[1] || val == this.itemsJuegos[2]){
+        if (this.itemsJuegos.includes(val)){
           this.juego = this.inputSelectJuego;
           if (this.inputSelectGrafico == this.itemsGrafico[1]){
             this.boolGrafico2 = false; this.boolGrafico1 = false; this.boolGrafico3 = false; this.boolGrafico4 = false; this.boolGrafico5 = false;

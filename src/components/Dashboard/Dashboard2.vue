@@ -95,6 +95,18 @@ export default {
             game = 'ordenarsecuencia'
             this.chartOptions.plugins.title.text = 'Tasa promedio de errores por día en ordenar secuencia'
         }
+        else if (this.juego == 'Memorice'){
+            game = 'memorize'
+            this.chartOptions.plugins.title.text = 'Tasa promedio de errores por día en memorice'
+        }
+        else if (this.juego == 'Rompecabezas'){
+            game = 'rompecabezas'
+            this.chartOptions.plugins.title.text = 'Tasa promedio de errores por día en rompecabezas'
+        }
+        else if (this.juego == 'Buscar Diferencias'){
+            game = 'buscardiferencias'
+            this.chartOptions.plugins.title.text = 'Tasa promedio de errores por día en buscar diferencias'
+        }
 
         try {
             let data = await transformDataGraphic2(game)

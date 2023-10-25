@@ -1,9 +1,9 @@
 [
     {
-        "nombre": "test27092",
-        "apellidoPaterno": "test27092",
-        "apellidoMaterno": "test27092",
-        "nombreUsuario": "test27092",
+        "nombre": "Prueba",
+        "apellidoPaterno": "Prueba",
+        "apellidoMaterno": "Prueba",
+        "nombreUsuario": "Prueba",
         "correo": "matiasVargas1@hotmail.es",
         "password": "12345",
         "passwordConfirm": "12345",

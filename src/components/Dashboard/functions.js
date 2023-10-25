@@ -107,7 +107,7 @@ async function transformDataGraphic5(game){
         }
         // si no se encuentra en la lista de fechas visitadas, lo incluye
         if (!visited.includes(metricsDate[i].date)){
-            structureData.date = metricsDate[i].date; structureData.prom = sum; visited.push(structureData.date)
+            structureData.date = metricsDate[i].date; structureData.prom = (sum/60); visited.push(structureData.date)
             data.push(structureData)
         }
     }
@@ -123,7 +123,7 @@ async function getTime(){
     let metricasVestir = (await axios.get(urlVestirPersonaje)).data.item
     let sumBusqueda = metricasBusqueda.length > 0 ? (metricasBusqueda.map(metrica => metrica.tiempo_jugado)).reduce((accumulator, currentValue) => accumulator + currentValue, 0) : 0
     let sumVestir = metricasVestir.length > 0 ? (metricasVestir.map(metrica => metrica.tiempo_jugado)).reduce((accumulator, currentValue) => accumulator + currentValue, 0) : 0
-    let sumTotal =  Math.round(sumBusqueda + sumVestir)
+    let sumTotal =  Math.round((sumBusqueda + sumVestir)/60)
     return sumTotal
 }
 

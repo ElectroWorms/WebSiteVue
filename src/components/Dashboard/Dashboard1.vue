@@ -74,21 +74,30 @@ export default {
         let urlBusquedaTesoro = `${config.PathAPI}metricas/busquedatesoro/list/${secondUserId}`
         let urlVestirPersonaje = `${config.PathAPI}metricas/vestirpersonaje/list/${secondUserId}`
         let urlOrdenar = `${config.PathAPI}metricas/ordenarsecuencia/list/${secondUserId}`
+        let urlMemorice = `${config.PathAPI}metricas/memorize/list/${secondUserId}`
+        let urlRompecabezas = `${config.PathAPI}metricas/rompecabezas/list/${secondUserId}`
+        let urlDiferencias = `${config.PathAPI}metricas/buscardiferencias/list/${secondUserId}`
         try {
             const metricasBusqueda = (await axios.get(urlBusquedaTesoro)).data.item
             const metricasVestir = (await axios.get(urlVestirPersonaje)).data.item
             const metricasOrdenar = (await axios.get(urlOrdenar)).data.item
+            const metricasMemorice = (await axios.get(urlMemorice)).data.item
+            const metricasRompecabezas = (await axios.get(urlRompecabezas)).data.item
+            const metricasDiferencias = (await axios.get(urlDiferencias)).data.item
             const promBusqueda = metricasBusqueda.length ? Math.round(((metricasBusqueda.map(metrica => metrica.cantidad_err + metrica.cantidad_obj)).reduce((accumulator, currentValue) => accumulator + currentValue, 0)) / metricasBusqueda.length) : 0
             const promVestir = metricasVestir.length ? Math.round(((metricasVestir.map(metrica => metrica.cantidad_err + metrica.cantidad_obj)).reduce((accumulator, currentValue) => accumulator + currentValue, 0)) / metricasVestir.length) : 0
             const promOrdenar = metricasOrdenar.length ? Math.round(((metricasOrdenar.map(metrica => metrica.cantidad_err + metrica.cantidad_obj)).reduce((accumulator, currentValue) => accumulator + currentValue, 0)) / metricasOrdenar.length) : 0
-            this.chartData.labels = ['Búqueda del tesoro', 'Vestir Personaje', 'Ordenar Secuencia']
+            const promMemorice = metricasBusqueda.length ? Math.round(((metricasMemorice.map(metrica => metrica.cantidad_err + metrica.cantidad_obj)).reduce((accumulator, currentValue) => accumulator + currentValue, 0)) / metricasMemorice.length) : 0
+            const promRompecabezas = metricasVestir.length ? Math.round(((metricasRompecabezas.map(metrica => metrica.cantidad_err + metrica.cantidad_obj)).reduce((accumulator, currentValue) => accumulator + currentValue, 0)) / metricasRompecabezas.length) : 0
+            const promDiferencias = metricasOrdenar.length ? Math.round(((metricasDiferencias.map(metrica => metrica.cantidad_err + metrica.cantidad_obj)).reduce((accumulator, currentValue) => accumulator + currentValue, 0)) / metricasDiferencias.length) : 0
+            this.chartData.labels = ['Búqueda del tesoro', 'Vestir Personaje', 'Ordenar Secuencia', 'Memorice', 'Rompecabezas', 'Buscar Diferencias']
             this.chartData.datasets = [
                 {
                     label: ['Promedio de intentos'],
                     backgroundColor: ['rgba(54, 162, 235, 0.2)'],
                     borderColor: ['rgb(54, 162, 235)'],
                     borderWidth:1,
-                    data: [promBusqueda, promVestir, promOrdenar]
+                    data: [promBusqueda, promVestir, promOrdenar, promMemorice, promRompecabezas, promDiferencias]
                 }
         ]
         this.loaded = true
