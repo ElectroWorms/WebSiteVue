@@ -7,7 +7,7 @@ async function getCantidadPares(){
     const secondUserId = store.secondUser._id;
     const metrics = (await axios.get(`${config.PathAPI}metricas/memorize/list/${secondUserId}`)).data.item
     let sum = (metrics.map(metrica => (metrica.cantidad_obj)/2)).reduce((accumulator, currentValue) => accumulator + currentValue, 0)
-    return sum
+    return Math.round(sum/metrics.length)
 }
 async function transformDataGraphic2(game){
     const store = useUserStore();
