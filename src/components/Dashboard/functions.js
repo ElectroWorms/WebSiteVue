@@ -1,6 +1,14 @@
 import axios from 'axios';
 import config from '../../../config.json';
 import {useUserStore} from "../../store/app";
+
+async function getCantidadPares(){
+    const store = useUserStore();
+    const secondUserId = store.secondUser._id;
+    const metrics = (await axios.get(`${config.PathAPI}metricas/memorize/list/${secondUserId}`)).data.item
+    let sum = (metrics.map(metrica => (metrica.cantidad_obj)/2)).reduce((accumulator, currentValue) => accumulator + currentValue, 0)
+    return sum
+}
 async function transformDataGraphic2(game){
     const store = useUserStore();
     const secondUserId = store.secondUser._id;
@@ -135,4 +143,4 @@ async function getTotalGames(game){
     return metrica.length
 }
 
-export {transformDataGraphic2, transformDataGraphic3, transformDataGraphic5, getTime, getTotalGames}
+export {transformDataGraphic2, transformDataGraphic3, transformDataGraphic5, getTime, getTotalGames, getCantidadPares}

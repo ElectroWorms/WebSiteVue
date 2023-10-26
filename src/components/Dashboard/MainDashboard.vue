@@ -68,7 +68,7 @@
 <script>
   import axios from 'axios'
   import config from '../../../config.json'
-  import {getTime, getTotalGames} from './functions'
+  import {getTime, getTotalGames, getCantidadPares} from './functions'
   import Dashboard1 from './Dashboard1.vue'; import Dashboard2 from './Dashboard2.vue'; import Dashboard3 from './Dashboard3.vue'; import Dashboard4 from './Dashboard4.vue'; import Dashboard5 from './Dashboard5.vue';
 
   export default {
@@ -96,6 +96,7 @@
         {title:'Partidas memorice',numero:'', color:'rgba(246,178,107, 0.5)', icon: 'mdi-help-rhombus-outline '},
         {title:'Partidas rompecabezas',numero:'', color:'rgba(201, 203, 207, 0.5)', icon: 'mdi-puzzle'},
         {title:'Partidas buscar diferencias',numero:'', color:'rgba(255, 99, 132, 0.5)', icon: 'mdi-image-search'},
+        {title:'Cantidad promedio de pares en memorice', numero:'', color:'rgba(54, 162, 235, 0.5)', icon: 'mdi-counter'},
       ],
       totalTime: '', partidasJugadasGame1: '', partidasJugadasGame2:'', partidasJugadasGame3: '',
       itemsGrafico:
@@ -104,7 +105,8 @@
                   'Tasa promedio de errores por día', 
                   'Tasa promedio de aciertos por día', 
                   'Tiempo promedio en completar el juego', 
-                  'Tiempo total de juego por día'
+                  'Tiempo total de juego por día',
+                  'Cantidad de pares de piezas en pantalla'
                 ],
       itemsJuegos: ['Búsqueda del tesoro', 'Vestir al personaje', 'Ordenar secuencia', 'Memorice', 'Rompecabezas', 'Buscar Diferencias']
       
@@ -116,12 +118,13 @@
       
     },
     async mounted (){
-      let auxtotalTime, auxPartidas1, auxPartidas2, auxPartidas3, auxPartidas4, auxPartidas5, auxPartidas6;
+      let auxtotalTime, auxPartidas1, auxPartidas2, auxPartidas3, auxPartidas4, auxPartidas5, auxPartidas6, auxPartidas7;
       auxtotalTime = await getTime(); auxPartidas1= await getTotalGames('busquedatesoro'); auxPartidas2= await getTotalGames('vestirpersonaje'); auxPartidas3= await getTotalGames('ordenarsecuencia'); 
-      auxPartidas4= await getTotalGames('memorize'); auxPartidas5= await getTotalGames('rompecabezas'); auxPartidas6 = await getTotalGames('buscardiferencias')
+      auxPartidas4= await getTotalGames('memorize'); auxPartidas5= await getTotalGames('rompecabezas'); auxPartidas6 = await getTotalGames('buscardiferencias');
+      auxPartidas7 = await getCantidadPares()
       this.loaded = true;
       this.games[0].numero = auxtotalTime; this.games[1].numero = auxPartidas1;  this.games[2].numero = auxPartidas2; this.games[3].numero = auxPartidas3;
-      this.games[4].numero = auxPartidas4; this.games[5].numero = auxPartidas5;  this.games[6].numero = auxPartidas6;
+      this.games[4].numero = auxPartidas4; this.games[5].numero = auxPartidas5;  this.games[6].numero = auxPartidas6; this.games[7].numero = auxPartidas7;
     },
     watch: {
       inputSelectGrafico: function(val, oldVal) {
